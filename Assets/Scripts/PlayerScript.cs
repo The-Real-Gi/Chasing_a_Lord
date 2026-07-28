@@ -4,21 +4,26 @@ public class PlayerScript : MonoBehaviour
 {
 
     public Animator anim;
-    public Rigidbody2D rb{get;private set;}
+    [HideInInspector]
+    public Rigidbody2D rb;
 
     public StateMachine stateMachine;
     public IdleState idle{get;private set;}
+    public MoveState move {get;private set;}
     public Vector2 inputVector;
+
+    public float moveSpeed;
 
 
     PlayersInputSet input;
 
     void Awake()
-    {
+    {   input = new PlayersInputSet();
         anim = GetComponentInChildren<Animator>();
         stateMachine= new StateMachine();
+        rb= GetComponent<Rigidbody2D>();
         idle= new IdleState(this,"Idle",stateMachine);
-        input = new PlayersInputSet();
+        move= new MoveState(this,"Run",stateMachine);
     }
 
     void OnEnable()

@@ -9,6 +9,7 @@ public class IdleState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        player.rb.linearVelocity= new Vector2(0,player.rb.linearVelocityY);
     }
 
     public override void Exit()
@@ -22,5 +23,9 @@ public class IdleState : PlayerState
     public override void Update()
     {
         base.Update();
+        if(player.inputVector.x!=0)
+        {
+            stateMachine.ChangeState(player.move);
+        }
     }
 }

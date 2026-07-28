@@ -733,7 +733,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerScript
   anim: {fileID: 1382708830}
+  rb: {fileID: 0}
   inputVector: {x: 0, y: 0}
+  moveSpeed: 100
 --- !u!114 &1396158286
 MonoBehaviour:
   m_ObjectHideFlags: 0
