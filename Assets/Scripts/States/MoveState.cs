@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MoveState : PlayerState
+public class MoveState : GroundedState
 {
     public MoveState(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
     {
@@ -23,9 +23,6 @@ public class MoveState : PlayerState
     public override void Update()
     {
         base.Update();
-        if(player.inputVector.x==0)
-        {
-            stateMachine.ChangeState(player.idle);
-        }
+       
     }
 }

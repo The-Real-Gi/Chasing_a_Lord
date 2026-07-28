@@ -100,6 +100,15 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""9da47afb-0855-4b32-93f5-2a9b5565df92"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -157,6 +166,17 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""action"": ""VerticalMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0b647f4-f515-4d59-bd43-6aa650ac4eae"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -183,6 +203,7 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_VerticalMove = m_Movement.FindAction("VerticalMove", throwIfNotFound: true);
+        m_Movement_Jump = m_Movement.FindAction("Jump", throwIfNotFound: true);
     }
 
     ~@PlayersInputSet()
@@ -264,6 +285,7 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Movement;
     private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
     private readonly InputAction m_Movement_VerticalMove;
+    private readonly InputAction m_Movement_Jump;
     /// <summary>
     /// Provides access to input actions defined in input action map "Movement".
     /// </summary>
@@ -279,6 +301,10 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Movement/VerticalMove".
         /// </summary>
         public InputAction @VerticalMove => m_Wrapper.m_Movement_VerticalMove;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/Jump".
+        /// </summary>
+        public InputAction @Jump => m_Wrapper.m_Movement_Jump;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -308,6 +334,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @VerticalMove.started += instance.OnVerticalMove;
             @VerticalMove.performed += instance.OnVerticalMove;
             @VerticalMove.canceled += instance.OnVerticalMove;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
         }
 
         /// <summary>
@@ -322,6 +351,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @VerticalMove.started -= instance.OnVerticalMove;
             @VerticalMove.performed -= instance.OnVerticalMove;
             @VerticalMove.canceled -= instance.OnVerticalMove;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
         }
 
         /// <summary>
@@ -382,5 +414,12 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnVerticalMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnJump(InputAction.CallbackContext context);
     }
 }

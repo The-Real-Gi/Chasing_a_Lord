@@ -10,10 +10,13 @@ public class PlayerScript : MonoBehaviour
     public StateMachine stateMachine;
     public IdleState idle{get;private set;}
     public MoveState move {get;private set;}
+    public JumpState jump{get;private set;}
+    public AirState airState{get;private set;}
     public Vector2 inputVector;
     public bool isFacingRight=true;
 
     public float moveSpeed;
+    public float jumpStrength;
 
     public Transform groundCheck;
     public float groundCheckDistance;
@@ -31,6 +34,8 @@ public class PlayerScript : MonoBehaviour
         rb= GetComponent<Rigidbody2D>();
         idle= new IdleState(this,"Idle",stateMachine);
         move= new MoveState(this,"Run",stateMachine);
+        jump= new JumpState(this, "Jump",stateMachine);
+        airState= new AirState(this,"Jump",stateMachine);
     }
 
     void OnEnable()
@@ -38,6 +43,15 @@ public class PlayerScript : MonoBehaviour
         input.Movement.Enable();
         input.Movement.VerticalMove.performed += ctx=> inputVector=ctx.ReadValue<Vector2>();
         input.Movement.VerticalMove.canceled += ctx => inputVector = Vector2.zero;
+        
+           input.Movement.Jump.performed+=ctx=>
+            {
+                if(isGrounded)
+                {
+                    Debug.Log("Performed Jump");
+                    stateMachine.ChangeState(jump);
+                }   
+            };
     }
 
     void OnDisable()
@@ -54,6 +68,7 @@ public class PlayerScript : MonoBehaviour
         stateMachine.currentState.Update();
         FlipController();
         Checks();
+        anim.SetFloat("YVelocity",rb.linearVelocityY);
     }
 
     void FixedUpdate()

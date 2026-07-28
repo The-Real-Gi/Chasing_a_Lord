@@ -1,15 +1,14 @@
 using UnityEngine;
 
-public class JumpState : PlayerState
+public class AirState : PlayerState
 {
-    public JumpState(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
+    public AirState(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
-        player.rb.linearVelocity= new Vector2(player.rb.linearVelocityX,player.jumpStrength);
         
     }
 
@@ -21,14 +20,15 @@ public class JumpState : PlayerState
     {
         base.FixedUpdate();
         player.rb.linearVelocityX=player.inputVector.x*player.moveSpeed*0.8f*Time.deltaTime;
+
     }
     public override void Update()
     {
         base.Update();
-        if(player.rb.linearVelocityY<=0)
+        if(player.isGrounded)
         {
-            stateMachine.ChangeState(player.airState);
+            stateMachine.ChangeState(player.idle);
         }
-        
+       
     }
 }
