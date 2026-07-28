@@ -15,6 +15,12 @@ public class PlayerScript : MonoBehaviour
 
     public float moveSpeed;
 
+    public Transform groundCheck;
+    public float groundCheckDistance;
+    public LayerMask whatIsGround;
+
+    public bool isGrounded;
+
 
     PlayersInputSet input;
 
@@ -47,6 +53,7 @@ public class PlayerScript : MonoBehaviour
     {
         stateMachine.currentState.Update();
         FlipController();
+        Checks();
     }
 
     void FixedUpdate()
@@ -69,5 +76,14 @@ public class PlayerScript : MonoBehaviour
     {
         transform.localScale= new Vector3(inputVector.x,1,1);
         isFacingRight=!isFacingRight;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(groundCheck.position,groundCheck.position + new Vector3(0,-groundCheckDistance));
+    }
+    void Checks()
+    {
+        isGrounded= Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckDistance,whatIsGround);
     }
 }
