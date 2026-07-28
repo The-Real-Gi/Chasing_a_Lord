@@ -1,16 +1,18 @@
 using UnityEngine;
 
-public class JumpState : AirState
+public class WallJump : PlayerState
 {
-    public JumpState(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
+   
+    public WallJump(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
     {
     }
-
     public override void Enter()
     {
         base.Enter();
-        player.rb.linearVelocity= new Vector2(player.rb.linearVelocityX,player.jumpStrength);
+        player.isWallJumping=true;
+        player.Flip(player.facDir);
         
+       player.rb.linearVelocity= new Vector2(player.wallJumpStrength*player.facDir*Time.deltaTime,player.jumpStrength);
     }
 
     public override void Exit()
@@ -20,15 +22,16 @@ public class JumpState : AirState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        
     }
     public override void Update()
     {
         base.Update();
+        
         if(player.rb.linearVelocityY<=0)
         {
+            player.isWallJumping=false;
             stateMachine.ChangeState(player.airState);
         }
-        
+       
     }
 }
