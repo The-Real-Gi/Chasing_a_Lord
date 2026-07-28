@@ -1,14 +1,15 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class MoveState : PlayerState
+public class AirState : PlayerState
 {
-    public MoveState(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
+    public AirState(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
     {
     }
+
     public override void Enter()
     {
         base.Enter();
+        
     }
 
     public override void Exit()
@@ -18,14 +19,16 @@ public class MoveState : PlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        player.rb.linearVelocityX= player.moveSpeed*player.inputVector.x*Time.deltaTime;
+        player.rb.linearVelocityX=player.inputVector.x*player.moveSpeed*0.8f*Time.deltaTime;
+
     }
     public override void Update()
     {
         base.Update();
-        if(player.inputVector.x==0)
+        if(player.isGrounded)
         {
             stateMachine.ChangeState(player.idle);
         }
+       
     }
 }

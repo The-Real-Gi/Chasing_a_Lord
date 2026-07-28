@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class IdleState : PlayerState
+public class IdleState : GroundedState
 {
     public IdleState(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
     {
@@ -23,9 +23,6 @@ public class IdleState : PlayerState
     public override void Update()
     {
         base.Update();
-        if(player.inputVector.x!=0)
-        {
-            stateMachine.ChangeState(player.move);
-        }
+       
     }
 }
