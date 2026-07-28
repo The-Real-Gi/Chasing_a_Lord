@@ -11,6 +11,7 @@ public class PlayerScript : MonoBehaviour
     public IdleState idle{get;private set;}
     public MoveState move {get;private set;}
     public Vector2 inputVector;
+    public bool isFacingRight=true;
 
     public float moveSpeed;
 
@@ -45,10 +46,28 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         stateMachine.currentState.Update();
+        FlipController();
     }
 
     void FixedUpdate()
     {
         stateMachine.currentState.FixedUpdate();
+    }
+    public void FlipController()
+    {
+        //could make animation for rotation by creating a new state with rotating and either time based or event based
+        if(inputVector.x==1&&!isFacingRight)
+        {
+            Flip();
+        }else if(inputVector.x==-1&&isFacingRight)
+        {
+            Flip();
+        }
+    }
+
+    public void Flip()
+    {
+        transform.localScale= new Vector3(inputVector.x,1,1);
+        isFacingRight=!isFacingRight;
     }
 }
