@@ -1,16 +1,14 @@
 using UnityEngine;
 
-public class JumpState : AirState
+public class WallSlide : PlayerState
 {
-    public JumpState(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
+    public WallSlide(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
-        player.rb.linearVelocity= new Vector2(player.rb.linearVelocityX,player.jumpStrength);
-        
     }
 
     public override void Exit()
@@ -20,15 +18,16 @@ public class JumpState : AirState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        
+        player.rb.linearVelocityY= player.rb.linearVelocityY*0.5f;
     }
     public override void Update()
     {
         base.Update();
-        if(player.rb.linearVelocityY<=0)
+        if(player.inputVector.x!=player.facDir)
         {
             stateMachine.ChangeState(player.airState);
         }
         
+       
     }
 }
