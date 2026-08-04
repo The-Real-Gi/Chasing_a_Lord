@@ -14,6 +14,8 @@ public class PlayerScript : MonoBehaviour
     public AirState airState{get;private set;}
     public WallSlide wallSlide{get;private set;}
     public WallJump wallJump {get;private set;}
+    public LedgeClimbState ledgeClimbState{get;private set;}
+    public WallHangState wallHangState {get;private set;}
 
 
     public Vector2 inputVector;
@@ -31,9 +33,26 @@ public class PlayerScript : MonoBehaviour
     public Transform wallCheck;
     public float wallCheckDistance;
 
+    public Transform hangCheck;
+    public float hangCheckDistance;
+
     public bool isGrounded;
     public bool isWallDetected;
     public bool isWallJumping=false;
+    public bool isHandging=false;
+    public bool isTouchingLedge=false;
+
+    public bool ledgeDetected;
+    public bool canClimbLedge=false;
+
+    public Vector2 ledgePosBot;
+    public Vector2 ledgePos1;
+    public  Vector2 ledgePos2;
+
+    public float ledgeClimbXOffset1 = 0f;
+    public float ledgeClimbYOffset1 = 0f;
+    public float ledgeClimbXoffset2 = 0f;
+    public float ledgeclimbYOffset2 = 0f;
 
 
     PlayersInputSet input;
@@ -49,12 +68,15 @@ public class PlayerScript : MonoBehaviour
         airState = new AirState(this,"Jump",stateMachine);
         wallJump =  new WallJump(this,"Jump",stateMachine);
         wallSlide = new WallSlide( this, "WallSlide",stateMachine); 
+        wallHangState= new WallHangState(this,"WallHang",stateMachine);
+        ledgeClimbState= new LedgeClimbState(this,"LedgeClimb",stateMachine);
     }
 
     void OnEnable()
     {
         input.Movement.Enable();
-        input.Movement.VerticalMove.performed += ctx=> inputVector=ctx.ReadValue<Vector2>();
+        input.Movement.VerticalMove.started += ctx => inputVector = ctx.ReadValue<Vector2>();
+        input.Movement.VerticalMove.performed += ctx => inputVector = ctx.ReadValue<Vector2>();
         input.Movement.VerticalMove.canceled += ctx => inputVector = Vector2.zero;
         
            input.Movement.Jump.performed+=ctx=>
@@ -63,10 +85,11 @@ public class PlayerScript : MonoBehaviour
                 {
                     Debug.Log("Performed Jump");
                     stateMachine.ChangeState(jump);
-                }else if(isWallDetected)
+                }else if(isWallDetected&&!isHandging)
                 {
                     stateMachine.ChangeState(wallJump);
                 }
+               
                    
             };
             
@@ -83,6 +106,7 @@ public class PlayerScript : MonoBehaviour
     
     void Update()
     {
+        inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
         stateMachine.currentState.Update();
         if(isGrounded||!isWallJumping)
         {
@@ -95,6 +119,8 @@ public class PlayerScript : MonoBehaviour
         {
             stateMachine.ChangeState(idle);
         }
+       CheckIfCanLedgeClimp();
+
     }
 
     void FixedUpdate()
@@ -104,13 +130,32 @@ public class PlayerScript : MonoBehaviour
     public void FlipController()
     {
         //could make animation for rotation by creating a new state with rotating and either time based or event based
-        if(inputVector.x==1&&!isFacingRight)
+            if(inputVector.x==1&&!isFacingRight)
+            {
+                Flip(inputVector.x);
+            }else if(inputVector.x==-1&&isFacingRight)
+            {
+                Flip(inputVector.x);
+            }
+        
+    }
+
+    public void CheckIfCanLedgeClimp()
+    {
+        if(ledgeDetected && isTouchingLedge)
         {
-            Flip(inputVector.x);
-        }else if(inputVector.x==-1&&isFacingRight)
-        {
-            Flip(inputVector.x);
+            stateMachine.ChangeState(wallHangState);
         }
+        if(canClimbLedge)
+        {
+            //stateMachine.ChangeState(ledgeClimbState);
+        }
+    }
+    public void FinishLedgeClimb()
+    {
+        canClimbLedge=false;
+        transform.position= ledgePos2;
+        ledgeDetected=false; 
     }
 
     public void Flip(float value)
@@ -131,10 +176,19 @@ public class PlayerScript : MonoBehaviour
     {
         Gizmos.DrawLine(groundCheck.position,groundCheck.position + new Vector3(0,-groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position,wallCheck.position+ new Vector3(facDir*wallCheckDistance,0,0));
+        Gizmos.DrawLine(hangCheck.position,hangCheck.position+ new Vector3(facDir*hangCheckDistance,0,0));
+
     }
     void Checks()
     {
         isGrounded= Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckDistance,whatIsGround);
         isWallDetected= Physics2D.Raycast(wallCheck.position,Vector2.right,wallCheckDistance*facDir,whatIsGround);
+        isTouchingLedge= Physics2D.Raycast(hangCheck.position,Vector2.right,hangCheckDistance*facDir,whatIsGround);
+
+        if(isWallDetected && !isTouchingLedge && !ledgeDetected)
+        {
+            ledgeDetected=true;
+            ledgePosBot= wallCheck.position;
+        }
     }
 }

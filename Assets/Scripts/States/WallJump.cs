@@ -32,6 +32,10 @@ public class WallJump : PlayerState
             player.isWallJumping=false;
             stateMachine.ChangeState(player.airState);
         }
+        if(player.isGrounded)
+        {
+            stateMachine.ChangeState(player.idle);
+        }
        
     }
 }

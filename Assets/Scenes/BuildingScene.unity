@@ -119,6 +119,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &24964584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 24964585}
+  m_Layer: 0
+  m_Name: WallHangCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &24964585
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24964584}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.029, y: 0.34, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1396158282}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,8 +531,8 @@ Transform:
   m_GameObject: {fileID: 709127535}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.24, y: 1.4, z: 0}
-  m_LocalScale: {x: 11, y: 5, z: 1}
+  m_LocalPosition: {x: -2.28, y: -1.93, z: 0}
+  m_LocalScale: {x: 3, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -666,7 +697,7 @@ Transform:
   m_GameObject: {fileID: 940732615}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.43, y: 1.4, z: 0}
+  m_LocalPosition: {x: 6.4, y: 1.4, z: 0}
   m_LocalScale: {x: 11, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1012,13 +1043,14 @@ Transform:
   m_GameObject: {fileID: 1396158281}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.12, y: 0, z: 0}
+  m_LocalPosition: {x: 0.135, y: -0.325, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1382708832}
   - {fileID: 1312727547}
   - {fileID: 1551969582}
+  - {fileID: 24964585}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &1396158283
@@ -1055,8 +1087,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.023004934, y: -0.13017184}
-  m_Size: {x: 0.3536053, y: 0.6245719}
+  m_Offset: {x: 0.014890552, y: -0.13017184}
+  m_Size: {x: 0.29322183, y: 0.6245719}
   m_Direction: 0
 --- !u!50 &1396158284
 Rigidbody2D:
@@ -1111,10 +1143,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   wallCheck: {fileID: 1551969582}
-  wallCheckDistance: 0.27
+  wallCheckDistance: 0.19
+  hangCheck: {fileID: 24964585}
+  hangCheckDistance: 0.28
   isGrounded: 0
   isWallDetected: 0
   isWallJumping: 0
+  isHandging: 0
+  isTouchingLedge: 0
+  ledgeDetected: 0
+  canClimbLedge: 0
+  ledgePosBot: {x: 0, y: 0}
+  ledgePos1: {x: 0, y: 0}
+  ledgePos2: {x: 0, y: 0}
+  ledgeClimbXOffset1: 0
+  ledgeClimbYOffset1: 0
+  ledgeClimbXoffset2: 0
+  ledgeclimbYOffset2: 0
 --- !u!114 &1396158286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1178,7 +1223,7 @@ Transform:
   m_GameObject: {fileID: 1551969581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.016, y: -0.07, z: 0}
+  m_LocalPosition: {x: -0.018, y: 0.32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

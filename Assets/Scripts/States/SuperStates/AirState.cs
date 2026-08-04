@@ -21,7 +21,7 @@ public class AirState : PlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        if(!player.isWallJumping)
+        if(!player.isWallJumping&&!player.isHandging)
         {
         player.rb.linearVelocityX=player.inputVector.x*player.moveSpeed*0.8f*Time.deltaTime;
         }
@@ -30,7 +30,7 @@ public class AirState : PlayerState
     public override void Update()
     {
         base.Update();
-        if(player.isWallDetected&& player.inputVector.x==player.facDir)
+        if(player.isWallDetected&& player.inputVector.x==player.facDir&& !player.canClimbLedge)
         {
             stateMachine.ChangeState(player.wallSlide);
         }
