@@ -55,7 +55,7 @@ public class PlayerScript : MonoBehaviour
     public float ledgeclimbYOffset2 = 0f;
 
 
-    PlayersInputSet input;
+    public PlayersInputSet input;
 
     void Awake()
     {   input = new PlayersInputSet();
@@ -81,15 +81,20 @@ public class PlayerScript : MonoBehaviour
         
            input.Movement.Jump.performed+=ctx=>
             {
-                if(isGrounded)
+                if(!isTouchingLedge && isWallDetected)
                 {
-                    Debug.Log("Performed Jump");
-                    stateMachine.ChangeState(jump);
-                }else if(isWallDetected&&!isHandging)
+                    stateMachine.ChangeState(ledgeClimbState);
+                }
+                 if(isWallDetected&&isTouchingLedge)
                 {
                     stateMachine.ChangeState(wallJump);
                 }
                
+                if(isGrounded)
+                {
+                    Debug.Log("Performed Jump");
+                    stateMachine.ChangeState(jump);
+                }
                    
             };
             
@@ -142,7 +147,7 @@ public class PlayerScript : MonoBehaviour
 
     public void CheckIfCanLedgeClimp()
     {
-        if(ledgeDetected && isTouchingLedge)
+        if(ledgeDetected && !isTouchingLedge)
         {
             stateMachine.ChangeState(wallHangState);
         }
@@ -190,5 +195,10 @@ public class PlayerScript : MonoBehaviour
             ledgeDetected=true;
             ledgePosBot= wallCheck.position;
         }
+    }
+    public bool AnimationFinishCalled()
+    {
+        Debug.Log("Finished animation");
+        return true;
     }
 }

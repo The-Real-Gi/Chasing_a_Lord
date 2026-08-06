@@ -24,6 +24,10 @@ public class LedgeClimbState : PlayerState
     public override void Update()
     {
         base.Update();
+        if(player.AnimationFinishCalled())
+        {
+            stateMachine.ChangeState(player.idle);
+        }
         
        
     }
