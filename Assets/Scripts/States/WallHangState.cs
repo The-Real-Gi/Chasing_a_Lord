@@ -25,7 +25,7 @@ public class WallHangState : PlayerState
     {
         base.Exit();
         player.isHandging=false;
-        player.canClimbLedge=false;
+        player.canClimbLedge=true;
         player.rb.gravityScale = previousGravityScale;
         player.rb.linearVelocity = Vector2.zero;
     }
@@ -38,8 +38,11 @@ public class WallHangState : PlayerState
     public override void Update()
     {
         base.Update();
-        player.canClimbLedge=true; 
-        if(currFacDir != player.facDir || player.inputVector.y < 0f)
+          player.input.Movement.Jump.performed+=ctx=>
+          {
+              stateMachine.ChangeState(player.ledgeClimbState);
+          };
+        if(!player.isWallDetected || player.inputVector.y < 0f)
         {
             player.ledgeDetected=false;
             stateMachine.ChangeState(player.airState);

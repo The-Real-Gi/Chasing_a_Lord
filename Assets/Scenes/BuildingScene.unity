@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 24964584}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.029, y: 0.34, z: 0}
+  m_LocalPosition: {x: 0.029, y: 0.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -911,6 +911,7 @@ GameObject:
   - component: {fileID: 1382708832}
   - component: {fileID: 1382708831}
   - component: {fileID: 1382708830}
+  - component: {fileID: 1382708833}
   m_Layer: 0
   m_Name: Idle_0_000
   m_TagString: Untagged
@@ -1014,6 +1015,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1396158282}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1382708833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382708829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a59fac8e91e0e47edbd52141146c00bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationEventTrigger
 --- !u!1 &1396158281
 GameObject:
   m_ObjectHideFlags: 0
@@ -1223,7 +1236,7 @@ Transform:
   m_GameObject: {fileID: 1551969581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.018, y: 0.32, z: 0}
+  m_LocalPosition: {x: -0.018, y: 0.11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

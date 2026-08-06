@@ -9,7 +9,7 @@ public class GroundedState : PlayerState
      public override void Enter()
     {
         base.Enter();
-      
+      player.isWallJumping=false;
     }
 
     public override void Exit()
