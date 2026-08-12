@@ -1145,7 +1145,7 @@ MonoBehaviour:
   anim: {fileID: 1382708830}
   rb: {fileID: 0}
   inputVector: {x: 0, y: 0}
-  isFacingRight: 1
+  isFacingRight: 0
   facDir: 1
   moveSpeed: 100
   jumpStrength: 5
@@ -1173,6 +1173,11 @@ MonoBehaviour:
   ledgeClimbYOffset1: 0
   ledgeClimbXoffset2: 0
   ledgeclimbYOffset2: 0
+  finishedCLimb: 0
+  moveUp: 0
+  moveForward: 0
+  climbingUpSpeed: 70
+  movingForwardSpeed: 50
 --- !u!114 &1396158286
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -53,6 +53,11 @@ public class PlayerScript : MonoBehaviour
     public float ledgeClimbYOffset1 = 0f;
     public float ledgeClimbXoffset2 = 0f;
     public float ledgeclimbYOffset2 = 0f;
+    public bool finishedCLimb=false;
+    public bool moveUp=false;
+    public bool moveForward=false;
+    public float climbingUpSpeed;
+    public float movingForwardSpeed;
 
 
     public PlayersInputSet input;
@@ -85,7 +90,7 @@ public class PlayerScript : MonoBehaviour
                 {
                     stateMachine.ChangeState(ledgeClimbState);
                 }
-                 if(isWallDetected&&isTouchingLedge)
+                 if(isWallDetected&&isTouchingLedge&&!isHandging)
                 {
                     stateMachine.ChangeState(wallJump);
                 }
@@ -125,6 +130,7 @@ public class PlayerScript : MonoBehaviour
             stateMachine.ChangeState(idle);
         }
        CheckIfCanLedgeClimp();
+       Debug.Log(stateMachine.currentState);
 
     }
 
@@ -151,10 +157,7 @@ public class PlayerScript : MonoBehaviour
         {
             stateMachine.ChangeState(wallHangState);
         }
-        if(canClimbLedge)
-        {
-            //stateMachine.ChangeState(ledgeClimbState);
-        }
+        
     }
     public void FinishLedgeClimb()
     {
@@ -196,9 +199,17 @@ public class PlayerScript : MonoBehaviour
             ledgePosBot= wallCheck.position;
         }
     }
-    public bool AnimationFinishCalled()
+    public void AnimationFinishCalled()
     {
         Debug.Log("Finished animation");
-        return true;
+        finishedCLimb=true;
+    }
+    public void AniimationClimbCalled()
+    {
+        moveUp=true;
+    }
+    public void AnimationMoveForwardCalled()
+    {
+        moveForward=true;
     }
 }

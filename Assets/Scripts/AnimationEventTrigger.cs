@@ -1,10 +1,22 @@
 using UnityEngine;
 
 public class AnimationEventTrigger : MonoBehaviour
-{
+{   PlayerScript player;
+    void Awake()
+    {
+        player= GetComponentInParent<PlayerScript>();
+    }
    public void OnLLedgeClimbEnded()
     {
-        PlayerScript player= GetComponentInParent<PlayerScript>();
+       
         player.AnimationFinishCalled();
+    }
+    public void ClimningUp()
+    {
+        player.AniimationClimbCalled();
+    }
+    public void MoveForward()
+    {
+        player.AnimationMoveForwardCalled();
     }
 }
