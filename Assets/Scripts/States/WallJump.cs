@@ -10,7 +10,7 @@ public class WallJump : PlayerState
     {
         base.Enter();
         player.isWallJumping=true;
-        player.Flip(player.facDir);
+        player.Flip(-player.facDir);
         
        player.rb.linearVelocity= new Vector2(player.wallJumpStrength*player.facDir*Time.deltaTime,player.jumpStrength);
     }

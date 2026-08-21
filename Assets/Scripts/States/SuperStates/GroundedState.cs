@@ -25,15 +25,33 @@ public class GroundedState : PlayerState
         base.Update();
         if(player.inputVector.x!=0)
         {
+            if(player.inputVector.y<0)
+            {
+                stateMachine.ChangeState(player.crouchMove);
+            }
+            else
+            {
+                
             stateMachine.ChangeState(player.move);
+            }
+
         }else if(player.inputVector.x==0)
         {
+            if(player.inputVector.y<0)
+            {
+                stateMachine.ChangeState(player.crouchIdle);
+            }
+            else
+            {
             stateMachine.ChangeState(player.idle);
+                
+            }
         }
 
-        if(!player.isGrounded)
+        if(!player.isGrounded&& !player.isWallDetected)
         {
             stateMachine.ChangeState(player.airState);
         }
+        
     }
 }

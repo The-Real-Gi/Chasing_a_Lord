@@ -1,4 +1,3 @@
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class LedgeClimbState : PlayerState
@@ -40,7 +39,7 @@ public class LedgeClimbState : PlayerState
 
         if(player.moveForward)
         {
-             player.rb.linearVelocity= new Vector2(player.movingForwardSpeed*player.facDir*Time.deltaTime,0);
+             player.rb.linearVelocity= new Vector2(player.movingForwardSpeed*-player.facDir*Time.deltaTime,0);
         }
         
     }

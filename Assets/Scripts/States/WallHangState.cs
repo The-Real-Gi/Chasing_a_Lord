@@ -41,7 +41,7 @@ public class WallHangState : PlayerState
         base.Update();
           player.input.Movement.Jump.performed+=ctx=>
           {
-              stateMachine.ChangeState(player.ledgeClimbState);
+             
           };
         if(!player.isWallDetected || player.inputVector.y < 0f)
         {
