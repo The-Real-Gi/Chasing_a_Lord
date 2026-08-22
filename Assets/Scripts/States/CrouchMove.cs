@@ -9,7 +9,7 @@ public class CrouchMove : GroundedState
     public override void Enter()
     {
         base.Enter();
-      
+      player.moveSpeed=player.baseRunSpeed;
     }
 
     public override void Exit()

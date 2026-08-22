@@ -1,3 +1,5 @@
+using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -19,6 +21,8 @@ public class PlayerScript : MonoBehaviour
     public WallHangState wallHangState {get;private set;}
     public CrouchIdle crouchIdle {get;private set;}
     public CrouchMove crouchMove {get;private set;}
+    public DashState dashState{get;private set;}
+    public SlideState slideState{get;private set;}
     #endregion
 
     public Vector2 inputVector;
@@ -67,7 +71,17 @@ public class PlayerScript : MonoBehaviour
     public bool isClimbingLedge=false;
     #endregion
     
+    public float timer;
+    public float dashCooldown;
+    public float dashingTime;
+    public float dashSpeed;
+    public float cooldownTimer;
+
+    public float maxRunSpeed;
+    public float baseRunSpeed;
+
     public PlayersInputSet input;
+    
 
     void Awake()
     {   input = new PlayersInputSet();
@@ -84,14 +98,26 @@ public class PlayerScript : MonoBehaviour
         ledgeClimbState= new LedgeClimbState(this,"LedgeClimb",stateMachine);
         crouchIdle = new CrouchIdle(this,"CrouchIdle",stateMachine);
         crouchMove = new CrouchMove(this,"CrouchMove",stateMachine);
+        dashState = new DashState(this,"Dash",stateMachine);
+        slideState = new SlideState(this,"Slide",stateMachine);
     }
 
     void OnEnable()
     {
         input.Movement.Enable();    
-        input.Movement.VerticalMove.started += ctx => inputVector = ctx.ReadValue<Vector2>();
+        
         input.Movement.VerticalMove.performed += ctx => inputVector = ctx.ReadValue<Vector2>();
         input.Movement.VerticalMove.canceled += ctx => inputVector = Vector2.zero;
+       
+        
+        input.Movement.Dash.performed+= ctx => 
+        {if(cooldownTimer<=0)
+            {
+            stateMachine.ChangeState(dashState);
+            }
+        };
+        
+        
         
            input.Movement.Jump.performed+=ctx=>
             {
@@ -125,7 +151,8 @@ public class PlayerScript : MonoBehaviour
     }
     
     void Update()
-    {
+    {   Debug.Log(rb.linearVelocityX);
+        cooldownTimer-= Time.deltaTime;
         inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
         stateMachine.currentState.Update();
         if(isGrounded||!isWallJumping)
