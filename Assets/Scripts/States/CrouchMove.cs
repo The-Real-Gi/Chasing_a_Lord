@@ -19,6 +19,11 @@ public class CrouchMove : GroundedState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+        if(player.IsInputOppositeFacing())
+        {
+            player.rb.linearVelocityX = 0f;
+            return;
+        }
         player.rb.linearVelocityX= player.moveSpeed*player.inputVector.x*Time.deltaTime/2;
     }
     public override void Update()

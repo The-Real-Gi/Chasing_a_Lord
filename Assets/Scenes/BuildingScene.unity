@@ -1217,8 +1217,12 @@ MonoBehaviour:
   dashingTime: 0.25
   dashSpeed: 300
   cooldownTimer: 0
+  flipCooldown: 0.6
+  flipCooldownTimer: 0
   maxRunSpeed: 300
   baseRunSpeed: 100
+  flipEnded: 1
+  isFlipping: 0
 --- !u!114 &1396158286
 MonoBehaviour:
   m_ObjectHideFlags: 0

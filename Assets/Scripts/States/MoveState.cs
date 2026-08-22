@@ -23,6 +23,11 @@ public class MoveState : GroundedState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+        if(player.IsInputOppositeFacing())
+        {
+            player.rb.linearVelocityX = 0f;
+            return;
+        }
         player.moveSpeed=player.moveSpeed*1.1f;
         player.anim.speed= player.anim.speed*1.1f;
         if(player.anim.speed>=3)

@@ -23,6 +23,7 @@ public class PlayerScript : MonoBehaviour
     public CrouchMove crouchMove {get;private set;}
     public DashState dashState{get;private set;}
     public SlideState slideState{get;private set;}
+    public Ground180Flip flipstate{get;private set;}
     #endregion
 
     public Vector2 inputVector;
@@ -76,12 +77,17 @@ public class PlayerScript : MonoBehaviour
     public float dashingTime;
     public float dashSpeed;
     public float cooldownTimer;
+    public float flipCooldown = 1f;
+    public float flipCooldownTimer;
 
     public float maxRunSpeed;
     public float baseRunSpeed;
 
     public PlayersInputSet input;
-    
+    public bool flipEnded=true;
+    public bool isFlipping=false;
+
+
 
     void Awake()
     {   input = new PlayersInputSet();
@@ -100,6 +106,7 @@ public class PlayerScript : MonoBehaviour
         crouchMove = new CrouchMove(this,"CrouchMove",stateMachine);
         dashState = new DashState(this,"Dash",stateMachine);
         slideState = new SlideState(this,"Slide",stateMachine);
+        flipstate = new Ground180Flip(this,"Flip",stateMachine);
     }
 
     void OnEnable()
@@ -153,6 +160,7 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {   Debug.Log(rb.linearVelocityX);
         cooldownTimer-= Time.deltaTime;
+        flipCooldownTimer -= Time.deltaTime;
         inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
         stateMachine.currentState.Update();
         if(isGrounded||!isWallJumping)
@@ -171,7 +179,6 @@ public class PlayerScript : MonoBehaviour
         {
             stateMachine.ChangeState(wallHangState);
         }
-     
 
     }
 
@@ -182,22 +189,50 @@ public class PlayerScript : MonoBehaviour
     public void FlipController()
     {
         //could make animation for rotation by creating a new state with rotating and either time based or event based
-            if(inputVector.x==1&&!isFacingRight)
+            if(isFlipping)
             {
-                Flip(inputVector.x);
-            }else if(inputVector.x==-1&&isFacingRight)
+                return;
+            }
+            if(inputVector.x > 0.1f&&!isFacingRight)
+            {   if(isGrounded)
+                {
+                    if(flipCooldownTimer <= 0f)
+                    {
+                        stateMachine.ChangeState(flipstate);
+                    }
+                }else
+                {
+                    Flip(inputVector.x);
+                }
+            }else if(inputVector.x < -0.1f&&isFacingRight)
             {
-                Flip(inputVector.x);
+               if(isGrounded)
+                {
+                    if(flipCooldownTimer <= 0f)
+                    {
+                        stateMachine.ChangeState(flipstate);
+                    }
+                }else
+                {
+                    Flip(inputVector.x);
+                }
             }
         
     }
 
     public void Flip(float value)
     {   
-        transform.localScale= new Vector3(value,1,1);
-        
-        isFacingRight=!isFacingRight;
-        facDir=facDir*(-1);
+        int direction = value >= 0 ? 1 : -1;
+        transform.localScale = new Vector3(direction, 1, 1);
+        isFacingRight = direction == 1;
+        facDir = direction;
+    }
+
+    public bool IsInputOppositeFacing()
+    {
+        return flipCooldownTimer > 0f &&
+            ((inputVector.x < -0.1f && isFacingRight) ||
+             (inputVector.x > 0.1f && !isFacingRight));
     }
 
     void OnDrawGizmos()
@@ -227,5 +262,10 @@ public class PlayerScript : MonoBehaviour
     public void AnimationMoveForwardCalled()
     {
         moveForward=true;
+    }
+
+    public void EndFlip()
+    {
+       flipEnded = true;
     }
 }
