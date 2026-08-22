@@ -11,6 +11,7 @@ public class LedgeClimbState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        player.isClimbingLedge=true;
         Debug.Log("Starting ledgeclimb");
         previousGravityScale = player.rb.gravityScale;
         player.rb.gravityScale = 0f;
@@ -22,6 +23,7 @@ public class LedgeClimbState : PlayerState
     public override void Exit()
     {
         base.Exit();
+        player.isClimbingLedge=false;
         player.canClimbLedge=false;
         player.finishedCLimb=false;
         player.moveUp=false;
@@ -39,7 +41,7 @@ public class LedgeClimbState : PlayerState
 
         if(player.moveForward)
         {
-             player.rb.linearVelocity= new Vector2(player.movingForwardSpeed*-player.facDir*Time.deltaTime,0);
+             player.rb.linearVelocity= new Vector2(player.movingForwardSpeed*player.facDir*Time.deltaTime,0);
         }
         
     }

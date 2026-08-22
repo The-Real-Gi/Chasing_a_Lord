@@ -30,7 +30,7 @@ public class AirState : PlayerState
     public override void Update()
     {
         base.Update();
-        if(player.isWallDetected&& player.inputVector.x==player.facDir)
+        if(player.isTouchingLedge&&player.isWallDetected&& player.inputVector.x==player.facDir)
         {
             stateMachine.ChangeState(player.wallSlide);
         }

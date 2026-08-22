@@ -39,10 +39,11 @@ public class WallHangState : PlayerState
     public override void Update()
     {
         base.Update();
-          player.input.Movement.Jump.performed+=ctx=>
-          {
-             
-          };
+         
+          if(player.inputVector.y>0)
+        {   
+            stateMachine.ChangeState(player.ledgeClimbState);
+        }
         if(!player.isWallDetected || player.inputVector.y < 0f)
         {
             player.ledgeDetected=false;

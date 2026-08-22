@@ -1176,8 +1176,9 @@ MonoBehaviour:
   finishedCLimb: 0
   moveUp: 0
   moveForward: 0
-  climbingUpSpeed: 70
+  climbingUpSpeed: 40
   movingForwardSpeed: 50
+  isClimbingLedge: 0
 --- !u!114 &1396158286
 MonoBehaviour:
   m_ObjectHideFlags: 0

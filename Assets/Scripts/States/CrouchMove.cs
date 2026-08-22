@@ -19,7 +19,7 @@ public class CrouchMove : GroundedState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        player.rb.linearVelocityX= player.moveSpeed*player.inputVector.x*Time.deltaTime;
+        player.rb.linearVelocityX= player.moveSpeed*player.inputVector.x*Time.deltaTime/2;
     }
     public override void Update()
     {

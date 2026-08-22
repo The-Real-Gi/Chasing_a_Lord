@@ -64,6 +64,7 @@ public class PlayerScript : MonoBehaviour
     public bool moveForward=false;
     public float climbingUpSpeed;
     public float movingForwardSpeed;
+    public bool isClimbingLedge=false;
     #endregion
     
     public PlayersInputSet input;
@@ -95,7 +96,7 @@ public class PlayerScript : MonoBehaviour
            input.Movement.Jump.performed+=ctx=>
             {
                
-                 if(isWallDetected&&isTouchingLedge)
+                 if(isWallDetected&&isTouchingLedge&&!isClimbingLedge)
                 {
                     stateMachine.ChangeState(wallJump);
                 }
@@ -104,6 +105,10 @@ public class PlayerScript : MonoBehaviour
                 {
                     Debug.Log("Performed Jump");
                     stateMachine.ChangeState(jump);
+                }
+                if(isHandging && !isClimbingLedge)
+                {
+                stateMachine.ChangeState(ledgeClimbState);
                 }
                    
             };
@@ -130,9 +135,14 @@ public class PlayerScript : MonoBehaviour
         Checks();
         anim.SetFloat("YVelocity",rb.linearVelocityY);
 
-        if(isWallDetected&&isGrounded&&inputVector.x!=0)
+        if(!isClimbingLedge && isWallDetected&&isGrounded&&inputVector.x!=0)
         {
             stateMachine.ChangeState(idle);
+        }
+
+        if (!isClimbingLedge && isWallDetected&&!isTouchingLedge&&inputVector.y>=0)
+        {
+            stateMachine.ChangeState(wallHangState);
         }
      
 
