@@ -1,3 +1,5 @@
+using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -8,6 +10,7 @@ public class PlayerScript : MonoBehaviour
     public Rigidbody2D rb;
 
     public StateMachine stateMachine;
+    #region States
     public IdleState idle{get;private set;}
     public MoveState move {get;private set;}
     public JumpState jump{get;private set;}
@@ -16,46 +19,69 @@ public class PlayerScript : MonoBehaviour
     public WallJump wallJump {get;private set;}
     public LedgeClimbState ledgeClimbState{get;private set;}
     public WallHangState wallHangState {get;private set;}
-
+    public CrouchIdle crouchIdle {get;private set;}
+    public CrouchMove crouchMove {get;private set;}
+    public DashState dashState{get;private set;}
+    public SlideState slideState{get;private set;}
+    #endregion
 
     public Vector2 inputVector;
+
+    #region Flip
     public bool isFacingRight=true;
     public int facDir=1;
+    #endregion
 
+    #region Stats
     public float moveSpeed;
     public float jumpStrength;
     public float wallJumpStrength;
-
+    #endregion
+    
+    #region Checks
     public Transform groundCheck;
     public float groundCheckDistance;
     public LayerMask whatIsGround;
-
     public Transform wallCheck;
     public float wallCheckDistance;
-
     public Transform hangCheck;
     public float hangCheckDistance;
-
     public bool isGrounded;
     public bool isWallDetected;
     public bool isWallJumping=false;
     public bool isHandging=false;
     public bool isTouchingLedge=false;
-
     public bool ledgeDetected;
     public bool canClimbLedge=false;
+    #endregion
 
+    #region Ledges
     public Vector2 ledgePosBot;
     public Vector2 ledgePos1;
     public  Vector2 ledgePos2;
-
     public float ledgeClimbXOffset1 = 0f;
     public float ledgeClimbYOffset1 = 0f;
     public float ledgeClimbXoffset2 = 0f;
     public float ledgeclimbYOffset2 = 0f;
+    public bool finishedCLimb=false;
+    public bool moveUp=false;
+    public bool moveForward=false;
+    public float climbingUpSpeed;
+    public float movingForwardSpeed;
+    public bool isClimbingLedge=false;
+    #endregion
+    
+    public float timer;
+    public float dashCooldown;
+    public float dashingTime;
+    public float dashSpeed;
+    public float cooldownTimer;
 
+    public float maxRunSpeed;
+    public float baseRunSpeed;
 
     public PlayersInputSet input;
+    
 
     void Awake()
     {   input = new PlayersInputSet();
@@ -70,22 +96,33 @@ public class PlayerScript : MonoBehaviour
         wallSlide = new WallSlide( this, "WallSlide",stateMachine); 
         wallHangState= new WallHangState(this,"WallHang",stateMachine);
         ledgeClimbState= new LedgeClimbState(this,"LedgeClimb",stateMachine);
+        crouchIdle = new CrouchIdle(this,"CrouchIdle",stateMachine);
+        crouchMove = new CrouchMove(this,"CrouchMove",stateMachine);
+        dashState = new DashState(this,"Dash",stateMachine);
+        slideState = new SlideState(this,"Slide",stateMachine);
     }
 
     void OnEnable()
     {
-        input.Movement.Enable();
-        input.Movement.VerticalMove.started += ctx => inputVector = ctx.ReadValue<Vector2>();
+        input.Movement.Enable();    
+        
         input.Movement.VerticalMove.performed += ctx => inputVector = ctx.ReadValue<Vector2>();
         input.Movement.VerticalMove.canceled += ctx => inputVector = Vector2.zero;
+       
+        
+        input.Movement.Dash.performed+= ctx => 
+        {if(cooldownTimer<=0)
+            {
+            stateMachine.ChangeState(dashState);
+            }
+        };
+        
+        
         
            input.Movement.Jump.performed+=ctx=>
             {
-                if(!isTouchingLedge && isWallDetected)
-                {
-                    stateMachine.ChangeState(ledgeClimbState);
-                }
-                 if(isWallDetected&&isTouchingLedge)
+               
+                 if(isWallDetected&&isTouchingLedge&&!isClimbingLedge)
                 {
                     stateMachine.ChangeState(wallJump);
                 }
@@ -94,6 +131,10 @@ public class PlayerScript : MonoBehaviour
                 {
                     Debug.Log("Performed Jump");
                     stateMachine.ChangeState(jump);
+                }
+                if(isHandging && !isClimbingLedge)
+                {
+                stateMachine.ChangeState(ledgeClimbState);
                 }
                    
             };
@@ -110,7 +151,8 @@ public class PlayerScript : MonoBehaviour
     }
     
     void Update()
-    {
+    {   Debug.Log(rb.linearVelocityX);
+        cooldownTimer-= Time.deltaTime;
         inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
         stateMachine.currentState.Update();
         if(isGrounded||!isWallJumping)
@@ -120,11 +162,16 @@ public class PlayerScript : MonoBehaviour
         Checks();
         anim.SetFloat("YVelocity",rb.linearVelocityY);
 
-        if(isWallDetected&&isGrounded&&inputVector.x!=0)
+        if(!isClimbingLedge && isWallDetected&&isGrounded&&inputVector.x!=0)
         {
             stateMachine.ChangeState(idle);
         }
-       CheckIfCanLedgeClimp();
+
+        if (!isClimbingLedge && isWallDetected&&!isTouchingLedge&&inputVector.y>=0)
+        {
+            stateMachine.ChangeState(wallHangState);
+        }
+     
 
     }
 
@@ -145,34 +192,10 @@ public class PlayerScript : MonoBehaviour
         
     }
 
-    public void CheckIfCanLedgeClimp()
-    {
-        if(ledgeDetected && !isTouchingLedge)
-        {
-            stateMachine.ChangeState(wallHangState);
-        }
-        if(canClimbLedge)
-        {
-            //stateMachine.ChangeState(ledgeClimbState);
-        }
-    }
-    public void FinishLedgeClimb()
-    {
-        canClimbLedge=false;
-        transform.position= ledgePos2;
-        ledgeDetected=false; 
-    }
-
     public void Flip(float value)
     {   
-        if(isWallJumping)
-        {
-        transform.localScale= new Vector3(-value,1,1);
-        }
-        else
-        {
-        transform.localScale= new Vector3(inputVector.x,1,1);           
-        }
+        transform.localScale= new Vector3(value,1,1);
+        
         isFacingRight=!isFacingRight;
         facDir=facDir*(-1);
     }
@@ -190,15 +213,19 @@ public class PlayerScript : MonoBehaviour
         isWallDetected= Physics2D.Raycast(wallCheck.position,Vector2.right,wallCheckDistance*facDir,whatIsGround);
         isTouchingLedge= Physics2D.Raycast(hangCheck.position,Vector2.right,hangCheckDistance*facDir,whatIsGround);
 
-        if(isWallDetected && !isTouchingLedge && !ledgeDetected)
-        {
-            ledgeDetected=true;
-            ledgePosBot= wallCheck.position;
-        }
+       
     }
-    public bool AnimationFinishCalled()
+    public void AnimationFinishCalled()
     {
         Debug.Log("Finished animation");
-        return true;
+        finishedCLimb=true;
+    }
+    public void AniimationClimbCalled()
+    {
+        moveUp=true;
+    }
+    public void AnimationMoveForwardCalled()
+    {
+        moveForward=true;
     }
 }

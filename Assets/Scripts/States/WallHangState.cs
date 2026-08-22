@@ -3,11 +3,11 @@ using UnityEngine;
 public class WallHangState : PlayerState
 {
     private float previousGravityScale;
+    int currFacDir;
 
     public WallHangState(PlayerScript _player, string _animName, StateMachine _statemachine) : base(_player, _animName, _statemachine)
     {
     }
-    int currFacDir;
 
 
     public override void Enter()
@@ -18,6 +18,7 @@ public class WallHangState : PlayerState
         player.rb.gravityScale = 0f;
         player.rb.linearVelocity = Vector2.zero;
         currFacDir=player.facDir;
+        player.canClimbLedge=true;
         
     }
 
@@ -25,7 +26,7 @@ public class WallHangState : PlayerState
     {
         base.Exit();
         player.isHandging=false;
-        player.canClimbLedge=true;
+        
         player.rb.gravityScale = previousGravityScale;
         player.rb.linearVelocity = Vector2.zero;
     }
@@ -38,10 +39,11 @@ public class WallHangState : PlayerState
     public override void Update()
     {
         base.Update();
-          player.input.Movement.Jump.performed+=ctx=>
-          {
-              stateMachine.ChangeState(player.ledgeClimbState);
-          };
+         
+          if(player.inputVector.y>0)
+        {   
+            stateMachine.ChangeState(player.ledgeClimbState);
+        }
         if(!player.isWallDetected || player.inputVector.y < 0f)
         {
             player.ledgeDetected=false;

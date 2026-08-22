@@ -25,15 +25,43 @@ public class GroundedState : PlayerState
         base.Update();
         if(player.inputVector.x!=0)
         {
-            stateMachine.ChangeState(player.move);
+            if(player.inputVector.y<0)
+            {   if(Mathf.Abs(player.rb.linearVelocityX)<=2)
+                {
+                    
+                stateMachine.ChangeState(player.crouchMove);
+                }
+                if(Mathf.Abs(player.rb.linearVelocityX)>2)
+                {
+                    stateMachine.ChangeState(player.slideState);
+                }
+            }
+            else
+            {
+              if(stateMachine.currentState!=player.move)
+                {
+                stateMachine.ChangeState(player.move);
+                    
+                }  
+            }
+
         }else if(player.inputVector.x==0)
         {
+            if(player.inputVector.y<0)
+            {
+                stateMachine.ChangeState(player.crouchIdle);
+            }
+            else
+            {
             stateMachine.ChangeState(player.idle);
+                
+            }
         }
 
-        if(!player.isGrounded)
+        if(!player.isGrounded&& !player.isWallDetected)
         {
             stateMachine.ChangeState(player.airState);
         }
+        
     }
 }
