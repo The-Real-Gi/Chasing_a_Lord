@@ -9,6 +9,11 @@ public class DoubleJump : AirState
         public override void Enter()
     {
         base.Enter();
+            player.isWallJumping=false;
+            if(Mathf.Abs(player.inputVector.x)>0.01f)
+            {
+                player.Flip(player.inputVector.x);
+            }
         player.rb.linearVelocityY=0;
        player.rb.AddForce(new Vector2(0,player.jumpStrength),ForceMode2D.Impulse);
         player.jumpCount++;

@@ -22,15 +22,22 @@ public class AirState : PlayerState
     {
         base.FixedUpdate();
         
+        if(Mathf.Abs(player.inputVector.x)>0.01f)
+        {
+            player.rb.linearVelocityX=player.moveSpeed*player.inputVector.x*Time.deltaTime;
+        }
+        
 
     }
     public override void Update()
     {
         base.Update();
-        if(player.isTouchingLedge&&player.isWallDetected&& player.inputVector.x==player.facDir)
+        if(player.isWallDetected && player.inputVector.x * player.facDir > 0.1f)
         {
             stateMachine.ChangeState(player.wallSlide);
+            return;
         }
+
         if(player.isGrounded)
         {
             stateMachine.ChangeState(player.idle);

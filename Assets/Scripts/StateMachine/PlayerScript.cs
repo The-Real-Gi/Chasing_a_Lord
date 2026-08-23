@@ -140,7 +140,12 @@ public class PlayerScript : MonoBehaviour
             {
              Checks();
                
-                 if(isWallDetected&&isTouchingLedge&&!isClimbingLedge)
+                if(isGrounded)
+                {
+                    stateMachine.ChangeState(jump);
+                    return;
+                }
+                else if(isWallDetected&&isTouchingLedge&&!isClimbingLedge)
                 {
                     stateMachine.ChangeState(wallJump);
                     return;
@@ -152,10 +157,7 @@ public class PlayerScript : MonoBehaviour
                     return;
                 }
 
-                if(isGrounded)
-                {
-                    stateMachine.ChangeState(jump);
-                }else if(jumpCount<maxJumps)
+                if(jumpCount<maxJumps)
                 {
                     stateMachine.ChangeState(doubleJump);
                 }
@@ -191,7 +193,7 @@ public class PlayerScript : MonoBehaviour
             stateMachine.ChangeState(idle);
         }
 
-        if (!isClimbingLedge && isWallDetected&&!isTouchingLedge&&inputVector.y>=0)
+        if (!isClimbingLedge && stateMachine.currentState!=wallSlide && isWallDetected&&!isTouchingLedge&&inputVector.y>=0)
         {
             stateMachine.ChangeState(wallHangState);
         }
