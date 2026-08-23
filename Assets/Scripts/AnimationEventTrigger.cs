@@ -19,5 +19,10 @@ public class AnimationEventTrigger : MonoBehaviour
     {
         player.AnimationMoveForwardCalled();
     }
+
+    public void AttackEnded()
+    {
+        player.AttackFinish();
+    }
     
 }

@@ -21,8 +21,13 @@ public class PlayerScript : MonoBehaviour
     public CrouchMove crouchMove {get;private set;}
     public DashState dashState{get;private set;}
     public SlideState slideState{get;private set;}
-
     public DoubleJump doubleJump{get;private set;}
+
+    public MeleeAtt1 meleeAtt1{get;private set;}
+    public MeleeAtt2 meleeAtt2{get;private set;}
+
+    public bool isAttacking=false;
+
 
     #endregion
 
@@ -94,6 +99,14 @@ public class PlayerScript : MonoBehaviour
     public Vector2 collidersizeCrouch;
 
 
+    public bool finishAttack=false;
+    public GameObject attackPos1;
+    public GameObject attackPos2;
+    public float attack1Distance1;
+    public float attack2Distance;
+    public LayerMask whatIsEnemy;
+
+
 
     void Awake()
     {   input = new PlayersInputSet();
@@ -115,8 +128,10 @@ public class PlayerScript : MonoBehaviour
         crouchMove = new CrouchMove(this,"CrouchMove",stateMachine);
         dashState = new DashState(this,"Dash",stateMachine);
         slideState = new SlideState(this,"Slide",stateMachine);
-        
         doubleJump = new DoubleJump(this,"FlipJump",stateMachine);
+
+        meleeAtt1 = new MeleeAtt1(this,"Attack1",stateMachine);
+        meleeAtt2 = new MeleeAtt2(this,"Attack2",stateMachine);
     }
 
     void OnEnable()
@@ -125,7 +140,10 @@ public class PlayerScript : MonoBehaviour
         
         input.Movement.VerticalMove.performed += ctx => inputVector = ctx.ReadValue<Vector2>();
         input.Movement.VerticalMove.canceled += ctx => inputVector = Vector2.zero;
-       
+        
+         input.Movement.Attack1.performed +=ctx => {if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt1);};
+         input.Movement.Attack2.performed +=ctx => {if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt2);};
+         
         
         input.Movement.Dash.performed+= ctx => 
         {if(cooldownTimer<=0)
@@ -242,7 +260,16 @@ public class PlayerScript : MonoBehaviour
         isWallDetected= Physics2D.Raycast(wallCheck.position,Vector2.right,wallCheckDistance*facDir,whatIsGround);
         isTouchingLedge= Physics2D.Raycast(hangCheck.position,Vector2.right,hangCheckDistance*facDir,whatIsGround);
 
+
+
        
+    }
+
+    public void Attack1Checks()
+    {   //we need to create a list of enemies that are in range using forloop
+        // we need to check if in that circle is object withing enemy layer that has enemy script on it
+        // if so then we add it to list and eventually we deal damage to each one 
+        Physics2D.OverlapCircleAll(attackPos1.transform.position,attack1Distance1,whatIsEnemy);
     }
     public void AnimationFinishCalled()
     {
@@ -256,6 +283,16 @@ public class PlayerScript : MonoBehaviour
     public void AnimationMoveForwardCalled()
     {
         moveForward=true;
+    }
+
+    public void AttackFinish()
+    {
+        finishAttack=true;
+    }
+
+    public void TakeDamage()
+    {
+        //here we deal damage
     }
 
    
