@@ -10,6 +10,7 @@ public class GroundedState : PlayerState
     {
         base.Enter();
       player.isWallJumping=false;
+      player.jumpCount=0;
     }
 
     public override void Exit()

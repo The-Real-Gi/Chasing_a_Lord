@@ -21,10 +21,7 @@ public class AirState : PlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        if(!player.isWallJumping)
-        {
-        player.rb.linearVelocityX=player.inputVector.x*player.moveSpeed*0.8f*Time.deltaTime;
-        }
+        
 
     }
     public override void Update()

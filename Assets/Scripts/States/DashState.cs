@@ -27,7 +27,7 @@ public class DashState : PlayerState
        player.timer-=Time.deltaTime;
        if(player.timer<=0)
         {
-            stateMachine.ChangeState(player.idle);
+            stateMachine.ChangeState(player.isGrounded ? player.idle : player.airState);
         }
     }
 }

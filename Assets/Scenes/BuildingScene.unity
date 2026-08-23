@@ -927,7 +927,7 @@ Transform:
   m_GameObject: {fileID: 1312727546}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.016, y: -0.392, z: 0}
+  m_LocalPosition: {x: 0.085, y: -0.354, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1133,8 +1133,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.014890552, y: -0.13017184}
-  m_Size: {x: 0.29322183, y: 0.6245719}
+  m_Offset: {x: 0.023435593, y: -0.11855206}
+  m_Size: {x: 0.20349741, y: 0.6}
   m_Direction: 0
 --- !u!50 &1396158284
 Rigidbody2D:
@@ -1182,14 +1182,14 @@ MonoBehaviour:
   facDir: 1
   moveSpeed: 0
   jumpStrength: 5
-  wallJumpStrength: 700
+  wallJumpStrength: 5
   groundCheck: {fileID: 1312727547}
   groundCheckDistance: 0.09
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
   wallCheck: {fileID: 1551969582}
-  wallCheckDistance: 0.19
+  wallCheckDistance: 0.25
   hangCheck: {fileID: 24964585}
   hangCheckDistance: 0.28
   isGrounded: 0
@@ -1221,8 +1221,13 @@ MonoBehaviour:
   flipCooldownTimer: 0
   maxRunSpeed: 300
   baseRunSpeed: 100
-  flipEnded: 1
-  isFlipping: 0
+  jumpCount: 0
+  maxJumps: 1
+  crouchColliderOffset: {x: 0.02343559, y: -0.2}
+  baseCollider: {x: 0.02343559, y: -0.1185521}
+  sizeCollider: {x: 0.2034974, y: 0.6143846}
+  playerCollider: {fileID: 0}
+  collidersizeCrouch: {x: 0.2034974, y: 0.4}
 --- !u!114 &1396158286
 MonoBehaviour:
   m_ObjectHideFlags: 0

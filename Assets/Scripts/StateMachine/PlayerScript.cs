@@ -1,5 +1,3 @@
-using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -23,7 +21,9 @@ public class PlayerScript : MonoBehaviour
     public CrouchMove crouchMove {get;private set;}
     public DashState dashState{get;private set;}
     public SlideState slideState{get;private set;}
-    public Ground180Flip flipstate{get;private set;}
+
+    public DoubleJump doubleJump{get;private set;}
+
     #endregion
 
     public Vector2 inputVector;
@@ -84,8 +84,14 @@ public class PlayerScript : MonoBehaviour
     public float baseRunSpeed;
 
     public PlayersInputSet input;
-    public bool flipEnded=true;
-    public bool isFlipping=false;
+  
+    public int jumpCount;
+    public int maxJumps;
+    public Vector2 crouchColliderOffset;
+    public Vector2 baseCollider;
+    public Vector2 sizeCollider;
+    public CapsuleCollider2D playerCollider;
+    public Vector2 collidersizeCrouch;
 
 
 
@@ -94,6 +100,9 @@ public class PlayerScript : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         stateMachine = new StateMachine();
         rb = GetComponent<Rigidbody2D>();
+        playerCollider= GetComponent<CapsuleCollider2D>();
+        playerCollider.offset=baseCollider;
+        sizeCollider=playerCollider.size;
         idle = new IdleState(this,"Idle",stateMachine);
         move = new MoveState(this,"Run",stateMachine);
         jump = new JumpState(this, "Jump",stateMachine);
@@ -106,7 +115,8 @@ public class PlayerScript : MonoBehaviour
         crouchMove = new CrouchMove(this,"CrouchMove",stateMachine);
         dashState = new DashState(this,"Dash",stateMachine);
         slideState = new SlideState(this,"Slide",stateMachine);
-        flipstate = new Ground180Flip(this,"Flip",stateMachine);
+        
+        doubleJump = new DoubleJump(this,"FlipJump",stateMachine);
     }
 
     void OnEnable()
@@ -128,20 +138,26 @@ public class PlayerScript : MonoBehaviour
         
            input.Movement.Jump.performed+=ctx=>
             {
+             Checks();
                
                  if(isWallDetected&&isTouchingLedge&&!isClimbingLedge)
                 {
                     stateMachine.ChangeState(wallJump);
+                    return;
                 }
-               
-                if(isGrounded)
-                {
-                    Debug.Log("Performed Jump");
-                    stateMachine.ChangeState(jump);
-                }
+
                 if(isHandging && !isClimbingLedge)
                 {
-                stateMachine.ChangeState(ledgeClimbState);
+                    stateMachine.ChangeState(ledgeClimbState);
+                    return;
+                }
+
+                if(isGrounded)
+                {
+                    stateMachine.ChangeState(jump);
+                }else if(jumpCount<maxJumps)
+                {
+                    stateMachine.ChangeState(doubleJump);
                 }
                    
             };
@@ -158,16 +174,16 @@ public class PlayerScript : MonoBehaviour
     }
     
     void Update()
-    {   Debug.Log(rb.linearVelocityX);
+    {   
         cooldownTimer-= Time.deltaTime;
-        flipCooldownTimer -= Time.deltaTime;
+       
         inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
+        Checks();
         stateMachine.currentState.Update();
         if(isGrounded||!isWallJumping)
         {
         FlipController();
         }
-        Checks();
         anim.SetFloat("YVelocity",rb.linearVelocityY);
 
         if(!isClimbingLedge && isWallDetected&&isGrounded&&inputVector.x!=0)
@@ -189,33 +205,14 @@ public class PlayerScript : MonoBehaviour
     public void FlipController()
     {
         //could make animation for rotation by creating a new state with rotating and either time based or event based
-            if(isFlipping)
-            {
-                return;
-            }
+            
             if(inputVector.x > 0.1f&&!isFacingRight)
-            {   if(isGrounded)
-                {
-                    if(flipCooldownTimer <= 0f)
-                    {
-                        stateMachine.ChangeState(flipstate);
-                    }
-                }else
-                {
+            {   
                     Flip(inputVector.x);
-                }
+                
             }else if(inputVector.x < -0.1f&&isFacingRight)
             {
-               if(isGrounded)
-                {
-                    if(flipCooldownTimer <= 0f)
-                    {
-                        stateMachine.ChangeState(flipstate);
-                    }
-                }else
-                {
-                    Flip(inputVector.x);
-                }
+                    Flip(inputVector.x);    
             }
         
     }
@@ -228,12 +225,7 @@ public class PlayerScript : MonoBehaviour
         facDir = direction;
     }
 
-    public bool IsInputOppositeFacing()
-    {
-        return flipCooldownTimer > 0f &&
-            ((inputVector.x < -0.1f && isFacingRight) ||
-             (inputVector.x > 0.1f && !isFacingRight));
-    }
+   
 
     void OnDrawGizmos()
     {
@@ -252,7 +244,7 @@ public class PlayerScript : MonoBehaviour
     }
     public void AnimationFinishCalled()
     {
-        Debug.Log("Finished animation");
+       
         finishedCLimb=true;
     }
     public void AniimationClimbCalled()
@@ -264,8 +256,5 @@ public class PlayerScript : MonoBehaviour
         moveForward=true;
     }
 
-    public void EndFlip()
-    {
-       flipEnded = true;
-    }
+   
 }

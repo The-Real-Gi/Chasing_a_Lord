@@ -9,6 +9,7 @@ public class WallSlide : PlayerState
     public override void Enter()
     {
         base.Enter();
+        player.jumpCount=0;
     }
 
     public override void Exit()

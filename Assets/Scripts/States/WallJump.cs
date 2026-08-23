@@ -11,8 +11,8 @@ public class WallJump : PlayerState
         base.Enter();
         player.isWallJumping=true;
         player.Flip(-player.facDir);
-        
-       player.rb.linearVelocity= new Vector2(player.wallJumpStrength*player.facDir*Time.deltaTime,player.jumpStrength);
+        player.rb.AddForce(new Vector2(player.facDir*player.wallJumpStrength,player.jumpStrength),ForceMode2D.Impulse);
+       //player.rb.linearVelocity= new Vector2(player.wallJumpStrength*player.facDir*Time.deltaTime,player.jumpStrength);
     }
 
     public override void Exit()

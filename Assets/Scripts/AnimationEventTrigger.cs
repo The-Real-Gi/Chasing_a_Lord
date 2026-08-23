@@ -19,8 +19,5 @@ public class AnimationEventTrigger : MonoBehaviour
     {
         player.AnimationMoveForwardCalled();
     }
-    public void FlipEndTrigger()
-    {
-        player.EndFlip();
-    }
+    
 }
