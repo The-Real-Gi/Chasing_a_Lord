@@ -19,4 +19,5 @@ public class AnimationEventTrigger : MonoBehaviour
     {
         player.AnimationMoveForwardCalled();
     }
+    
 }

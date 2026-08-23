@@ -9,8 +9,9 @@ public class JumpState : AirState
     public override void Enter()
     {
         base.Enter();
-        player.rb.linearVelocity= new Vector2(player.rb.linearVelocityX,player.jumpStrength);
-        
+      
+        player.rb.AddForce(new Vector2(0,player.jumpStrength),ForceMode2D.Impulse);
+        player.jumpCount=1;
     }
 
     public override void Exit()

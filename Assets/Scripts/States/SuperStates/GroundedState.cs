@@ -10,6 +10,7 @@ public class GroundedState : PlayerState
     {
         base.Enter();
       player.isWallJumping=false;
+      player.jumpCount=0;
     }
 
     public override void Exit()
@@ -23,6 +24,12 @@ public class GroundedState : PlayerState
     public override void Update()
     {
         base.Update();
+        if(!player.isGrounded)
+        {
+            stateMachine.ChangeState(player.airState);
+            return;
+        }
+
         if(player.inputVector.x!=0)
         {
             if(player.inputVector.y<0)
@@ -58,10 +65,5 @@ public class GroundedState : PlayerState
             }
         }
 
-        if(!player.isGrounded&& !player.isWallDetected)
-        {
-            stateMachine.ChangeState(player.airState);
-        }
-        
     }
 }

@@ -10,7 +10,7 @@ public class MoveState : GroundedState
     {
         base.Enter();
         player.moveSpeed=player.baseRunSpeed;
-        Debug.Log("entered the base move state");
+     
         
     }
 
@@ -23,6 +23,7 @@ public class MoveState : GroundedState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+        
         player.moveSpeed=player.moveSpeed*1.1f;
         player.anim.speed= player.anim.speed*1.1f;
         if(player.anim.speed>=3)

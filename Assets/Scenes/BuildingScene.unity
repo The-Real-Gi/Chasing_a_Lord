@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 24964584}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.029, y: 0.13, z: 0}
+  m_LocalPosition: {x: 0.029, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -282,7 +282,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.51, y: 1.11, z: -10}
+  m_LocalPosition: {x: -5.5, y: 0.35, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -564,7 +564,7 @@ Transform:
   m_GameObject: {fileID: 709127535}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.28, y: -1.93, z: 0}
+  m_LocalPosition: {x: -2.26, y: -1.19, z: 0}
   m_LocalScale: {x: 3, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -927,7 +927,7 @@ Transform:
   m_GameObject: {fileID: 1312727546}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.016, y: -0.392, z: 0}
+  m_LocalPosition: {x: 0.085, y: -0.354, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1089,7 +1089,7 @@ Transform:
   m_GameObject: {fileID: 1396158281}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.51, y: 1.11, z: 0}
+  m_LocalPosition: {x: -5.5, y: 0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1133,8 +1133,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.014890552, y: -0.13017184}
-  m_Size: {x: 0.29322183, y: 0.6245719}
+  m_Offset: {x: 0.023435593, y: -0.11855206}
+  m_Size: {x: 0.20349741, y: 0.6}
   m_Direction: 0
 --- !u!50 &1396158284
 Rigidbody2D:
@@ -1182,16 +1182,16 @@ MonoBehaviour:
   facDir: 1
   moveSpeed: 0
   jumpStrength: 5
-  wallJumpStrength: 700
+  wallJumpStrength: 5
   groundCheck: {fileID: 1312727547}
   groundCheckDistance: 0.09
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
   wallCheck: {fileID: 1551969582}
-  wallCheckDistance: 0.19
+  wallCheckDistance: 0.17
   hangCheck: {fileID: 24964585}
-  hangCheckDistance: 0.28
+  hangCheckDistance: 0.15
   isGrounded: 0
   isWallDetected: 0
   isWallJumping: 0
@@ -1209,7 +1209,7 @@ MonoBehaviour:
   finishedCLimb: 0
   moveUp: 0
   moveForward: 0
-  climbingUpSpeed: 40
+  climbingUpSpeed: 25
   movingForwardSpeed: 50
   isClimbingLedge: 0
   timer: 0
@@ -1217,8 +1217,17 @@ MonoBehaviour:
   dashingTime: 0.25
   dashSpeed: 300
   cooldownTimer: 0
+  flipCooldown: 0.6
+  flipCooldownTimer: 0
   maxRunSpeed: 300
   baseRunSpeed: 100
+  jumpCount: 0
+  maxJumps: 1
+  crouchColliderOffset: {x: 0.02343559, y: -0.2}
+  baseCollider: {x: 0.02343559, y: -0.1185521}
+  sizeCollider: {x: 0.2034974, y: 0.6143846}
+  playerCollider: {fileID: 0}
+  collidersizeCrouch: {x: 0.2034974, y: 0.4}
 --- !u!114 &1396158286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1380,7 +1389,7 @@ Transform:
   m_GameObject: {fileID: 1490055890}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.51, y: 1.11, z: -10}
+  m_LocalPosition: {x: -5.5, y: 0.35, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1411,7 +1420,7 @@ Transform:
   m_GameObject: {fileID: 1551969581}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.018, y: 0.059, z: 0}
+  m_LocalPosition: {x: -0.018, y: 0.154, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
