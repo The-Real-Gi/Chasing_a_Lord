@@ -24,5 +24,9 @@ public class AnimationEventTrigger : MonoBehaviour
     {
         player.AttackFinish();
     }
+    public void CheckToDealDamage()
+    {
+        player.Attack1Checks();
+    }
     
 }

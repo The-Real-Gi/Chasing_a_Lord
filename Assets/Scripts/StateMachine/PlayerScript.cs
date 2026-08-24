@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -98,14 +99,15 @@ public class PlayerScript : MonoBehaviour
     public CapsuleCollider2D playerCollider;
     public Vector2 collidersizeCrouch;
 
-
+    #region Combat
     public bool finishAttack=false;
     public GameObject attackPos1;
     public GameObject attackPos2;
     public float attack1Distance1;
     public float attack2Distance;
     public LayerMask whatIsEnemy;
-
+    public List<EnemyScript> enemiesInAttackRange = new List<EnemyScript>();
+    #endregion
 
 
     void Awake()
@@ -254,6 +256,22 @@ public class PlayerScript : MonoBehaviour
         Gizmos.DrawLine(hangCheck.position,hangCheck.position+ new Vector3(facDir*hangCheckDistance,0,0));
 
     }
+
+    void OnDrawGizmosSelected()
+    {
+        if (attackPos1 != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(attackPos1.transform.position, attack1Distance1);
+        }
+
+        if (attackPos2 != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(attackPos2.transform.position, attack2Distance);
+        }
+    }
+
     void Checks()
     {
         isGrounded= Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckDistance,whatIsGround);
@@ -266,10 +284,28 @@ public class PlayerScript : MonoBehaviour
     }
 
     public void Attack1Checks()
-    {   //we need to create a list of enemies that are in range using forloop
-        // we need to check if in that circle is object withing enemy layer that has enemy script on it
-        // if so then we add it to list and eventually we deal damage to each one 
-        Physics2D.OverlapCircleAll(attackPos1.transform.position,attack1Distance1,whatIsEnemy);
+    {
+        enemiesInAttackRange.Clear();
+
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
+            attackPos1.transform.position,
+            attack1Distance1,
+            whatIsEnemy);
+
+        foreach (Collider2D hitCollider in hitColliders)
+        {
+            EnemyScript enemy = hitCollider.GetComponentInParent<EnemyScript>();
+
+            if (enemy != null && !enemiesInAttackRange.Contains(enemy))
+            {
+                enemiesInAttackRange.Add(enemy);
+            }
+        }
+        Debug.Log("I will hit "+enemiesInAttackRange.Count+" enemies");
+        foreach(var enemy in enemiesInAttackRange)
+        {
+            TakeDamage(enemy,10);
+        }
     }
     public void AnimationFinishCalled()
     {
@@ -290,9 +326,16 @@ public class PlayerScript : MonoBehaviour
         finishAttack=true;
     }
 
-    public void TakeDamage()
+    public void TakeDamage(EnemyScript enemy,int damage)
     {
-        //here we deal damage
+        if (enemy == null)
+        {
+            return;
+            Debug.Log("enemy is null");
+        }
+
+        enemy.health -= damage;
+        Debug.Log("Enemy health: " + enemy.health);
     }
 
    
