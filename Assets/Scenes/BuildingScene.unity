@@ -1337,10 +1337,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1396158282}
-  - component: {fileID: 1396158285}
   - component: {fileID: 1396158284}
   - component: {fileID: 1396158283}
   - component: {fileID: 1396158286}
+  - component: {fileID: 1396158287}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -1403,8 +1403,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.023435593, y: -0.11855206}
-  m_Size: {x: 0.20349741, y: 0.6}
+  m_Offset: {x: 0.02, y: -0.12}
+  m_Size: {x: 0.2, y: 0.6}
   m_Direction: 0
 --- !u!50 &1396158284
 Rigidbody2D:
@@ -1433,80 +1433,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &1396158285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1396158281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea5779638ef0543558718da40f1856a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerScript
-  anim: {fileID: 1382708830}
-  rb: {fileID: 0}
-  isAttacking: 0
-  inputVector: {x: 0, y: 0}
-  isFacingRight: 1
-  facDir: 1
-  moveSpeed: 0
-  jumpStrength: 5
-  wallJumpStrength: 5
-  groundCheck: {fileID: 1312727547}
-  groundCheckDistance: 0.09
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 64
-  wallCheck: {fileID: 1551969582}
-  wallCheckDistance: 0.17
-  hangCheck: {fileID: 24964585}
-  hangCheckDistance: 0.15
-  isGrounded: 0
-  isWallDetected: 0
-  isWallJumping: 0
-  isHandging: 0
-  isTouchingLedge: 0
-  ledgeDetected: 0
-  canClimbLedge: 0
-  ledgePosBot: {x: 0, y: 0}
-  ledgePos1: {x: 0, y: 0}
-  ledgePos2: {x: 0, y: 0}
-  ledgeClimbXOffset1: 0
-  ledgeClimbYOffset1: 0
-  ledgeClimbXoffset2: 0
-  ledgeclimbYOffset2: 0
-  finishedCLimb: 0
-  moveUp: 0
-  moveForward: 0
-  climbingUpSpeed: 25
-  movingForwardSpeed: 50
-  isClimbingLedge: 0
-  timer: 0
-  dashCooldown: 2
-  dashingTime: 0.25
-  dashSpeed: 300
-  cooldownTimer: 0
-  flipCooldown: 0.6
-  flipCooldownTimer: 0
-  maxRunSpeed: 300
-  baseRunSpeed: 100
-  jumpCount: 0
-  maxJumps: 1
-  crouchColliderOffset: {x: 0.02343559, y: -0.2}
-  baseCollider: {x: 0.02343559, y: -0.1185521}
-  sizeCollider: {x: 0.2034974, y: 0.6143846}
-  playerCollider: {fileID: 0}
-  collidersizeCrouch: {x: 0.2034974, y: 0.4}
-  finishAttack: 0
-  attackPos1: {fileID: 0}
-  attackPos2: {fileID: 0}
-  attack1Distance1: 0
-  attack2Distance: 0
-  whatIsEnemy:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &1396158286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1557,6 +1483,81 @@ MonoBehaviour:
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1396158287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1396158281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a406344a54d44fda9ec111233a8f25d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerScript
+  anim: {fileID: 1382708830}
+  rb: {fileID: 0}
+  isAttacking: 0
+  inputVector: {x: 0, y: 0}
+  isFacingRight: 1
+  facDir: 1
+  moveSpeed: 0
+  jumpStrength: 7
+  wallJumpStrength: 5
+  groundCheck: {fileID: 1312727547}
+  groundCheckDistance: 0.12
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
+  wallCheck: {fileID: 1551969582}
+  wallCheckDistance: 0.21
+  hangCheck: {fileID: 24964585}
+  hangCheckDistance: 0.18
+  isGrounded: 0
+  isWallDetected: 0
+  isWallJumping: 0
+  isHandging: 0
+  isTouchingLedge: 0
+  ledgeDetected: 0
+  canClimbLedge: 0
+  ledgePosBot: {x: 0, y: 0}
+  ledgePos1: {x: 0, y: 0}
+  ledgePos2: {x: 0, y: 0}
+  ledgeClimbXOffset1: 0
+  ledgeClimbYOffset1: 0
+  ledgeClimbXoffset2: 0
+  ledgeclimbYOffset2: 0
+  finishedCLimb: 0
+  moveUp: 0
+  moveForward: 0
+  climbingUpSpeed: 0
+  movingForwardSpeed: 0
+  isClimbingLedge: 0
+  timer: 0
+  dashCooldown: 1
+  dashingTime: 0
+  dashSpeed: 50
+  cooldownTimer: 0
+  flipCooldown: 1
+  flipCooldownTimer: 0
+  maxRunSpeed: 300
+  baseRunSpeed: 100
+  jumpCount: 0
+  maxJumps: 2
+  crouchColliderOffset: {x: 0, y: 0.3}
+  baseCollider: {x: 0, y: -0.12}
+  sizeCollider: {x: 0.2, y: 0.6}
+  playerCollider: {fileID: 0}
+  collidersizeCrouch: {x: 0, y: -0.3}
+  finishAttack: 0
+  attackPos1: {fileID: 1516542971}
+  attackPos2: {fileID: 415873538}
+  attack1Distance1: 0.18
+  attack2Distance: 0.18
+  whatIsEnemy:
+    serializedVersion: 2
+    m_Bits: 256
+  enemiesInAttackRange: []
 --- !u!1 &1490055890
 GameObject:
   m_ObjectHideFlags: 0
@@ -1754,6 +1755,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1732373414}
   - component: {fileID: 1732373413}
+  - component: {fileID: 1732373416}
+  - component: {fileID: 1732373415}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
@@ -1814,6 +1817,46 @@ Transform:
   - {fileID: 305022027}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1732373415
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732373412}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &1732373416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732373412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c063d7fd53cf243cb9d04f00516a7dcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyScript
+  health: 100
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

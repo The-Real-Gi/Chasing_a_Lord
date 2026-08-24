@@ -26,6 +26,9 @@ public class PlayerScript : MonoBehaviour
 
     public MeleeAtt1 meleeAtt1{get;private set;}
     public MeleeAtt2 meleeAtt2{get;private set;}
+    public Kick kick{get;private set;}
+    public MeleeRun meleeRun{get;private set;}
+    public MeleeSpin meleeSpin{get;private set;}
 
     public bool isAttacking=false;
 
@@ -134,6 +137,9 @@ public class PlayerScript : MonoBehaviour
 
         meleeAtt1 = new MeleeAtt1(this,"Attack1",stateMachine);
         meleeAtt2 = new MeleeAtt2(this,"Attack2",stateMachine);
+        meleeRun = new MeleeRun(this,"MeleeRun",stateMachine);
+        meleeSpin = new MeleeSpin(this,"MeleeSpin",stateMachine);
+        kick = new Kick(this,"Kick",stateMachine);
     }
 
     void OnEnable()
@@ -145,7 +151,9 @@ public class PlayerScript : MonoBehaviour
         
          input.Movement.Attack1.performed +=ctx => {if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt1);};
          input.Movement.Attack2.performed +=ctx => {if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt2);};
-         
+         input.Movement.MeleeRun.performed+= ctx =>{if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeRun);};
+         input.Movement.MeleeSpin.performed+= ctx =>{if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeSpin);};
+         input.Movement.Kick.performed+= ctx =>{if(isGrounded&&!isAttacking)stateMachine.ChangeState(kick);};
         
         input.Movement.Dash.performed+= ctx => 
         {if(cooldownTimer<=0)

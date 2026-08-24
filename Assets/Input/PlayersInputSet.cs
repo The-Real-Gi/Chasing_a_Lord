@@ -136,6 +136,33 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Kick"",
+                    ""type"": ""Button"",
+                    ""id"": ""d74db892-c18a-4d18-abe3-3a5832359273"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MeleeSpin"",
+                    ""type"": ""Button"",
+                    ""id"": ""e6bbadd5-6474-4c0b-ac57-028a16833edd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MeleeRun"",
+                    ""type"": ""Button"",
+                    ""id"": ""be0072fb-2bc1-4e31-9666-cce69d51f5ed"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -237,6 +264,39 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""action"": ""Attack2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3864b5d7-1b9f-4953-a8b1-e259a8f31eb4"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""Kick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""014b3be3-e82b-4b7f-9f8c-ba6aed489601"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""MeleeSpin"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""313ebec3-413f-48a3-bd28-742a5926d54a"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""MeleeRun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -267,6 +327,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         m_Movement_Dash = m_Movement.FindAction("Dash", throwIfNotFound: true);
         m_Movement_Attack1 = m_Movement.FindAction("Attack1", throwIfNotFound: true);
         m_Movement_Attack2 = m_Movement.FindAction("Attack2", throwIfNotFound: true);
+        m_Movement_Kick = m_Movement.FindAction("Kick", throwIfNotFound: true);
+        m_Movement_MeleeSpin = m_Movement.FindAction("MeleeSpin", throwIfNotFound: true);
+        m_Movement_MeleeRun = m_Movement.FindAction("MeleeRun", throwIfNotFound: true);
     }
 
     ~@PlayersInputSet()
@@ -352,6 +415,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_Dash;
     private readonly InputAction m_Movement_Attack1;
     private readonly InputAction m_Movement_Attack2;
+    private readonly InputAction m_Movement_Kick;
+    private readonly InputAction m_Movement_MeleeSpin;
+    private readonly InputAction m_Movement_MeleeRun;
     /// <summary>
     /// Provides access to input actions defined in input action map "Movement".
     /// </summary>
@@ -383,6 +449,18 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Movement/Attack2".
         /// </summary>
         public InputAction @Attack2 => m_Wrapper.m_Movement_Attack2;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/Kick".
+        /// </summary>
+        public InputAction @Kick => m_Wrapper.m_Movement_Kick;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/MeleeSpin".
+        /// </summary>
+        public InputAction @MeleeSpin => m_Wrapper.m_Movement_MeleeSpin;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/MeleeRun".
+        /// </summary>
+        public InputAction @MeleeRun => m_Wrapper.m_Movement_MeleeRun;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -424,6 +502,15 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @Attack2.started += instance.OnAttack2;
             @Attack2.performed += instance.OnAttack2;
             @Attack2.canceled += instance.OnAttack2;
+            @Kick.started += instance.OnKick;
+            @Kick.performed += instance.OnKick;
+            @Kick.canceled += instance.OnKick;
+            @MeleeSpin.started += instance.OnMeleeSpin;
+            @MeleeSpin.performed += instance.OnMeleeSpin;
+            @MeleeSpin.canceled += instance.OnMeleeSpin;
+            @MeleeRun.started += instance.OnMeleeRun;
+            @MeleeRun.performed += instance.OnMeleeRun;
+            @MeleeRun.canceled += instance.OnMeleeRun;
         }
 
         /// <summary>
@@ -450,6 +537,15 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @Attack2.started -= instance.OnAttack2;
             @Attack2.performed -= instance.OnAttack2;
             @Attack2.canceled -= instance.OnAttack2;
+            @Kick.started -= instance.OnKick;
+            @Kick.performed -= instance.OnKick;
+            @Kick.canceled -= instance.OnKick;
+            @MeleeSpin.started -= instance.OnMeleeSpin;
+            @MeleeSpin.performed -= instance.OnMeleeSpin;
+            @MeleeSpin.canceled -= instance.OnMeleeSpin;
+            @MeleeRun.started -= instance.OnMeleeRun;
+            @MeleeRun.performed -= instance.OnMeleeRun;
+            @MeleeRun.canceled -= instance.OnMeleeRun;
         }
 
         /// <summary>
@@ -538,5 +634,26 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAttack2(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Kick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnKick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MeleeSpin" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMeleeSpin(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MeleeRun" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMeleeRun(InputAction.CallbackContext context);
     }
 }
