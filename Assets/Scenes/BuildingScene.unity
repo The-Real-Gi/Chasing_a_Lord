@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 305022027}
   - component: {fileID: 305022028}
   - component: {fileID: 305022029}
+  - component: {fileID: 305022030}
   m_Layer: 8
   m_Name: _Idle_0
   m_TagString: Untagged
@@ -295,6 +296,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &305022030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 305022026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d79d06060ee947cd8089d17d7494ad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimationTrigger
 --- !u!1 &415873538
 GameObject:
   m_ObjectHideFlags: 0
@@ -2042,6 +2055,7 @@ MonoBehaviour:
   isGrounded: 0
   isWallDetected: 0
   isSeeingPlayer: 0
+  attackFinish: 0
 --- !u!1 &1961934611
 GameObject:
   m_ObjectHideFlags: 0

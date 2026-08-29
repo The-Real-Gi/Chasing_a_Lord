@@ -15,6 +15,11 @@ public class EnemyAttack1 : EnemyState
     public override void Update()
     {
         base.Update();
+        if(enemy.attackFinish)
+        {
+            stateMachine.ChangeState(enemy.battleState);
+        }
+        //check for player in range to check for dealing damage
     }
 
     public override void FixedUpdate()

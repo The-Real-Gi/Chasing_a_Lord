@@ -37,6 +37,9 @@ public class EnemyScript : MonoBehaviour
     public EnemyMove enemyMove{get;private set;}
     public EnemyBattleState battleState {get; private set;}
     public EnemyAttack1 enemyAttack1 {get;private set;}
+    public EnemyDeath death{get;private set;}
+    public bool attackFinish=false;
+    public bool dealingDamage=false;
 
     void Awake()
     {   anim= GetComponentInChildren<Animator>();
@@ -47,6 +50,7 @@ public class EnemyScript : MonoBehaviour
         enemyMove= new EnemyMove(this,enemyStateMachine,"Move");
         battleState = new EnemyBattleState (this,enemyStateMachine,"Move");
         enemyAttack1 = new EnemyAttack1(this,enemyStateMachine,"Attack1");
+        death = new EnemyDeath(this,enemyStateMachine,"death");
 
         enemyStateMachine.Initialize(enemyIdle);
     
@@ -61,6 +65,22 @@ public class EnemyScript : MonoBehaviour
     {
         Checks();
 
+        GeneralFlipCheck();
+
+        if (isSeeingPlayer && enemyStateMachine.currentState != battleState)
+        {
+            enemyStateMachine.ChangeState(battleState);
+        }
+
+        enemyStateMachine.currentState.Update();
+        if (health <= 0)
+        {
+            enemyStateMachine.ChangeState(death);
+        }
+    }
+
+    private void GeneralFlipCheck()
+    {
         if (player != null)
         {
             if (player.position.x > transform.position.x)
@@ -74,14 +94,8 @@ public class EnemyScript : MonoBehaviour
 
             FlipController();
         }
-
-        if (isSeeingPlayer && enemyStateMachine.currentState != battleState)
-        {
-            enemyStateMachine.ChangeState(battleState);
-        }
-
-        enemyStateMachine.currentState.Update();
     }
+
     void FixedUpdate()
     {
         enemyStateMachine.currentState.FixedUpdate();
@@ -127,5 +141,14 @@ public class EnemyScript : MonoBehaviour
         isFacingRight=!isFacingRight;
         facDir=facDir*(-1);
         transform.localScale= new Vector3(facDir*2,2,2);
+    }
+
+    public void AttackFinish()
+    {
+        attackFinish=true;
+    }
+    public void DealingDamage()
+    {
+        
     }
 }
