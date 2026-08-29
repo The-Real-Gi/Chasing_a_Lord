@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -21,8 +22,16 @@ public class PlayerScript : MonoBehaviour
     public CrouchMove crouchMove {get;private set;}
     public DashState dashState{get;private set;}
     public SlideState slideState{get;private set;}
-
     public DoubleJump doubleJump{get;private set;}
+
+    public MeleeAtt1 meleeAtt1{get;private set;}
+    public MeleeAtt2 meleeAtt2{get;private set;}
+    public Kick kick{get;private set;}
+    public MeleeRun meleeRun{get;private set;}
+    public MeleeSpin meleeSpin{get;private set;}
+
+    public bool isAttacking=false;
+
 
     #endregion
 
@@ -93,6 +102,35 @@ public class PlayerScript : MonoBehaviour
     public CapsuleCollider2D playerCollider;
     public Vector2 collidersizeCrouch;
 
+    #region Combat
+    public bool finishAttack=false;
+    public bool kickDamageDealt=false;
+    public float kickMoveSpeed = 5f;
+    public float meleeAtt1MoveSpeed = 5f;
+    public float meleeAtt2MoveSpeed = 6f;
+    public float meleeAttackBlendSpeed = 8f;
+    public float meleeSpinSlowdownRate = 0.08f;
+    public float meleeRunAccelerationSpeed = 0.12f;
+    public float meleeRunAccelerationTimer = 0.25f;
+    public float meleeSpinPushForce ;
+    public float meleeSpinUpForce ;
+    public bool meleeSpinDamageDealt=false;
+    public bool meleeAtt1DamageDealt=false;
+    public bool meleeAtt2DamageDealt=false;
+    public GameObject attackPos1;
+    public GameObject attackPos2;
+    public GameObject attackPos3;
+    public GameObject attackPos4;
+    public GameObject attackPos5;
+    public float attack1Distance1;
+    public float attack2Distance;
+    public float attack3Distance;
+    public float attack4Distance;
+    public float attack5Distance;
+    public LayerMask whatIsEnemy;
+    public List<EnemyScript> enemiesInAttackRange = new List<EnemyScript>();
+
+    #endregion
 
 
     void Awake()
@@ -115,8 +153,13 @@ public class PlayerScript : MonoBehaviour
         crouchMove = new CrouchMove(this,"CrouchMove",stateMachine);
         dashState = new DashState(this,"Dash",stateMachine);
         slideState = new SlideState(this,"Slide",stateMachine);
-        
         doubleJump = new DoubleJump(this,"FlipJump",stateMachine);
+
+        meleeAtt1 = new MeleeAtt1(this,"Attack1",stateMachine);
+        meleeAtt2 = new MeleeAtt2(this,"Attack2",stateMachine);
+        meleeRun = new MeleeRun(this,"MeleeRun",stateMachine);
+        meleeSpin = new MeleeSpin(this,"MeleeSpin",stateMachine);
+        kick = new Kick(this,"Kick",stateMachine);
     }
 
     void OnEnable()
@@ -125,7 +168,12 @@ public class PlayerScript : MonoBehaviour
         
         input.Movement.VerticalMove.performed += ctx => inputVector = ctx.ReadValue<Vector2>();
         input.Movement.VerticalMove.canceled += ctx => inputVector = Vector2.zero;
-       
+        
+         input.Movement.Attack1.performed +=ctx => {if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt1);};
+         input.Movement.Attack2.performed +=ctx => {if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt2);};
+         input.Movement.MeleeRun.performed+= ctx =>{if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeRun);};
+         input.Movement.MeleeSpin.performed+= ctx =>{if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeSpin);};
+         input.Movement.Kick.performed+= ctx =>{if(isGrounded&&!isAttacking)stateMachine.ChangeState(kick);};
         
         input.Movement.Dash.performed+= ctx => 
         {if(cooldownTimer<=0)
@@ -207,6 +255,10 @@ public class PlayerScript : MonoBehaviour
     public void FlipController()
     {
         //could make animation for rotation by creating a new state with rotating and either time based or event based
+        if (isAttacking)
+        {
+            return;
+        }
             
             if(inputVector.x > 0.1f&&!isFacingRight)
             {   
@@ -221,6 +273,11 @@ public class PlayerScript : MonoBehaviour
 
     public void Flip(float value)
     {   
+        if (isAttacking)
+        {
+            return;
+        }
+
         int direction = value >= 0 ? 1 : -1;
         transform.localScale = new Vector3(direction, 1, 1);
         isFacingRight = direction == 1;
@@ -236,13 +293,102 @@ public class PlayerScript : MonoBehaviour
         Gizmos.DrawLine(hangCheck.position,hangCheck.position+ new Vector3(facDir*hangCheckDistance,0,0));
 
     }
+
+    void OnDrawGizmosSelected()
+    {
+        if (attackPos1 != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(attackPos1.transform.position, attack1Distance1);
+        }
+
+        if (attackPos2 != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(attackPos2.transform.position, attack2Distance);
+        }
+
+        if(attackPos3 != null)
+        {
+            Gizmos.color= Color.blue;
+            Gizmos.DrawWireSphere(attackPos3.transform.position,attack3Distance);
+        }
+
+         if(attackPos4 != null)
+        {
+            Gizmos.color= Color.purple;
+            Gizmos.DrawWireSphere(attackPos4.transform.position,attack4Distance);
+        }
+
+         if(attackPos5 != null)
+        {
+            Gizmos.color= Color.green;
+            Gizmos.DrawWireSphere(attackPos5.transform.position,attack5Distance);
+        }
+    }
+
     void Checks()
     {
         isGrounded= Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckDistance,whatIsGround);
         isWallDetected= Physics2D.Raycast(wallCheck.position,Vector2.right,wallCheckDistance*facDir,whatIsGround);
         isTouchingLedge= Physics2D.Raycast(hangCheck.position,Vector2.right,hangCheckDistance*facDir,whatIsGround);
 
+
+
        
+    }
+
+    public void Attack1Checks()
+    {
+        enemiesInAttackRange.Clear();
+
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
+            attackPos1.transform.position,
+            attack1Distance1,
+            whatIsEnemy);
+
+        foreach (Collider2D hitCollider in hitColliders)
+        {
+            EnemyScript enemy = hitCollider.GetComponentInParent<EnemyScript>();
+
+            if (enemy != null && !enemiesInAttackRange.Contains(enemy))
+            {
+                enemiesInAttackRange.Add(enemy);
+            }
+        }
+        int dealingDamage = 0;
+
+        if (stateMachine.currentState == kick)
+        {
+            dealingDamage = 10;
+        }
+        else if (stateMachine.currentState == meleeAtt1)
+        {
+            dealingDamage = 15;
+        }
+        else if (stateMachine.currentState == meleeAtt2)
+        {
+            dealingDamage = 20;
+        }
+        else if (stateMachine.currentState == meleeRun)
+        {
+            dealingDamage = 25;
+        }
+        else if (stateMachine.currentState == meleeSpin)
+        {
+            dealingDamage = 30;
+        }
+        else
+        {
+            Debug.LogWarning("Attack1Checks called while current state is not a valid attack state.");
+            return;
+        }
+
+        Debug.Log("I will hit " + enemiesInAttackRange.Count + " enemies with " + dealingDamage + " damage");
+        foreach (var enemy in enemiesInAttackRange)
+        {
+            TakeDamage(enemy, dealingDamage);
+        }
     }
     public void AnimationFinishCalled()
     {
@@ -256,6 +402,41 @@ public class PlayerScript : MonoBehaviour
     public void AnimationMoveForwardCalled()
     {
         moveForward=true;
+    }
+
+    public void AttackFinish()
+    {
+        finishAttack=true;
+    }
+
+    public void StartKickForwardMovement()
+    {
+        kickDamageDealt = false;
+        rb.linearVelocity = new Vector2(kickMoveSpeed * facDir, rb.linearVelocity.y);
+    }
+
+    public void StartKickBackwardMovement()
+    {
+        kickDamageDealt = true;
+        rb.linearVelocity = new Vector2(-kickMoveSpeed * facDir, rb.linearVelocity.y);
+    }
+
+    public void ResetKickMovement()
+    {
+        kickDamageDealt = false;
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+    }
+
+    public void TakeDamage(EnemyScript enemy,int damage)
+    {
+        if (enemy == null)
+        {
+            return;
+           
+        }
+
+        enemy.health -= damage;
+      
     }
 
    
