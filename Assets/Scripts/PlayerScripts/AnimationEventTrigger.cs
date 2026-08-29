@@ -27,6 +27,26 @@ public class AnimationEventTrigger : MonoBehaviour
     public void CheckToDealDamage()
     {
         player.Attack1Checks();
+
+        if (player.stateMachine.currentState == player.meleeAtt1)
+        {
+            player.meleeAtt1DamageDealt = true;
+        }
+        else if (player.stateMachine.currentState == player.meleeAtt2)
+        {
+            player.meleeAtt2DamageDealt = true;
+        }
+        else if (player.stateMachine.currentState == player.meleeSpin)
+        {
+            player.meleeSpinDamageDealt = true;
+            player.rb.linearVelocity = Vector2.zero;
+        }
+        else if (player.stateMachine.currentState == player.kick)
+        {
+            player.kickDamageDealt = true;
+        }
     }
+
+    // do func for all types of attack
     
 }

@@ -104,12 +104,32 @@ public class PlayerScript : MonoBehaviour
 
     #region Combat
     public bool finishAttack=false;
+    public bool kickDamageDealt=false;
+    public float kickMoveSpeed = 5f;
+    public float meleeAtt1MoveSpeed = 5f;
+    public float meleeAtt2MoveSpeed = 6f;
+    public float meleeAttackBlendSpeed = 8f;
+    public float meleeSpinSlowdownRate = 0.08f;
+    public float meleeRunAccelerationSpeed = 0.12f;
+    public float meleeRunAccelerationTimer = 0.25f;
+    public float meleeSpinPushForce ;
+    public float meleeSpinUpForce ;
+    public bool meleeSpinDamageDealt=false;
+    public bool meleeAtt1DamageDealt=false;
+    public bool meleeAtt2DamageDealt=false;
     public GameObject attackPos1;
     public GameObject attackPos2;
+    public GameObject attackPos3;
+    public GameObject attackPos4;
+    public GameObject attackPos5;
     public float attack1Distance1;
     public float attack2Distance;
+    public float attack3Distance;
+    public float attack4Distance;
+    public float attack5Distance;
     public LayerMask whatIsEnemy;
     public List<EnemyScript> enemiesInAttackRange = new List<EnemyScript>();
+
     #endregion
 
 
@@ -235,6 +255,10 @@ public class PlayerScript : MonoBehaviour
     public void FlipController()
     {
         //could make animation for rotation by creating a new state with rotating and either time based or event based
+        if (isAttacking)
+        {
+            return;
+        }
             
             if(inputVector.x > 0.1f&&!isFacingRight)
             {   
@@ -249,6 +273,11 @@ public class PlayerScript : MonoBehaviour
 
     public void Flip(float value)
     {   
+        if (isAttacking)
+        {
+            return;
+        }
+
         int direction = value >= 0 ? 1 : -1;
         transform.localScale = new Vector3(direction, 1, 1);
         isFacingRight = direction == 1;
@@ -277,6 +306,24 @@ public class PlayerScript : MonoBehaviour
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(attackPos2.transform.position, attack2Distance);
+        }
+
+        if(attackPos3 != null)
+        {
+            Gizmos.color= Color.blue;
+            Gizmos.DrawWireSphere(attackPos3.transform.position,attack3Distance);
+        }
+
+         if(attackPos4 != null)
+        {
+            Gizmos.color= Color.purple;
+            Gizmos.DrawWireSphere(attackPos4.transform.position,attack4Distance);
+        }
+
+         if(attackPos5 != null)
+        {
+            Gizmos.color= Color.green;
+            Gizmos.DrawWireSphere(attackPos5.transform.position,attack5Distance);
         }
     }
 
@@ -309,10 +356,38 @@ public class PlayerScript : MonoBehaviour
                 enemiesInAttackRange.Add(enemy);
             }
         }
-        Debug.Log("I will hit "+enemiesInAttackRange.Count+" enemies");
-        foreach(var enemy in enemiesInAttackRange)
+        int dealingDamage = 0;
+
+        if (stateMachine.currentState == kick)
         {
-            TakeDamage(enemy,10);
+            dealingDamage = 10;
+        }
+        else if (stateMachine.currentState == meleeAtt1)
+        {
+            dealingDamage = 15;
+        }
+        else if (stateMachine.currentState == meleeAtt2)
+        {
+            dealingDamage = 20;
+        }
+        else if (stateMachine.currentState == meleeRun)
+        {
+            dealingDamage = 25;
+        }
+        else if (stateMachine.currentState == meleeSpin)
+        {
+            dealingDamage = 30;
+        }
+        else
+        {
+            Debug.LogWarning("Attack1Checks called while current state is not a valid attack state.");
+            return;
+        }
+
+        Debug.Log("I will hit " + enemiesInAttackRange.Count + " enemies with " + dealingDamage + " damage");
+        foreach (var enemy in enemiesInAttackRange)
+        {
+            TakeDamage(enemy, dealingDamage);
         }
     }
     public void AnimationFinishCalled()
@@ -334,16 +409,34 @@ public class PlayerScript : MonoBehaviour
         finishAttack=true;
     }
 
+    public void StartKickForwardMovement()
+    {
+        kickDamageDealt = false;
+        rb.linearVelocity = new Vector2(kickMoveSpeed * facDir, rb.linearVelocity.y);
+    }
+
+    public void StartKickBackwardMovement()
+    {
+        kickDamageDealt = true;
+        rb.linearVelocity = new Vector2(-kickMoveSpeed * facDir, rb.linearVelocity.y);
+    }
+
+    public void ResetKickMovement()
+    {
+        kickDamageDealt = false;
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+    }
+
     public void TakeDamage(EnemyScript enemy,int damage)
     {
         if (enemy == null)
         {
             return;
-            Debug.Log("enemy is null");
+           
         }
 
         enemy.health -= damage;
-        Debug.Log("Enemy health: " + enemy.health);
+      
     }
 
    
