@@ -1652,30 +1652,32 @@ MonoBehaviour:
   finishedCLimb: 0
   moveUp: 0
   moveForward: 0
-  climbingUpSpeed: 0
-  movingForwardSpeed: 0
+  climbingUpSpeed: 30
+  movingForwardSpeed: 35
   isClimbingLedge: 0
   timer: 0
   dashCooldown: 1
-  dashingTime: 0
-  dashSpeed: 50
+  dashingTime: 1
+  dashSpeed: 200
   cooldownTimer: 0
   flipCooldown: 1
   flipCooldownTimer: 0
-  maxRunSpeed: 300
+  maxRunSpeed: 200
   baseRunSpeed: 100
   jumpCount: 0
   maxJumps: 2
-  crouchColliderOffset: {x: 0, y: 0.3}
+  crouchColliderOffset: {x: 0, y: -0.23}
   baseCollider: {x: 0, y: -0.12}
   sizeCollider: {x: 0.2, y: 0.6}
   playerCollider: {fileID: 0}
-  collidersizeCrouch: {x: 0, y: -0.3}
+  collidersizeCrouch: {x: 0.4, y: 0.001}
   finishAttack: 0
   kickDamageDealt: 0
   kickMoveSpeed: 0.1
   meleeAtt1MoveSpeed: 0.1
   meleeAtt2MoveSpeed: 0.1
+  getHitDuration: 0.5
+  getHitTimer: 0
   meleeAttackBlendSpeed: 8
   meleeSpinSlowdownRate: 1
   meleeRunAccelerationSpeed: 0.02

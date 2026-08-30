@@ -24,6 +24,7 @@ public class PlayerScript : MonoBehaviour
     public SlideState slideState{get;private set;}
     public DoubleJump doubleJump{get;private set;}
 
+    public GetHit getHit{get;private set;}
     public PlayerDeath playerDeath{get;private set;}
 
     public MeleeAtt1 meleeAtt1{get;private set;}
@@ -112,6 +113,8 @@ public class PlayerScript : MonoBehaviour
     public float kickMoveSpeed = 5f;
     public float meleeAtt1MoveSpeed = 5f;
     public float meleeAtt2MoveSpeed = 6f;
+    [SerializeField] public float getHitDuration = 0.35f;
+    [SerializeField] public float getHitTimer = 0f;
     public float meleeAttackBlendSpeed = 8f;
     public float meleeSpinSlowdownRate = 0.08f;
     public float meleeRunAccelerationSpeed = 0.12f;
@@ -166,6 +169,7 @@ public class PlayerScript : MonoBehaviour
         kick = new Kick(this,"Kick",stateMachine);
 
         playerDeath= new PlayerDeath(this,"Death",stateMachine);
+        getHit= new GetHit(this,"GetHit",stateMachine);
     }
 
     void OnEnable()
@@ -175,14 +179,14 @@ public class PlayerScript : MonoBehaviour
         input.Movement.VerticalMove.performed += ctx => inputVector = ctx.ReadValue<Vector2>();
         input.Movement.VerticalMove.canceled += ctx => inputVector = Vector2.zero;
         
-         input.Movement.Attack1.performed +=ctx => {if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt1);};
-         input.Movement.Attack2.performed +=ctx => {if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt2);};
-         input.Movement.MeleeRun.performed+= ctx =>{if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeRun);};
-         input.Movement.MeleeSpin.performed+= ctx =>{if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeSpin);};
-         input.Movement.Kick.performed+= ctx =>{if(isGrounded&&!isAttacking)stateMachine.ChangeState(kick);};
+         input.Movement.Attack1.performed +=ctx => {if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt1);};
+         input.Movement.Attack2.performed +=ctx => {if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt2);};
+         input.Movement.MeleeRun.performed+= ctx =>{if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeRun);};
+         input.Movement.MeleeSpin.performed+= ctx =>{if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeSpin);};
+         input.Movement.Kick.performed+= ctx =>{if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(kick);};
         
         input.Movement.Dash.performed+= ctx => 
-        {if(cooldownTimer<=0)
+        {if(stateMachine.currentState == getHit) return; if(cooldownTimer<=0)
             {
             stateMachine.ChangeState(dashState);
             }
@@ -192,6 +196,7 @@ public class PlayerScript : MonoBehaviour
         
            input.Movement.Jump.performed+=ctx=>
             {
+             if(stateMachine.currentState == getHit) return;
              Checks();
                
                 if(isGrounded)
@@ -232,6 +237,13 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {   
         cooldownTimer-= Time.deltaTime;
+
+        if (stateMachine.currentState == getHit)
+        {
+            getHit.Update();
+            return;
+        }
+
        if(health<=0)
         {
             stateMachine.ChangeState(playerDeath);
@@ -259,6 +271,13 @@ public class PlayerScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (stateMachine.currentState == getHit)
+        {
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            stateMachine.currentState.FixedUpdate();
+            return;
+        }
+
         stateMachine.currentState.FixedUpdate();
     }
     public void FlipController()
@@ -436,9 +455,26 @@ public class PlayerScript : MonoBehaviour
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
     }
 
+    public void HitByEnemy(Transform attacker = null)
+    {
+        if (attacker != null)
+        {
+            facDir = attacker.position.x >= transform.position.x ? 1 : -1;
+            Flip(facDir);
+        }
+
+        getHitTimer = getHitDuration;
+        rb.linearVelocity = Vector2.zero;
+        stateMachine.ChangeState(getHit);
+    }
+
     public void TakeDamage(int damage)
     {
         health -= damage;
+        if (stateMachine.currentState != getHit)
+        {
+            HitByEnemy();
+        }
     }
 
     public void TakeDamage(EnemyScript enemy,int damage)
@@ -451,6 +487,11 @@ public class PlayerScript : MonoBehaviour
 
         enemy.health -= damage;
         enemy.HitByPlayer();
+
+        if (stateMachine.currentState != getHit)
+        {
+            HitByEnemy(enemy.transform);
+        }
       
     }
 

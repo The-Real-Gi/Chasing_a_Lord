@@ -177,7 +177,7 @@ public class EnemyScript : MonoBehaviour
             if (playerScript != null)
             {
                 int damage = enemyAttack1 != null && enemyStateMachine.currentState == enemyAttack1 ? attack1Damage : attack2Damage;
-                playerScript.TakeDamage(damage);
+                playerScript.TakeDamage(this, damage);
                 return;
             }
         }
