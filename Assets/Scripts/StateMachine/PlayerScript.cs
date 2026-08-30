@@ -436,6 +436,11 @@ public class PlayerScript : MonoBehaviour
         rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
     }
 
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+    }
+
     public void TakeDamage(EnemyScript enemy,int damage)
     {
         if (enemy == null)
@@ -445,6 +450,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         enemy.health -= damage;
+        enemy.HitByPlayer();
       
     }
 

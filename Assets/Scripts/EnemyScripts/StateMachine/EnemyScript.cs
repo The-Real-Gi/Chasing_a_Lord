@@ -23,6 +23,13 @@ public class EnemyScript : MonoBehaviour
     public float timeToRun;
     public float attackRange = 1.5f;
     [SerializeField] private float attackCooldown = 0.6f;
+    [SerializeField] private Transform attackHitPoint;
+    [SerializeField] private float attackHitRadius = 0.7f;
+    [SerializeField] private int attack1Damage = 10;
+    [SerializeField] private int attack2Damage = 15;
+    [SerializeField] private float getHitDuration = 0.3f;
+    [SerializeField] private float getHitTimer;
+    [SerializeField] private float hitKnockbackForce = 4f;
     private float nextAttackTime;
     public Transform player;
 
@@ -37,11 +44,20 @@ public class EnemyScript : MonoBehaviour
     EnemyStateMachine enemyStateMachine;
     public EnemyIdle enemyIdle{get;private set;}
     public EnemyMove enemyMove{get;private set;}
+    public EnemyCrouchIdle enemyCrouchIdle {get;private set;}
+    public EnemyCrouchMove enemyCrouchMove {get;private set;}
+    public EnemyRoll enemyRoll {get;private set;}
+
     public EnemyBattleState battleState {get; private set;}
+    public EnemyGetHit getHit {get;private set;}
     public EnemyAttack1 enemyAttack1 {get;private set;}
+    public EnemyAttack2 enemyAttack2 {get;private set;}
+
     public EnemyDeath death{get;private set;}
     public bool attackFinish=false;
+    public bool attackFinish2;
     public bool dealingDamage=false;
+    public bool getHitFinish=false;
 
     void Awake()
     {   anim= GetComponentInChildren<Animator>();
@@ -51,7 +67,12 @@ public class EnemyScript : MonoBehaviour
         enemyIdle= new EnemyIdle(this,enemyStateMachine,"Idle");
         enemyMove= new EnemyMove(this,enemyStateMachine,"Move");
         battleState = new EnemyBattleState (this,enemyStateMachine,"Move");
+        enemyCrouchIdle = new EnemyCrouchIdle(this,enemyStateMachine,"CrouchIdle");
+        enemyCrouchMove = new EnemyCrouchMove(this,enemyStateMachine,"CrouchMove");
+        enemyRoll= new EnemyRoll(this,enemyStateMachine,"Roll"); 
         enemyAttack1 = new EnemyAttack1(this,enemyStateMachine,"Attack1");
+        enemyAttack2 = new EnemyAttack2(this,enemyStateMachine,"Attack2");
+        getHit= new EnemyGetHit(this,enemyStateMachine,"GetHit");
         death = new EnemyDeath(this,enemyStateMachine,"Death");
 
         enemyStateMachine.Initialize(enemyIdle);
@@ -67,7 +88,13 @@ public class EnemyScript : MonoBehaviour
     {
         Checks();
 
-        bool isAttacking = enemyStateMachine.currentState == enemyAttack1;
+        if (enemyStateMachine.currentState == getHit)
+        {
+            enemyStateMachine.currentState.Update();
+            return;
+        }
+
+        bool isAttacking = enemyStateMachine.currentState == enemyAttack1 || enemyStateMachine.currentState == enemyAttack2;
 
         if (!isAttacking)
         {
@@ -78,7 +105,7 @@ public class EnemyScript : MonoBehaviour
             }
         }
 
-        if (enemyStateMachine.currentState != enemyAttack1 && isSeeingPlayer && enemyStateMachine.currentState != battleState)
+        if ((enemyStateMachine.currentState != enemyAttack1 && enemyStateMachine.currentState != enemyAttack2) && isSeeingPlayer && enemyStateMachine.currentState != battleState)
         {
             enemyStateMachine.ChangeState(battleState);
         }
@@ -105,6 +132,12 @@ public class EnemyScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (enemyStateMachine.currentState == getHit)
+        {
+            enemyStateMachine.currentState.FixedUpdate();
+            return;
+        }
+
         enemyStateMachine.currentState.FixedUpdate();
     }
 
@@ -120,6 +153,34 @@ public class EnemyScript : MonoBehaviour
         Gizmos.DrawLine(groundCheck.position, groundCheck.position + new Vector3(0, -groundCheckDistance, 0));
         Gizmos.DrawLine(wallCheck.position, wallCheck.position + new Vector3(facDir * wallCheckDistance, 0, 0));
         Gizmos.DrawLine(playerCheck.position, playerCheck.position + new Vector3(facDir * playerCheckDistance, 0, 0));
+
+        if (attackHitPoint != null)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(attackHitPoint.position, attackHitRadius);
+        }
+    }
+
+    public void TryDealDamage()
+    {
+        if (attackHitPoint == null || player == null)
+        {
+            return;
+        }
+
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(attackHitPoint.position, attackHitRadius, whatIsPlayer);
+
+        foreach (Collider2D hitCollider in hitColliders)
+        {
+            PlayerScript playerScript = hitCollider.GetComponentInParent<PlayerScript>();
+
+            if (playerScript != null)
+            {
+                int damage = enemyAttack1 != null && enemyStateMachine.currentState == enemyAttack1 ? attack1Damage : attack2Damage;
+                playerScript.TakeDamage(damage);
+                return;
+            }
+        }
     }
 
     public bool IsPlayerInAttackRange()
@@ -160,14 +221,61 @@ public class EnemyScript : MonoBehaviour
     {
         nextAttackTime = Time.time + attackCooldown;
         attackFinish = false;
+        attackFinish2 = false;
     }
 
     public void AttackFinish()
     {
-        attackFinish=true;
+        attackFinish = true;
     }
-    public void DealingDamage()
+
+    public void Attack2Finish()
     {
-        
+        attackFinish2 = true;
+    }
+
+    public void HitByPlayer()
+    {
+        if (enemyStateMachine == null || getHit == null || player == null)
+        {
+            return;
+        }
+
+        getHitTimer = getHitDuration;
+        getHitFinish = false;
+
+        Vector2 knockbackDirection = (transform.position - player.position).normalized;
+        if (knockbackDirection == Vector2.zero)
+        {
+            knockbackDirection = Vector2.left;
+        }
+
+        rb.linearVelocity = new Vector2(knockbackDirection.x * hitKnockbackForce, rb.linearVelocity.y);
+
+        facDir = player.position.x >= transform.position.x ? 1 : -1;
+        UpdateFacingFromDirection(facDir);
+
+        enemyStateMachine.ChangeState(getHit);
+    }
+
+    public void UpdateGetHitState()
+    {
+        if (enemyStateMachine.currentState != getHit)
+        {
+            return;
+        }
+
+        getHitTimer -= Time.deltaTime;
+
+        if (getHitTimer <= 0f)
+        {
+            getHitFinish = true;
+            enemyStateMachine.ChangeState(enemyIdle);
+        }
+    }
+
+    public void GettingHit()
+    {
+        getHitFinish = true;
     }
 }

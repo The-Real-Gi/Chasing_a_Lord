@@ -20,8 +20,23 @@ public class EnemyBattleState : EnemyState
 
         if (enemy.IsPlayerInAttackRange() && enemy.CanAttackAgain())
         {
-            stateMachine.ChangeState(enemy.enemyAttack1);
-            return;
+            int randomNumber = Random.Range(1, 3);
+            Debug.Log(randomNumber);
+
+            if (randomNumber == 1)
+            {
+                stateMachine.ChangeState(enemy.enemyAttack1);
+                return;
+            }
+            else if (randomNumber == 2)
+            {
+                stateMachine.ChangeState(enemy.enemyAttack2);
+                return;
+            }
+            else
+            {
+                Debug.Log("error in choosing the number");
+            }
         }
 
         if (enemy.IsPlayerInAttackRange() && !enemy.CanAttackAgain())

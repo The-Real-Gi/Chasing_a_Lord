@@ -39,6 +39,6 @@ public class EnemyState
         enemy.anim.SetBool("Idle", false);
         enemy.anim.SetBool("Move", false);
         enemy.anim.SetBool("Attack1", false);
-        enemy.anim.SetBool("death", false);
+        enemy.anim.SetBool("Death", false);
     }
 }
