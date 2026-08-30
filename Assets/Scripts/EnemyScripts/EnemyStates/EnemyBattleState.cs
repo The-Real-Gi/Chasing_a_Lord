@@ -18,11 +18,24 @@ public class EnemyBattleState : EnemyState
     {
         base.Update();
 
-        if (enemy.IsPlayerInAttackRange())
+        if (enemy.IsPlayerInAttackRange() && enemy.CanAttackAgain())
         {
             stateMachine.ChangeState(enemy.enemyAttack1);
             return;
         }
+
+        if (enemy.IsPlayerInAttackRange() && !enemy.CanAttackAgain())
+        {
+            enemy.anim.SetBool("Move", false);
+            enemy.anim.SetBool("Idle", true);
+            enemy.anim.SetBool("Attack1", false);
+            enemy.timer = loseSightTimer;
+            return;
+        }
+
+        enemy.anim.SetBool("Idle", false);
+        enemy.anim.SetBool("Move", true);
+        enemy.anim.SetBool("Attack1", false);
 
         if (enemy.isSeeingPlayer)
         {
@@ -41,6 +54,20 @@ public class EnemyBattleState : EnemyState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+
+        if (enemy.IsPlayerInAttackRange() && !enemy.CanAttackAgain())
+        {
+            enemy.rb.linearVelocityX = 0f;
+            enemy.anim.speed = 1f;
+            enemy.anim.SetBool("Move", false);
+            enemy.anim.SetBool("Idle", true);
+            enemy.anim.SetBool("Attack1", false);
+            return;
+        }
+
+        enemy.anim.SetBool("Idle", false);
+        enemy.anim.SetBool("Move", true);
+        enemy.anim.SetBool("Attack1", false);
         enemy.rb.linearVelocityX = enemy.facDir * enemy.moveSpeed * Time.fixedDeltaTime * 2;
         enemy.anim.speed = 2;
     }

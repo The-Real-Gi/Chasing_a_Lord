@@ -22,6 +22,8 @@ public class EnemyScript : MonoBehaviour
     public float timer;
     public float timeToRun;
     public float attackRange = 1.5f;
+    [SerializeField] private float attackCooldown = 0.6f;
+    private float nextAttackTime;
     public Transform player;
 
     public int facDir=1;
@@ -50,7 +52,7 @@ public class EnemyScript : MonoBehaviour
         enemyMove= new EnemyMove(this,enemyStateMachine,"Move");
         battleState = new EnemyBattleState (this,enemyStateMachine,"Move");
         enemyAttack1 = new EnemyAttack1(this,enemyStateMachine,"Attack1");
-        death = new EnemyDeath(this,enemyStateMachine,"death");
+        death = new EnemyDeath(this,enemyStateMachine,"Death");
 
         enemyStateMachine.Initialize(enemyIdle);
     
@@ -65,9 +67,18 @@ public class EnemyScript : MonoBehaviour
     {
         Checks();
 
-        GeneralFlipCheck();
+        bool isAttacking = enemyStateMachine.currentState == enemyAttack1;
 
-        if (isSeeingPlayer && enemyStateMachine.currentState != battleState)
+        if (!isAttacking)
+        {
+            bool isInCombatPhase = enemyStateMachine.currentState == battleState || isSeeingPlayer;
+            if (isInCombatPhase)
+            {
+                GeneralFlipCheck();
+            }
+        }
+
+        if (enemyStateMachine.currentState != enemyAttack1 && isSeeingPlayer && enemyStateMachine.currentState != battleState)
         {
             enemyStateMachine.ChangeState(battleState);
         }
@@ -81,19 +92,15 @@ public class EnemyScript : MonoBehaviour
 
     private void GeneralFlipCheck()
     {
-        if (player != null)
-        {
-            if (player.position.x > transform.position.x)
-            {
-                facDir = 1;
-            }
-            else if (player.position.x < transform.position.x)
-            {
-                facDir = -1;
-            }
+        if (player == null)
+            return;
 
-            FlipController();
-        }
+        float delta = player.position.x - transform.position.x;
+        if (Mathf.Abs(delta) < 0.05f)
+            return;
+
+        facDir = delta > 0 ? 1 : -1;
+        UpdateFacingFromDirection(facDir);
     }
 
     void FixedUpdate()
@@ -127,20 +134,32 @@ public class EnemyScript : MonoBehaviour
 
     public void FlipController()
     {
-        if(isFacingRight&&facDir==-1)
-        {
-            Flip();
-        }else if(!isFacingRight&&facDir==1)
-        {
-            Flip();
-        }
+        UpdateFacingFromDirection(facDir);
     }
 
     public void Flip()
     {
-        isFacingRight=!isFacingRight;
-        facDir=facDir*(-1);
-        transform.localScale= new Vector3(facDir*2,2,2);
+        facDir *= -1;
+        UpdateFacingFromDirection(facDir);
+    }
+
+    private void UpdateFacingFromDirection(int direction)
+    {
+        isFacingRight = direction >= 0;
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * direction;
+        transform.localScale = scale;
+    }
+
+    public bool CanAttackAgain()
+    {
+        return Time.time >= nextAttackTime;
+    }
+
+    public void BeginAttack()
+    {
+        nextAttackTime = Time.time + attackCooldown;
+        attackFinish = false;
     }
 
     public void AttackFinish()

@@ -24,6 +24,8 @@ public class PlayerScript : MonoBehaviour
     public SlideState slideState{get;private set;}
     public DoubleJump doubleJump{get;private set;}
 
+    public PlayerDeath playerDeath{get;private set;}
+
     public MeleeAtt1 meleeAtt1{get;private set;}
     public MeleeAtt2 meleeAtt2{get;private set;}
     public Kick kick{get;private set;}
@@ -43,6 +45,8 @@ public class PlayerScript : MonoBehaviour
     #endregion
 
     #region Stats
+
+    public float health;
     public float moveSpeed;
     public float jumpStrength;
     public float wallJumpStrength;
@@ -160,6 +164,8 @@ public class PlayerScript : MonoBehaviour
         meleeRun = new MeleeRun(this,"MeleeRun",stateMachine);
         meleeSpin = new MeleeSpin(this,"MeleeSpin",stateMachine);
         kick = new Kick(this,"Kick",stateMachine);
+
+        playerDeath= new PlayerDeath(this,"Death",stateMachine);
     }
 
     void OnEnable()
@@ -226,7 +232,10 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {   
         cooldownTimer-= Time.deltaTime;
-       
+       if(health<=0)
+        {
+            stateMachine.ChangeState(playerDeath);
+        }
         inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
         Checks();
         stateMachine.currentState.Update();

@@ -16,6 +16,7 @@ public class EnemyMove : EnemyState
         base.Update();
         if(enemy.isWallDetected)
         {
+            enemy.Flip();
             stateMachine.ChangeState(enemy.enemyIdle);
         }
     }

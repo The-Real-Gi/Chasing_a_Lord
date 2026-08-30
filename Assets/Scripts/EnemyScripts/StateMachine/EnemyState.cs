@@ -15,6 +15,7 @@ public class EnemyState
 
     public virtual void Enter()
     {
+        ClearOtherAnimationBools();
         enemy.anim.SetBool(enemyAnim,true);
     }
 
@@ -31,5 +32,13 @@ public class EnemyState
     public virtual void Exit()
     {
         enemy.anim.SetBool(enemyAnim,false);
+    }
+
+    protected void ClearOtherAnimationBools()
+    {
+        enemy.anim.SetBool("Idle", false);
+        enemy.anim.SetBool("Move", false);
+        enemy.anim.SetBool("Attack1", false);
+        enemy.anim.SetBool("death", false);
     }
 }
