@@ -88,7 +88,7 @@ public class EnemyScript : MonoBehaviour
     {
         Checks();
 
-        if (enemyStateMachine.currentState == getHit)
+        if (enemyStateMachine.currentState == getHit&&health>0)
         {
             enemyStateMachine.currentState.Update();
             return;

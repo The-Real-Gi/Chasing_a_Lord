@@ -163,6 +163,33 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CrouchAtt"",
+                    ""type"": ""Button"",
+                    ""id"": ""7223f772-0e9d-4947-8496-982dc3ca4711"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CrouchBlock"",
+                    ""type"": ""Button"",
+                    ""id"": ""7087821a-acd9-43e6-801a-1a6fb9493800"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Block"",
+                    ""type"": ""Button"",
+                    ""id"": ""629ff47b-3919-4a05-924c-60d1ec164796"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -297,6 +324,39 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""action"": ""MeleeRun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8624e58-1f54-4ff8-8ede-10601b02a543"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""CrouchAtt"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0840491-5ebb-4e7c-a36e-4e4c91cf2289"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""CrouchBlock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4398f08-018d-4a1b-a136-69c9f3504a41"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""Block"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -330,6 +390,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         m_Movement_Kick = m_Movement.FindAction("Kick", throwIfNotFound: true);
         m_Movement_MeleeSpin = m_Movement.FindAction("MeleeSpin", throwIfNotFound: true);
         m_Movement_MeleeRun = m_Movement.FindAction("MeleeRun", throwIfNotFound: true);
+        m_Movement_CrouchAtt = m_Movement.FindAction("CrouchAtt", throwIfNotFound: true);
+        m_Movement_CrouchBlock = m_Movement.FindAction("CrouchBlock", throwIfNotFound: true);
+        m_Movement_Block = m_Movement.FindAction("Block", throwIfNotFound: true);
     }
 
     ~@PlayersInputSet()
@@ -418,6 +481,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_Kick;
     private readonly InputAction m_Movement_MeleeSpin;
     private readonly InputAction m_Movement_MeleeRun;
+    private readonly InputAction m_Movement_CrouchAtt;
+    private readonly InputAction m_Movement_CrouchBlock;
+    private readonly InputAction m_Movement_Block;
     /// <summary>
     /// Provides access to input actions defined in input action map "Movement".
     /// </summary>
@@ -461,6 +527,18 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Movement/MeleeRun".
         /// </summary>
         public InputAction @MeleeRun => m_Wrapper.m_Movement_MeleeRun;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/CrouchAtt".
+        /// </summary>
+        public InputAction @CrouchAtt => m_Wrapper.m_Movement_CrouchAtt;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/CrouchBlock".
+        /// </summary>
+        public InputAction @CrouchBlock => m_Wrapper.m_Movement_CrouchBlock;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/Block".
+        /// </summary>
+        public InputAction @Block => m_Wrapper.m_Movement_Block;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -511,6 +589,15 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @MeleeRun.started += instance.OnMeleeRun;
             @MeleeRun.performed += instance.OnMeleeRun;
             @MeleeRun.canceled += instance.OnMeleeRun;
+            @CrouchAtt.started += instance.OnCrouchAtt;
+            @CrouchAtt.performed += instance.OnCrouchAtt;
+            @CrouchAtt.canceled += instance.OnCrouchAtt;
+            @CrouchBlock.started += instance.OnCrouchBlock;
+            @CrouchBlock.performed += instance.OnCrouchBlock;
+            @CrouchBlock.canceled += instance.OnCrouchBlock;
+            @Block.started += instance.OnBlock;
+            @Block.performed += instance.OnBlock;
+            @Block.canceled += instance.OnBlock;
         }
 
         /// <summary>
@@ -546,6 +633,15 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @MeleeRun.started -= instance.OnMeleeRun;
             @MeleeRun.performed -= instance.OnMeleeRun;
             @MeleeRun.canceled -= instance.OnMeleeRun;
+            @CrouchAtt.started -= instance.OnCrouchAtt;
+            @CrouchAtt.performed -= instance.OnCrouchAtt;
+            @CrouchAtt.canceled -= instance.OnCrouchAtt;
+            @CrouchBlock.started -= instance.OnCrouchBlock;
+            @CrouchBlock.performed -= instance.OnCrouchBlock;
+            @CrouchBlock.canceled -= instance.OnCrouchBlock;
+            @Block.started -= instance.OnBlock;
+            @Block.performed -= instance.OnBlock;
+            @Block.canceled -= instance.OnBlock;
         }
 
         /// <summary>
@@ -655,5 +751,26 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMeleeRun(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CrouchAtt" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCrouchAtt(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CrouchBlock" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCrouchBlock(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Block" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBlock(InputAction.CallbackContext context);
     }
 }

@@ -32,6 +32,7 @@ public class PlayerScript : MonoBehaviour
     public Kick kick{get;private set;}
     public MeleeRun meleeRun{get;private set;}
     public MeleeSpin meleeSpin{get;private set;}
+    public CrouchAttack crouchAttack {get;private set;}
 
     public bool isAttacking=false;
 
@@ -126,16 +127,19 @@ public class PlayerScript : MonoBehaviour
     public bool meleeSpinDamageDealt=false;
     public bool meleeAtt1DamageDealt=false;
     public bool meleeAtt2DamageDealt=false;
-    public GameObject attackPos1;
-    public GameObject attackPos2;
-    public GameObject attackPos3;
-    public GameObject attackPos4;
-    public GameObject attackPos5;
+    public bool crouchMeleeDamageDealt=false;
+    public GameObject meleeAtt1AttackPos1;
+    public GameObject meleeAtt2AttackPos2;
+    public GameObject meleeRunAttackPos3;
+    public GameObject meleeSpinAttackPos4;
+    public GameObject meleeAttKickAttackPos5;
+    public GameObject meleeAttCrouchAttackPos6;
     public float attack1Distance1;
     public float attack2Distance;
     public float attack3Distance;
     public float attack4Distance;
     public float attack5Distance;
+    public float attack6Distance;
     public LayerMask whatIsEnemy;
     public List<EnemyScript> enemiesInAttackRange = new List<EnemyScript>();
 
@@ -169,6 +173,7 @@ public class PlayerScript : MonoBehaviour
         meleeRun = new MeleeRun(this,"MeleeRun",stateMachine);
         meleeSpin = new MeleeSpin(this,"MeleeSpin",stateMachine);
         kick = new Kick(this,"Kick",stateMachine);
+        crouchAttack = new CrouchAttack(this,"CrouchAttack",stateMachine);
 
         playerDeath= new PlayerDeath(this,"Death",stateMachine);
         getHit= new GetHit(this,"GetHit",stateMachine);
@@ -188,13 +193,19 @@ public class PlayerScript : MonoBehaviour
          input.Movement.Kick.performed+= ctx =>{if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(kick);};
         
         input.Movement.Dash.performed+= ctx => 
-        {if(stateMachine.currentState == getHit) return; if(cooldownTimer<=0)
+        {if(stateMachine.currentState == getHit) return; 
+            if(cooldownTimer<=0)
             {
             stateMachine.ChangeState(dashState);
             }
         };
         
-        
+            input.Movement.CrouchAtt.performed+=ctx=>{
+                if(inputVector.y<0)
+                {
+                    stateMachine.ChangeState(crouchAttack);
+                }
+                };    
         
            input.Movement.Jump.performed+=ctx=>
             {
@@ -326,34 +337,39 @@ public class PlayerScript : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if (attackPos1 != null)
+        if (meleeAtt1AttackPos1 != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(attackPos1.transform.position, attack1Distance1);
+            Gizmos.DrawWireSphere(meleeAtt1AttackPos1.transform.position, attack1Distance1);
         }
 
-        if (attackPos2 != null)
+        if (meleeAtt2AttackPos2 != null)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(attackPos2.transform.position, attack2Distance);
+            Gizmos.DrawWireSphere(meleeAtt2AttackPos2.transform.position, attack2Distance);
         }
 
-        if(attackPos3 != null)
+        if(meleeRunAttackPos3 != null)
         {
             Gizmos.color= Color.blue;
-            Gizmos.DrawWireSphere(attackPos3.transform.position,attack3Distance);
+            Gizmos.DrawWireSphere(meleeRunAttackPos3.transform.position,attack3Distance);
         }
 
-         if(attackPos4 != null)
+         if(meleeSpinAttackPos4 != null)
         {
             Gizmos.color= Color.purple;
-            Gizmos.DrawWireSphere(attackPos4.transform.position,attack4Distance);
+            Gizmos.DrawWireSphere(meleeSpinAttackPos4.transform.position,attack4Distance);
         }
 
-         if(attackPos5 != null)
+         if(meleeAttKickAttackPos5 != null)
         {
             Gizmos.color= Color.green;
-            Gizmos.DrawWireSphere(attackPos5.transform.position,attack5Distance);
+            Gizmos.DrawWireSphere(meleeAttKickAttackPos5.transform.position,attack5Distance);
+        }
+        if(meleeAttCrouchAttackPos6!=null)
+        {
+            Gizmos.color= Color.purple;
+            Gizmos.DrawWireSphere(meleeAttCrouchAttackPos6.transform.position,attack6Distance);
         }
     }
 
@@ -372,20 +388,9 @@ public class PlayerScript : MonoBehaviour
     {
         enemiesInAttackRange.Clear();
 
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
-            attackPos1.transform.position,
-            attack1Distance1,
-            whatIsEnemy);
+        
 
-        foreach (Collider2D hitCollider in hitColliders)
-        {
-            EnemyScript enemy = hitCollider.GetComponentInParent<EnemyScript>();
-
-            if (enemy != null && !enemiesInAttackRange.Contains(enemy))
-            {
-                enemiesInAttackRange.Add(enemy);
-            }
-        }
+       
         int dealingDamage = 0;
 
         if (stateMachine.currentState == kick)
@@ -407,11 +412,68 @@ public class PlayerScript : MonoBehaviour
         else if (stateMachine.currentState == meleeSpin)
         {
             dealingDamage = 30;
+        }else if(stateMachine.currentState == crouchAttack)
+        {
+            dealingDamage= 15;
         }
         else
         {
             Debug.LogWarning("Attack1Checks called while current state is not a valid attack state.");
             return;
+        }
+        Transform attackOrigin = null;
+        float attackRadius = 0f;
+
+        if (stateMachine.currentState == kick)
+        {
+            attackOrigin = meleeAttKickAttackPos5 != null ? meleeAttKickAttackPos5.transform : null;
+            attackRadius = attack5Distance;
+        }
+        else if (stateMachine.currentState == meleeAtt1)
+        {
+            attackOrigin = meleeAtt1AttackPos1 != null ? meleeAtt1AttackPos1.transform : null;
+            attackRadius = attack1Distance1;
+        }
+        else if (stateMachine.currentState == meleeAtt2)
+        {
+            attackOrigin = meleeAtt2AttackPos2 != null ? meleeAtt2AttackPos2.transform : null;
+            attackRadius = attack2Distance;
+        }
+        else if (stateMachine.currentState == meleeRun)
+        {
+            attackOrigin = meleeRunAttackPos3 != null ? meleeRunAttackPos3.transform : null;
+            attackRadius = attack3Distance;
+        }
+        else if (stateMachine.currentState == meleeSpin)
+        {
+            attackOrigin = meleeSpinAttackPos4 != null ? meleeSpinAttackPos4.transform : null;
+            attackRadius = attack4Distance;
+        }
+        else if (stateMachine.currentState == crouchAttack)
+        {
+            attackOrigin = meleeAttCrouchAttackPos6 != null ? meleeAttCrouchAttackPos6.transform : null;
+            attackRadius = attack6Distance;
+        }
+
+        if (attackOrigin == null)
+        {
+            Debug.LogWarning("Attack1Checks called with no valid attack origin for the current state.");
+            return;
+        }
+
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
+            attackOrigin.position,
+            attackRadius,
+            whatIsEnemy);
+
+        foreach (Collider2D hitCollider in hitColliders)
+        {
+            EnemyScript enemy = hitCollider.GetComponentInParent<EnemyScript>();
+
+            if (enemy != null && !enemiesInAttackRange.Contains(enemy))
+            {
+                enemiesInAttackRange.Add(enemy);
+            }
         }
 
         Debug.Log("I will hit " + enemiesInAttackRange.Count + " enemies with " + dealingDamage + " damage");
