@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Android.Gradle;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -23,6 +24,10 @@ public class PlayerScript : MonoBehaviour
     public DashState dashState{get;private set;}
     public SlideState slideState{get;private set;}
     public DoubleJump doubleJump{get;private set;}
+
+
+    public ShieldBlock shieldBlock {get;private set;}
+    public CrouchBlock crouchBlock {get;private set;}
 
     public GetHit getHit{get;private set;}
     public PlayerDeath playerDeath{get;private set;}
@@ -62,6 +67,8 @@ public class PlayerScript : MonoBehaviour
     public float wallCheckDistance;
     public Transform hangCheck;
     public float hangCheckDistance;
+    public Transform forcedCrouchCheck;
+    public float forcedCrouchCheckDistance;
     public bool isGrounded;
     public bool isWallDetected;
     public bool isWallJumping=false;
@@ -69,6 +76,8 @@ public class PlayerScript : MonoBehaviour
     public bool isTouchingLedge=false;
     public bool ledgeDetected;
     public bool canClimbLedge=false;
+    public bool isForcedCrouchDetected;
+
     #endregion
 
     #region Ledges
@@ -142,9 +151,12 @@ public class PlayerScript : MonoBehaviour
     public float attack6Distance;
     public LayerMask whatIsEnemy;
     public List<EnemyScript> enemiesInAttackRange = new List<EnemyScript>();
+    public bool isForcedCrouch;
 
     #endregion
 
+
+    
 
     void Awake()
     {   input = new PlayersInputSet();
@@ -177,6 +189,9 @@ public class PlayerScript : MonoBehaviour
 
         playerDeath= new PlayerDeath(this,"Death",stateMachine);
         getHit= new GetHit(this,"GetHit",stateMachine);
+
+        shieldBlock = new ShieldBlock(this,"Block",stateMachine);
+        crouchBlock = new CrouchBlock(this,"CrouchBlock", stateMachine);
     }
 
     void OnEnable()
@@ -204,10 +219,16 @@ public class PlayerScript : MonoBehaviour
                 if(inputVector.y<0)
                 {
                     stateMachine.ChangeState(crouchAttack);
+                }else{
                 }
+                
                 };    
-        
-           input.Movement.Jump.performed+=ctx=>
+            input.Movement.CrouchBlock.performed+= ctx=>stateMachine.ChangeState(crouchBlock);
+            input.Movement.Block.performed+=ctx=>{
+                if(inputVector.y>=0)
+                {stateMachine.ChangeState(shieldBlock);}
+                };
+            input.Movement.Jump.performed+=ctx=>
             {
              if(stateMachine.currentState == getHit) return;
              Checks();
@@ -249,7 +270,8 @@ public class PlayerScript : MonoBehaviour
     
     void Update()
     {   
-        cooldownTimer-= Time.deltaTime;
+        inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
+        Checks();
 
         if (stateMachine.currentState == getHit)
         {
@@ -261,21 +283,28 @@ public class PlayerScript : MonoBehaviour
         {
             stateMachine.ChangeState(playerDeath);
         }
-        inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
-        Checks();
+
+        if(isForcedCrouch && stateMachine.currentState != crouchIdle && stateMachine.currentState != crouchMove)
+        {
+            stateMachine.ChangeState(crouchIdle);
+        }
+
+        cooldownTimer-= Time.deltaTime;
+
         stateMachine.currentState.Update();
+
         if(isGrounded||!isWallJumping)
         {
         FlipController();
         }
         anim.SetFloat("YVelocity",rb.linearVelocityY);
 
-        if(!isClimbingLedge && isWallDetected&&isGrounded&&inputVector.x!=0)
+        if(!isClimbingLedge && isWallDetected&&isGrounded&&inputVector.x!=0 && !isForcedCrouch && stateMachine.currentState != crouchIdle && stateMachine.currentState != crouchMove)
         {
             stateMachine.ChangeState(idle);
         }
 
-        if (!isClimbingLedge && stateMachine.currentState!=wallSlide && isWallDetected&&!isTouchingLedge&&inputVector.y>=0)
+        if (!isClimbingLedge && !isForcedCrouch && stateMachine.currentState!=wallSlide && isWallDetected&&!isTouchingLedge&&inputVector.y>=0)
         {
             stateMachine.ChangeState(wallHangState);
         }
@@ -296,7 +325,7 @@ public class PlayerScript : MonoBehaviour
     public void FlipController()
     {
         //could make animation for rotation by creating a new state with rotating and either time based or event based
-        if (isAttacking)
+        if (isAttacking || stateMachine.currentState == slideState)
         {
             return;
         }
@@ -314,7 +343,7 @@ public class PlayerScript : MonoBehaviour
 
     public void Flip(float value)
     {   
-        if (isAttacking)
+        if (isAttacking || stateMachine.currentState == slideState)
         {
             return;
         }
@@ -333,6 +362,10 @@ public class PlayerScript : MonoBehaviour
         Gizmos.DrawLine(wallCheck.position,wallCheck.position+ new Vector3(facDir*wallCheckDistance,0,0));
         Gizmos.DrawLine(hangCheck.position,hangCheck.position+ new Vector3(facDir*hangCheckDistance,0,0));
 
+       
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(forcedCrouchCheck.position, forcedCrouchCheck.position + new Vector3(0, -forcedCrouchCheckDistance, 0));
+        
     }
 
     void OnDrawGizmosSelected()
@@ -379,9 +412,16 @@ public class PlayerScript : MonoBehaviour
         isWallDetected= Physics2D.Raycast(wallCheck.position,Vector2.right,wallCheckDistance*facDir,whatIsGround);
         isTouchingLedge= Physics2D.Raycast(hangCheck.position,Vector2.right,hangCheckDistance*facDir,whatIsGround);
 
+        if (forcedCrouchCheck != null)
+        {
+            isForcedCrouchDetected = Physics2D.Raycast(forcedCrouchCheck.position, Vector2.down, forcedCrouchCheckDistance, whatIsGround);
+        }
+        else
+        {
+            isForcedCrouchDetected = false;
+        }
 
-
-       
+        isForcedCrouch = isForcedCrouchDetected && isGrounded;
     }
 
     public void Attack1Checks()
@@ -542,10 +582,15 @@ public class PlayerScript : MonoBehaviour
         {
             getHitKnockbackDirection = -facDir;
         }
-
+        if(stateMachine.currentState!=shieldBlock){
         getHitTimer = getHitDuration;
         rb.linearVelocity = Vector2.zero;
         stateMachine.ChangeState(getHit);
+        }
+        else
+        {
+            return;
+        }
     }
 
     public void TakeDamage(int damage, Transform attacker = null)

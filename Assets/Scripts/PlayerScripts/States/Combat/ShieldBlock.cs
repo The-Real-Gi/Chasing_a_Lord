@@ -7,13 +7,15 @@ public class ShieldBlock : PlayerState
     }
 
     public override void Enter()
-    {
+    {    
         base.Enter();
+        player.rb.linearVelocity= new Vector2(0,player.rb.linearVelocityY);
     }
 
     public override void Update()
     {
         base.Update();
+        player.input.Movement.Block.canceled+= ctx=>stateMachine.ChangeState(player.idle);
     }
 
     public override void FixedUpdate()

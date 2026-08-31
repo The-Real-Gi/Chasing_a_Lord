@@ -9,11 +9,13 @@ public class CrouchBlock : PlayerState
    public override void Enter()
     {
         base.Enter();
+        player.rb.linearVelocity= new Vector2(0,player.rb.linearVelocityY);
     }
 
     public override void Update()
     {
         base.Update();
+        player.input.Movement.CrouchBlock.canceled+= ctx => stateMachine.ChangeState(player.crouchIdle);
     }
 
     public override void FixedUpdate()

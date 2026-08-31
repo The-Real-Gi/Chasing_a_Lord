@@ -32,10 +32,9 @@ public class GroundedState : PlayerState
 
         if(player.inputVector.x!=0)
         {
-            if(player.inputVector.y<0)
+            if(player.inputVector.y<0||player.isForcedCrouch)
             {   if(Mathf.Abs(player.rb.linearVelocityX)<=2)
-                {
-                    
+                {                  
                 stateMachine.ChangeState(player.crouchMove);
                 }
                 if(Mathf.Abs(player.rb.linearVelocityX)>2)
@@ -54,9 +53,10 @@ public class GroundedState : PlayerState
 
         }else if(player.inputVector.x==0)
         {
-            if(player.inputVector.y<0)
+            if(player.inputVector.y<0||player.isForcedCrouch)
             {
-                stateMachine.ChangeState(player.crouchIdle);
+                if(stateMachine.currentState!=player.slideState)
+                {stateMachine.ChangeState(player.crouchIdle);}
             }
             else
             {
