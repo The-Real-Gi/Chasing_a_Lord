@@ -105,7 +105,7 @@ public class EnemyScript : MonoBehaviour
             }
         }
 
-        if ((enemyStateMachine.currentState != enemyAttack1 && enemyStateMachine.currentState != enemyAttack2) && isSeeingPlayer && enemyStateMachine.currentState != battleState)
+        if (enemyStateMachine.currentState != enemyAttack1 && enemyStateMachine.currentState != enemyAttack2 && isSeeingPlayer && enemyStateMachine.currentState != battleState)
         {
             enemyStateMachine.ChangeState(battleState);
         }
@@ -177,7 +177,7 @@ public class EnemyScript : MonoBehaviour
             if (playerScript != null)
             {
                 int damage = enemyAttack1 != null && enemyStateMachine.currentState == enemyAttack1 ? attack1Damage : attack2Damage;
-                playerScript.TakeDamage(this, damage);
+                playerScript.TakeDamage(damage, transform);
                 return;
             }
         }
@@ -236,16 +236,16 @@ public class EnemyScript : MonoBehaviour
 
     public void HitByPlayer()
     {
-        if (enemyStateMachine == null || getHit == null || player == null)
+        if (enemyStateMachine == null || getHit == null || player == null)// enemy or get hit or player is null go back
         {
             return;
         }
 
-        getHitTimer = getHitDuration;
+        getHitTimer = getHitDuration; //get hit timer starts and get hit finish is false
         getHitFinish = false;
 
-        Vector2 knockbackDirection = (transform.position - player.position).normalized;
-        if (knockbackDirection == Vector2.zero)
+        Vector2 knockbackDirection = (transform.position - player.position).normalized; // knockbackDirection is objects position minus player position normalised
+        if (knockbackDirection == Vector2.zero) // if the result is 0 then its left
         {
             knockbackDirection = Vector2.left;
         }

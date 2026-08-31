@@ -115,6 +115,8 @@ public class PlayerScript : MonoBehaviour
     public float meleeAtt2MoveSpeed = 6f;
     [SerializeField] public float getHitDuration = 0.35f;
     [SerializeField] public float getHitTimer = 0f;
+    [SerializeField] public float getHitKnockbackForce ;
+    [HideInInspector] public float getHitKnockbackDirection = 1f;
     public float meleeAttackBlendSpeed = 8f;
     public float meleeSpinSlowdownRate = 0.08f;
     public float meleeRunAccelerationSpeed = 0.12f;
@@ -459,8 +461,24 @@ public class PlayerScript : MonoBehaviour
     {
         if (attacker != null)
         {
-            facDir = attacker.position.x >= transform.position.x ? 1 : -1;
-            Flip(facDir);
+            // Calculate direction to attacker
+            float directionToAttacker = Mathf.Sign(attacker.position.x - transform.position.x);
+            // If attacker is at same position, default to current facing
+            if (directionToAttacker == 0) directionToAttacker = facDir;
+            
+            facDir = (int)directionToAttacker;
+            // Only flip if not already facing that direction
+            if ((facDir > 0 && !isFacingRight) || (facDir < 0 && isFacingRight))
+            {
+                Flip(facDir);
+            }
+            
+            // Knockback is opposite of direction to attacker
+            getHitKnockbackDirection = -directionToAttacker;
+        }
+        else
+        {
+            getHitKnockbackDirection = -facDir;
         }
 
         getHitTimer = getHitDuration;
@@ -468,12 +486,12 @@ public class PlayerScript : MonoBehaviour
         stateMachine.ChangeState(getHit);
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, Transform attacker = null)
     {
         health -= damage;
         if (stateMachine.currentState != getHit)
         {
-            HitByEnemy();
+            HitByEnemy(attacker);
         }
     }
 
@@ -487,11 +505,6 @@ public class PlayerScript : MonoBehaviour
 
         enemy.health -= damage;
         enemy.HitByPlayer();
-
-        if (stateMachine.currentState != getHit)
-        {
-            HitByEnemy(enemy.transform);
-        }
       
     }
 

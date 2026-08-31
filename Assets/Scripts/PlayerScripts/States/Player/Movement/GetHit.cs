@@ -9,7 +9,7 @@ public class GetHit : PlayerState
     public override void Enter()
     {
         base.Enter();
-        player.rb.linearVelocity = Vector2.zero;
+       
         player.getHitTimer = player.getHitDuration;
     }
 
@@ -21,7 +21,11 @@ public class GetHit : PlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
-        player.rb.linearVelocity = new Vector2(0f, player.rb.linearVelocity.y);
+        // Calculate how much time has elapsed (0 to 1)
+        float elapsedRatio = 1f - (player.getHitTimer / player.getHitDuration);
+        // Lerp from full knockback force to 0 based on elapsed time
+        float currentForce = Mathf.Lerp(player.getHitKnockbackForce, 0f, elapsedRatio);
+        player.rb.linearVelocity = new Vector2(currentForce * player.getHitKnockbackDirection, player.rb.linearVelocity.y);
     }
 
     public override void Update()
