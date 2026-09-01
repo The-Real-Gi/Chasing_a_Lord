@@ -284,7 +284,11 @@ public class PlayerScript : MonoBehaviour
             stateMachine.ChangeState(playerDeath);
         }
 
-        if(isForcedCrouch && stateMachine.currentState != crouchIdle && stateMachine.currentState != crouchMove)
+        // Keep the slide active under a low ceiling; SlideState decides when it
+        // has slowed enough to become a crouch state.
+        if (isForcedCrouch && stateMachine.currentState != crouchIdle
+            && stateMachine.currentState != crouchMove
+            && stateMachine.currentState != slideState)
         {
             stateMachine.ChangeState(crouchIdle);
         }
@@ -433,64 +437,43 @@ public class PlayerScript : MonoBehaviour
        
         int dealingDamage = 0;
 
-        if (stateMachine.currentState == kick)
-        {
-            dealingDamage = 10;
-        }
-        else if (stateMachine.currentState == meleeAtt1)
-        {
-            dealingDamage = 15;
-        }
-        else if (stateMachine.currentState == meleeAtt2)
-        {
-            dealingDamage = 20;
-        }
-        else if (stateMachine.currentState == meleeRun)
-        {
-            dealingDamage = 25;
-        }
-        else if (stateMachine.currentState == meleeSpin)
-        {
-            dealingDamage = 30;
-        }else if(stateMachine.currentState == crouchAttack)
-        {
-            dealingDamage= 15;
-        }
-        else
-        {
-            Debug.LogWarning("Attack1Checks called while current state is not a valid attack state.");
-            return;
-        }
+
         Transform attackOrigin = null;
         float attackRadius = 0f;
 
         if (stateMachine.currentState == kick)
         {
+            dealingDamage = 10;
             attackOrigin = meleeAttKickAttackPos5 != null ? meleeAttKickAttackPos5.transform : null;
             attackRadius = attack5Distance;
         }
         else if (stateMachine.currentState == meleeAtt1)
         {
+            dealingDamage = 15;
             attackOrigin = meleeAtt1AttackPos1 != null ? meleeAtt1AttackPos1.transform : null;
             attackRadius = attack1Distance1;
         }
         else if (stateMachine.currentState == meleeAtt2)
         {
+            dealingDamage = 20;
             attackOrigin = meleeAtt2AttackPos2 != null ? meleeAtt2AttackPos2.transform : null;
             attackRadius = attack2Distance;
         }
         else if (stateMachine.currentState == meleeRun)
         {
+            dealingDamage = 25;
             attackOrigin = meleeRunAttackPos3 != null ? meleeRunAttackPos3.transform : null;
             attackRadius = attack3Distance;
         }
         else if (stateMachine.currentState == meleeSpin)
         {
+            dealingDamage = 30;
             attackOrigin = meleeSpinAttackPos4 != null ? meleeSpinAttackPos4.transform : null;
             attackRadius = attack4Distance;
         }
         else if (stateMachine.currentState == crouchAttack)
         {
+            dealingDamage= 15;
             attackOrigin = meleeAttCrouchAttackPos6 != null ? meleeAttCrouchAttackPos6.transform : null;
             attackRadius = attack6Distance;
         }

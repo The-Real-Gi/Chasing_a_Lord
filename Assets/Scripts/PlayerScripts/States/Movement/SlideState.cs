@@ -27,13 +27,15 @@ public class SlideState : PlayerState
     public override void Update()
     {
         base.Update();
-        if(Mathf.Abs(player.rb.linearVelocityX)<1&&player.isForcedCrouch)
-        {
-            return;
-        }
-       if(Mathf.Abs(player.rb.linearVelocityX) <= 1f || !player.isGrounded)
+        if (!player.isGrounded)
         {
             stateMachine.ChangeState(player.idle);
+            return;
+        }
+
+        if (Mathf.Abs(player.rb.linearVelocityX) <= 1f)
+        {
+            stateMachine.ChangeState(player.isForcedCrouch ? player.crouchIdle : player.idle);
         }
     }
 

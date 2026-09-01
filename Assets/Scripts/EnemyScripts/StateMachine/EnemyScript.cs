@@ -10,17 +10,33 @@ public class EnemyScript : MonoBehaviour
     [SerializeField]Transform groundCheck;
     [SerializeField] Transform wallCheck;
     [SerializeField] Transform playerCheck;
+    [SerializeField] Transform playerCrouchCheck;
+    [SerializeField] Transform forcedCrouchCheck;
+    [SerializeField] Transform forcedCrouchCheck2;
+
     [SerializeField]float groundCheckDistance;
     [SerializeField] float wallCheckDistance;
     [SerializeField] float playerCheckDistance;
+    [SerializeField] float playerCrouchCheckDistance;
+    [SerializeField] float forcedCrouchCheckDistance;
+    [SerializeField] float forcedCrouchCheckDistance2;
+    [SerializeField] private float wallDetectionGraceDuration = 0.1f;
+    [SerializeField] private float crouchObstacleGraceDuration = 0.2f;
     [SerializeField] LayerMask whatIsGround;
     [SerializeField] LayerMask whatIsPlayer;
 
     public Animator anim;
     public Rigidbody2D rb;
+    public CapsuleCollider2D enemyCollider;
+    public Vector2 crouchColliderSize;
+    public Vector2 crouchColliderOffset;
+    public Vector2 baseColliderSize;
+    public Vector2 baseColliderOffset;
 
     public float timer;
     public float timeToRun;
+    [SerializeField] private float crouchIdleMoveDelay = 2f;
+    [SerializeField] private float crouchSearchDuration = 2f;
     public float attackRange = 1.5f;
     [SerializeField] private float attackCooldown = 0.6f;
     [SerializeField] private Transform attackHitPoint;
@@ -30,6 +46,12 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private float getHitDuration = 0.3f;
     [SerializeField] private float getHitTimer;
     [SerializeField] private float hitKnockbackForce = 4f;
+    [SerializeField] public int hitsBeforeRoll = 2;
+    [SerializeField] public float rollSpeed = 6f;
+    [SerializeField] public float rollDuration = 0.7f;
+    private int playerHitCounter;
+    private float wallDetectedTimer;
+    private float crouchObstacleTimer;
     private float nextAttackTime;
     public Transform player;
 
@@ -39,6 +61,9 @@ public class EnemyScript : MonoBehaviour
     public bool isGrounded;
     public bool isWallDetected;
     public bool isSeeingPlayer;
+    public bool isSeeingPlayerCrouched;
+    public bool isForcedCrouch;
+    public bool isForcedCrouch2;
     
     
     EnemyStateMachine enemyStateMachine;
@@ -59,9 +84,16 @@ public class EnemyScript : MonoBehaviour
     public bool dealingDamage=false;
     public bool getHitFinish=false;
 
+
     void Awake()
     {   anim= GetComponentInChildren<Animator>();
         rb= GetComponent<Rigidbody2D>();
+        enemyCollider = GetComponent<CapsuleCollider2D>();
+        if (enemyCollider != null)
+        {
+            baseColliderSize = enemyCollider.size;
+            baseColliderOffset = enemyCollider.offset;
+        }
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         enemyStateMachine = new EnemyStateMachine();
         enemyIdle= new EnemyIdle(this,enemyStateMachine,"Idle");
@@ -96,16 +128,23 @@ public class EnemyScript : MonoBehaviour
 
         bool isAttacking = enemyStateMachine.currentState == enemyAttack1 || enemyStateMachine.currentState == enemyAttack2;
 
-        if (!isAttacking)
+        if (!isAttacking && enemyStateMachine.currentState != enemyRoll)
         {
-            bool isInCombatPhase = enemyStateMachine.currentState == battleState || isSeeingPlayer;
+            bool isInCombatPhase = enemyStateMachine.currentState == battleState
+                || isSeeingPlayer
+                || isSeeingPlayerCrouched;
             if (isInCombatPhase)
             {
                 GeneralFlipCheck();
             }
         }
 
-        if (enemyStateMachine.currentState != enemyAttack1 && enemyStateMachine.currentState != enemyAttack2 && isSeeingPlayer && enemyStateMachine.currentState != battleState)
+        // Crouch states own their transitions while the enemy is under a low
+        // ceiling. Do not replace them with the standing battle state.
+        bool canEnterBattleState = enemyStateMachine.currentState == enemyIdle
+            || enemyStateMachine.currentState == enemyMove;
+
+        if (CanSeePlayer() && canEnterBattleState)
         {
             enemyStateMachine.ChangeState(battleState);
         }
@@ -130,6 +169,18 @@ public class EnemyScript : MonoBehaviour
         UpdateFacingFromDirection(facDir);
     }
 
+    public bool CanSeePlayer()
+    {
+        return isSeeingPlayer || isSeeingPlayerCrouched;
+    }
+
+    public bool MustCrouch()
+    {
+        // Keep crouch pursuit stable when a wall ray flickers for a frame
+        // while the enemy moves through a low passage.
+        return crouchObstacleTimer > 0f;
+    }
+
     void FixedUpdate()
     {
         if (enemyStateMachine.currentState == getHit)
@@ -144,8 +195,32 @@ public class EnemyScript : MonoBehaviour
     void Checks()
     {
         isGrounded= Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckDistance,whatIsGround);
-        isWallDetected= Physics2D.Raycast(wallCheck.position,Vector2.right,wallCheckDistance*facDir,whatIsGround);
+        bool wallDetectedThisFrame = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * facDir, whatIsGround);
+        if (wallDetectedThisFrame)
+        {
+            wallDetectedTimer = wallDetectionGraceDuration;
+        }
+        else
+        {
+            wallDetectedTimer = Mathf.Max(0f, wallDetectedTimer - Time.deltaTime);
+        }
+
+        isWallDetected = wallDetectedTimer > 0f;
         isSeeingPlayer= Physics2D.Raycast(wallCheck.position,Vector2.right*facDir,playerCheckDistance,whatIsPlayer);
+        isSeeingPlayerCrouched = playerCrouchCheck != null && Physics2D.Raycast(playerCrouchCheck.position, Vector2.right * facDir, playerCrouchCheckDistance, whatIsPlayer);
+        isForcedCrouch = forcedCrouchCheck != null && Physics2D.Raycast(forcedCrouchCheck.position, Vector2.up, forcedCrouchCheckDistance, whatIsGround);
+        isForcedCrouch2 = forcedCrouchCheck2 != null && Physics2D.Raycast(forcedCrouchCheck2.position, Vector2.up, forcedCrouchCheckDistance2, whatIsGround);
+
+        bool crouchObstacleDetected = isForcedCrouch || isForcedCrouch2 || (isWallDetected && CanSeePlayer());
+        if (crouchObstacleDetected)
+        {
+            crouchObstacleTimer = crouchObstacleGraceDuration;
+        }
+        else
+        {
+            crouchObstacleTimer = Mathf.Max(0f, crouchObstacleTimer - Time.deltaTime);
+        }
+
     }
     void OnDrawGizmos()
     {
@@ -153,7 +228,18 @@ public class EnemyScript : MonoBehaviour
         Gizmos.DrawLine(groundCheck.position, groundCheck.position + new Vector3(0, -groundCheckDistance, 0));
         Gizmos.DrawLine(wallCheck.position, wallCheck.position + new Vector3(facDir * wallCheckDistance, 0, 0));
         Gizmos.DrawLine(playerCheck.position, playerCheck.position + new Vector3(facDir * playerCheckDistance, 0, 0));
-
+        if (playerCrouchCheck != null)
+        {
+            Gizmos.DrawLine(playerCrouchCheck.position, playerCrouchCheck.position + new Vector3(facDir * playerCrouchCheckDistance, 0, 0));
+        }
+        if (forcedCrouchCheck != null)
+        {
+            Gizmos.DrawLine(forcedCrouchCheck.position, forcedCrouchCheck.position + new Vector3(0, forcedCrouchCheckDistance, 0));
+        }
+        if (forcedCrouchCheck2 != null)
+        {
+            Gizmos.DrawLine(forcedCrouchCheck2.position, forcedCrouchCheck2.position + new Vector3(0, forcedCrouchCheckDistance2, 0));
+        }
         if (attackHitPoint != null)
         {
             Gizmos.color = Color.magenta;
@@ -192,6 +278,31 @@ public class EnemyScript : MonoBehaviour
 
         return Vector2.Distance(transform.position, player.position) <= attackRange;
     }
+
+    public void ApplyCrouchCollider()
+    {
+        if (enemyCollider == null)
+        {
+            return;
+        }
+
+        enemyCollider.size = crouchColliderSize;
+        enemyCollider.offset = crouchColliderOffset;
+    }
+
+    public void ResetColliderToBase()
+    {
+        if (enemyCollider == null)
+        {
+            return;
+        }
+
+        enemyCollider.size = baseColliderSize;
+        enemyCollider.offset = baseColliderOffset;
+    }
+
+    public float CrouchIdleMoveDelay => crouchIdleMoveDelay;
+    public float CrouchSearchDuration => crouchSearchDuration;
 
     public void FlipController()
     {
@@ -236,8 +347,22 @@ public class EnemyScript : MonoBehaviour
 
     public void HitByPlayer()
     {
-        if (enemyStateMachine == null || getHit == null || player == null)// enemy or get hit or player is null go back
+        if (enemyStateMachine == null || getHit == null || player == null || enemyStateMachine.currentState == enemyRoll)
         {
+            return;
+        }
+
+        playerHitCounter++;
+
+        // With hitsBeforeRoll set to 2, the second player hit starts the roll.
+        if (playerHitCounter >= Mathf.Max(1, hitsBeforeRoll))
+        {
+            playerHitCounter = 0;
+
+            facDir = player.position.x >= transform.position.x ? 1 : -1;
+            UpdateFacingFromDirection(facDir);
+
+            enemyStateMachine.ChangeState(enemyRoll);
             return;
         }
 
