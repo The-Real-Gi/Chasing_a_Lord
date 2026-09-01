@@ -14,6 +14,13 @@ public class EnemyMove : EnemyState
     public override void Update()
     {
         base.Update();
+
+        if (enemy.MustCrouch())
+        {
+            stateMachine.ChangeState(enemy.enemyCrouchIdle);
+            return;
+        }
+
         if(enemy.isWallDetected)
         {
             enemy.Flip();

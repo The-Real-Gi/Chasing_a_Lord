@@ -106,7 +106,6 @@ public class EnemyScript : MonoBehaviour
         enemyAttack2 = new EnemyAttack2(this,enemyStateMachine,"Attack2");
         getHit= new EnemyGetHit(this,enemyStateMachine,"GetHit");
         death = new EnemyDeath(this,enemyStateMachine,"Death");
-
         enemyStateMachine.Initialize(enemyIdle);
     
     }
@@ -119,6 +118,13 @@ public class EnemyScript : MonoBehaviour
     void Update()
     {
         Checks();
+
+        bool isInCrouchState = enemyStateMachine.currentState == enemyCrouchIdle || enemyStateMachine.currentState == enemyCrouchMove;
+        if (!isInCrouchState && MustCrouch())
+        {
+            enemyStateMachine.ChangeState(enemyCrouchIdle);
+            return;
+        }
 
         if (enemyStateMachine.currentState == getHit&&health>0)
         {
