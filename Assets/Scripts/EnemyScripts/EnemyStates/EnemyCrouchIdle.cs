@@ -26,6 +26,11 @@ public class EnemyCrouchIdle : EnemyState
 
         if (enemy.CanSeePlayer())
         {
+            if (enemy.IsPlayerInAttackRange() && enemy.CanAttackAgain())
+            {
+                stateMachine.ChangeState(enemy.enemyCrouchAttack);
+                return;
+            }
             stateMachine.ChangeState(enemy.enemyCrouchMove);
             return;
         }

@@ -43,6 +43,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private float attackHitRadius = 0.7f;
     [SerializeField] private int attack1Damage = 10;
     [SerializeField] private int attack2Damage = 15;
+    [SerializeField] private int attack3Damage= 5;
     [SerializeField] private float getHitDuration = 0.3f;
     [SerializeField] private float getHitTimer;
     [SerializeField] private float hitKnockbackForce = 4f;
@@ -77,10 +78,12 @@ public class EnemyScript : MonoBehaviour
     public EnemyGetHit getHit {get;private set;}
     public EnemyAttack1 enemyAttack1 {get;private set;}
     public EnemyAttack2 enemyAttack2 {get;private set;}
+    public EnemyCrouchAttack enemyCrouchAttack {get;private set;}
 
     public EnemyDeath death{get;private set;}
     public bool attackFinish=false;
     public bool attackFinish2;
+    public bool attackFinish3 = false;
     public bool dealingDamage=false;
     public bool getHitFinish=false;
 
@@ -104,6 +107,7 @@ public class EnemyScript : MonoBehaviour
         enemyRoll= new EnemyRoll(this,enemyStateMachine,"Roll"); 
         enemyAttack1 = new EnemyAttack1(this,enemyStateMachine,"Attack1");
         enemyAttack2 = new EnemyAttack2(this,enemyStateMachine,"Attack2");
+        enemyCrouchAttack = new EnemyCrouchAttack(this, enemyStateMachine, "CrouchAttack");
         getHit= new EnemyGetHit(this,enemyStateMachine,"GetHit");
         death = new EnemyDeath(this,enemyStateMachine,"Death");
         enemyStateMachine.Initialize(enemyIdle);
@@ -132,7 +136,9 @@ public class EnemyScript : MonoBehaviour
             return;
         }
 
-        bool isAttacking = enemyStateMachine.currentState == enemyAttack1 || enemyStateMachine.currentState == enemyAttack2;
+        bool isAttacking = enemyStateMachine.currentState == enemyAttack1
+            || enemyStateMachine.currentState == enemyAttack2
+            || enemyStateMachine.currentState == enemyCrouchAttack;
 
         if (!isAttacking && enemyStateMachine.currentState != enemyRoll)
         {
@@ -268,7 +274,9 @@ public class EnemyScript : MonoBehaviour
 
             if (playerScript != null)
             {
-                int damage = enemyAttack1 != null && enemyStateMachine.currentState == enemyAttack1 ? attack1Damage : attack2Damage;
+                int damage = enemyStateMachine.currentState == enemyAttack1 ? attack1Damage
+                    : enemyStateMachine.currentState == enemyAttack2 || enemyStateMachine.currentState == enemyCrouchAttack ? attack2Damage
+                    : attack3Damage;
                 playerScript.TakeDamage(damage, transform);
                 return;
             }
@@ -339,6 +347,7 @@ public class EnemyScript : MonoBehaviour
         nextAttackTime = Time.time + attackCooldown;
         attackFinish = false;
         attackFinish2 = false;
+        attackFinish3 = false;
     }
 
     public void AttackFinish()
@@ -349,6 +358,10 @@ public class EnemyScript : MonoBehaviour
     public void Attack2Finish()
     {
         attackFinish2 = true;
+    }
+    public void Attack3Finish()
+    {
+        attackFinish3 = true;
     }
 
     public void HitByPlayer()

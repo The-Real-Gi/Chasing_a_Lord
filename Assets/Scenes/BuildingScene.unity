@@ -2192,6 +2192,7 @@ MonoBehaviour:
   attackHitRadius: 0.34
   attack1Damage: 0
   attack2Damage: 0
+  attack3Damage: 5
   getHitDuration: 1
   getHitTimer: 0
   hitKnockbackForce: 2
@@ -2209,6 +2210,7 @@ MonoBehaviour:
   isForcedCrouch2: 0
   attackFinish: 0
   attackFinish2: 0
+  attackFinish3: 0
   dealingDamage: 0
   getHitFinish: 0
 --- !u!1 &1791201310
@@ -2495,7 +2497,7 @@ Transform:
   m_GameObject: {fileID: 2119003399}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.142, y: 0, z: 0}
+  m_LocalPosition: {x: 0.134, y: -0.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

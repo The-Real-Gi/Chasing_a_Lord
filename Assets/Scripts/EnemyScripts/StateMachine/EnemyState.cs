@@ -40,6 +40,7 @@ public class EnemyState
         enemy.anim.SetBool("Move", false);
         enemy.anim.SetBool("Attack1", false);
         enemy.anim.SetBool("Attack2", false);
+        enemy.anim.SetBool("CrouchAttack", false);
         enemy.anim.SetBool("GetHit", false);
         enemy.anim.SetBool("Roll", false);
         enemy.anim.SetBool("CrouchIdle", false);

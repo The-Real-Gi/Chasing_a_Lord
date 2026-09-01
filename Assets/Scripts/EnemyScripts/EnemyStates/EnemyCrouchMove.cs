@@ -25,6 +25,11 @@ public class EnemyCrouchMove : EnemyState
         if (enemy.CanSeePlayer())
         {
             enemy.timer = enemy.CrouchSearchDuration;
+            if (enemy.IsPlayerInAttackRange() && enemy.CanAttackAgain())
+            {
+                stateMachine.ChangeState(enemy.enemyCrouchAttack);
+                return;
+            }
             return;
         }
 

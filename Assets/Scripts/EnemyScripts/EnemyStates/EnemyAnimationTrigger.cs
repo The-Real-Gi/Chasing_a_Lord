@@ -20,8 +20,9 @@ public class EnemyAnimationTrigger : MonoBehaviour
     {
         enemy.TryDealDamage();
     }
-    public void GetHitFinish()
+    
+    public void Attack3Finish()
     {
-        
+        enemy.AttackFinish();
     }
 }

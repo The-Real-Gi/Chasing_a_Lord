@@ -565,7 +565,7 @@ public class PlayerScript : MonoBehaviour
         {
             getHitKnockbackDirection = -facDir;
         }
-        if(stateMachine.currentState!=shieldBlock){
+        if(stateMachine.currentState!=shieldBlock||stateMachine.currentState!=crouchBlock){
         getHitTimer = getHitDuration;
         rb.linearVelocity = Vector2.zero;
         stateMachine.ChangeState(getHit);
