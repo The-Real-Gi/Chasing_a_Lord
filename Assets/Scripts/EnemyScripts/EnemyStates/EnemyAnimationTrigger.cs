@@ -11,9 +11,17 @@ public class EnemyAnimationTrigger : MonoBehaviour
     {
         enemy.AttackFinish();
     }
-
+    
+    public void Attack2Finish()
+    {
+        enemy.Attack2Finish();
+    }
     public void DealDamage()
     {
-        //signal to check for player to deal damage
+        enemy.TryDealDamage();
+    }
+    public void GetHitFinish()
+    {
+        
     }
 }

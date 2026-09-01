@@ -18,10 +18,33 @@ public class EnemyBattleState : EnemyState
     {
         base.Update();
 
+        // A low ceiling (or the second ceiling check) keeps the enemy in its
+        // crouched pursuit mode, regardless of which player ray sees them.
+        if (enemy.MustCrouch())
+        {
+            stateMachine.ChangeState(enemy.enemyCrouchMove);
+            return;
+        }
+
         if (enemy.IsPlayerInAttackRange() && enemy.CanAttackAgain())
         {
-            stateMachine.ChangeState(enemy.enemyAttack1);
-            return;
+            int randomNumber = Random.Range(1, 3);
+            Debug.Log(randomNumber);
+
+            if (randomNumber == 1)
+            {
+                stateMachine.ChangeState(enemy.enemyAttack1);
+                return;
+            }
+            else if (randomNumber == 2)
+            {
+                stateMachine.ChangeState(enemy.enemyAttack2);
+                return;
+            }
+            else
+            {
+                Debug.Log("error in choosing the number");
+            }
         }
 
         if (enemy.IsPlayerInAttackRange() && !enemy.CanAttackAgain())

@@ -175,7 +175,38 @@ Transform:
   m_GameObject: {fileID: 100349566}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.013, y: 0.013, z: 0}
+  m_LocalPosition: {x: 0.013, y: 0.049, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1732373414}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &222925550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 222925551}
+  m_Layer: 8
+  m_Name: ForcedCrouchCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &222925551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222925550}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.035, y: 0.033, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -333,7 +364,7 @@ Transform:
   m_GameObject: {fileID: 415873538}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.373, y: -0.044, z: 0}
+  m_LocalPosition: {x: 0.277, y: 0.011, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -562,7 +593,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.391, y: -0.105, z: -10}
+  m_LocalPosition: {x: -6.89, y: -0.105, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -709,7 +740,7 @@ Transform:
   m_GameObject: {fileID: 698700849}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.471, y: -0.156, z: 0}
+  m_LocalPosition: {x: 0.427, y: -0.077, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -875,7 +906,7 @@ Transform:
   m_GameObject: {fileID: 709127535}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.26, y: -1.19, z: 0}
+  m_LocalPosition: {x: -2.26, y: 2.41, z: 0}
   m_LocalScale: {x: 3, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1110,6 +1141,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1258087442
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1258087443}
+  m_Layer: 8
+  m_Name: ForcedCrouchCheck 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1258087443
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258087442}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.069, y: 0.033, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1732373414}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1312588869
 GameObject:
   m_ObjectHideFlags: 0
@@ -1307,6 +1369,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1396158282}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1326967381
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1326967382}
+  m_Layer: 8
+  m_Name: crouchPlayerCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1326967382
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326967381}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.087, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1732373414}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1382708829
 GameObject:
   m_ObjectHideFlags: 0
@@ -1463,19 +1556,21 @@ Transform:
   m_GameObject: {fileID: 1396158281}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.391, y: -0.105, z: 0}
+  m_LocalPosition: {x: -6.89, y: -0.105, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1382708832}
   - {fileID: 1312727547}
   - {fileID: 1551969582}
+  - {fileID: 2065636261}
   - {fileID: 24964585}
   - {fileID: 1516542972}
   - {fileID: 415873539}
   - {fileID: 1594521269}
   - {fileID: 2088423851}
   - {fileID: 698700850}
+  - {fileID: 1791201311}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &1396158283
@@ -1599,6 +1694,18 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: be0072fb-2bc1-4e31-9666-cce69d51f5ed
     m_ActionName: 'Movement/MeleeRun[/Keyboard/i]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7223f772-0e9d-4947-8496-982dc3ca4711
+    m_ActionName: 'Movement/CrouchAtt[/Keyboard/p]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7087821a-acd9-43e6-801a-1a6fb9493800
+    m_ActionName: 'Movement/CrouchBlock[/Keyboard/b]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 629ff47b-3919-4a05-924c-60d1ec164796
+    m_ActionName: 'Movement/Block[/Keyboard/b]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Player
   m_DefaultActionMap: Movement
@@ -1635,6 +1742,8 @@ MonoBehaviour:
   wallCheckDistance: 0.21
   hangCheck: {fileID: 24964585}
   hangCheckDistance: 0.18
+  forcedCrouchCheck: {fileID: 2065636261}
+  forcedCrouchCheckDistance: 0.15
   isGrounded: 0
   isWallDetected: 0
   isWallJumping: 0
@@ -1642,6 +1751,7 @@ MonoBehaviour:
   isTouchingLedge: 0
   ledgeDetected: 0
   canClimbLedge: 0
+  isForcedCrouchDetected: 0
   ledgePosBot: {x: 0, y: 0}
   ledgePos1: {x: 0, y: 0}
   ledgePos2: {x: 0, y: 0}
@@ -1652,30 +1762,34 @@ MonoBehaviour:
   finishedCLimb: 0
   moveUp: 0
   moveForward: 0
-  climbingUpSpeed: 0
-  movingForwardSpeed: 0
+  climbingUpSpeed: 30
+  movingForwardSpeed: 35
   isClimbingLedge: 0
   timer: 0
   dashCooldown: 1
-  dashingTime: 0
-  dashSpeed: 50
+  dashingTime: 1
+  dashSpeed: 200
   cooldownTimer: 0
   flipCooldown: 1
   flipCooldownTimer: 0
-  maxRunSpeed: 300
+  maxRunSpeed: 200
   baseRunSpeed: 100
   jumpCount: 0
   maxJumps: 2
-  crouchColliderOffset: {x: 0, y: 0.3}
+  crouchColliderOffset: {x: 0, y: -0.23}
   baseCollider: {x: 0, y: -0.12}
   sizeCollider: {x: 0.2, y: 0.6}
   playerCollider: {fileID: 0}
-  collidersizeCrouch: {x: 0, y: -0.3}
+  collidersizeCrouch: {x: 0.4, y: 0.001}
   finishAttack: 0
   kickDamageDealt: 0
   kickMoveSpeed: 0.1
   meleeAtt1MoveSpeed: 0.1
   meleeAtt2MoveSpeed: 0.1
+  getHitDuration: 0.5
+  getHitTimer: 0
+  getHitKnockbackForce: 2
+  getHitKnockbackDirection: 1
   meleeAttackBlendSpeed: 8
   meleeSpinSlowdownRate: 1
   meleeRunAccelerationSpeed: 0.02
@@ -1685,20 +1799,24 @@ MonoBehaviour:
   meleeSpinDamageDealt: 0
   meleeAtt1DamageDealt: 0
   meleeAtt2DamageDealt: 0
-  attackPos1: {fileID: 1516542971}
-  attackPos2: {fileID: 415873538}
-  attackPos3: {fileID: 1594521268}
-  attackPos4: {fileID: 2088423850}
-  attackPos5: {fileID: 698700849}
-  attack1Distance1: 0.18
-  attack2Distance: 0.18
-  attack3Distance: 0.18
-  attack4Distance: 0.18
-  attack5Distance: 0.12
+  crouchMeleeDamageDealt: 0
+  meleeAtt1AttackPos1: {fileID: 1516542971}
+  meleeAtt2AttackPos2: {fileID: 415873538}
+  meleeRunAttackPos3: {fileID: 1594521268}
+  meleeSpinAttackPos4: {fileID: 2088423850}
+  meleeAttKickAttackPos5: {fileID: 698700849}
+  meleeAttCrouchAttackPos6: {fileID: 1791201310}
+  attack1Distance1: 0.3
+  attack2Distance: 0.27
+  attack3Distance: 0.35
+  attack4Distance: 0.51
+  attack5Distance: 0.24
+  attack6Distance: 0.27
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 256
   enemiesInAttackRange: []
+  isForcedCrouch: 0
 --- !u!1 &1490055890
 GameObject:
   m_ObjectHideFlags: 0
@@ -1818,7 +1936,7 @@ Transform:
   m_GameObject: {fileID: 1490055890}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.391, y: -0.105, z: -10}
+  m_LocalPosition: {x: -6.89, y: -0.105, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1849,7 +1967,7 @@ Transform:
   m_GameObject: {fileID: 1516542971}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.333, y: -0.087, z: 0}
+  m_LocalPosition: {x: 0.234, y: -0.066, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1911,7 +2029,7 @@ Transform:
   m_GameObject: {fileID: 1594521268}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.34, y: 0.014, z: 0}
+  m_LocalPosition: {x: 0.107, y: -0.013, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1970,8 +2088,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.011150512, y: 0.00036406372}
-  m_Size: {x: 0.19522332, y: 0.42566422}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.2, y: 0.4}
   m_Direction: 0
 --- !u!4 &1732373414
 Transform:
@@ -1982,7 +2100,7 @@ Transform:
   m_GameObject: {fileID: 1732373412}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.329, y: -0.19, z: 0}
+  m_LocalPosition: {x: -8.716, y: -0.162, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1991,6 +2109,9 @@ Transform:
   - {fileID: 100349567}
   - {fileID: 2137001676}
   - {fileID: 2119003400}
+  - {fileID: 1326967382}
+  - {fileID: 222925551}
+  - {fileID: 1258087443}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1732373415
@@ -2032,14 +2153,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c063d7fd53cf243cb9d04f00516a7dcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyScript
-  health: 100
-  moveSpeed: 30
+  health: 1000
+  moveSpeed: 50
   groundCheck: {fileID: 799813430}
   wallCheck: {fileID: 100349567}
   playerCheck: {fileID: 2137001676}
+  playerCrouchCheck: {fileID: 1326967382}
+  forcedCrouchCheck: {fileID: 222925551}
+  forcedCrouchCheck2: {fileID: 1258087443}
   groundCheckDistance: 0.28
   wallCheckDistance: 0.31
   playerCheckDistance: 2
+  playerCrouchCheckDistance: 2.15
+  forcedCrouchCheckDistance: 0.39
+  forcedCrouchCheckDistance2: 0.38
+  wallDetectionGraceDuration: 0.3
+  crouchObstacleGraceDuration: 0.2
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -2048,18 +2177,71 @@ MonoBehaviour:
     m_Bits: 128
   anim: {fileID: 0}
   rb: {fileID: 0}
+  enemyCollider: {fileID: 0}
+  crouchColliderSize: {x: 0.2, y: 0.24}
+  crouchColliderOffset: {x: 0, y: -0.07}
+  baseColliderSize: {x: 0.2, y: 0.4}
+  baseColliderOffset: {x: 0, y: 0}
   timer: 0
   timeToRun: 2
+  crouchIdleMoveDelay: 2
+  crouchSearchDuration: 2
   attackRange: 0.3
   attackCooldown: 1
+  attackHitPoint: {fileID: 2119003400}
+  attackHitRadius: 0.34
+  attack1Damage: 0
+  attack2Damage: 0
+  getHitDuration: 1
+  getHitTimer: 0
+  hitKnockbackForce: 2
+  hitsBeforeRoll: 1
+  rollSpeed: 6
+  rollDuration: 0.7
   player: {fileID: 0}
   facDir: 1
   isFacingRight: 1
   isGrounded: 0
   isWallDetected: 0
   isSeeingPlayer: 0
+  isSeeingPlayerCrouched: 0
+  isForcedCrouch: 0
+  isForcedCrouch2: 0
   attackFinish: 0
+  attackFinish2: 0
   dealingDamage: 0
+  getHitFinish: 0
+--- !u!1 &1791201310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1791201311}
+  m_Layer: 7
+  m_Name: meleeAttCrouch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1791201311
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791201310}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.182, y: -0.175, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1396158282}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1961934611
 GameObject:
   m_ObjectHideFlags: 0
@@ -2220,11 +2402,42 @@ Transform:
   m_GameObject: {fileID: 1961934611}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.35, y: -1.21, z: 0}
+  m_LocalPosition: {x: -14.51, y: 2.5, z: 0}
   m_LocalScale: {x: 3, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2065636260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2065636261}
+  m_Layer: 7
+  m_Name: forcedCrouchCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2065636261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065636260}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.178, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1396158282}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2088423850
 GameObject:
@@ -2251,7 +2464,7 @@ Transform:
   m_GameObject: {fileID: 2088423850}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.196, y: -0.124, z: 0}
+  m_LocalPosition: {x: 0.06, y: -0.076, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2282,7 +2495,7 @@ Transform:
   m_GameObject: {fileID: 2119003399}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.142, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2313,7 +2526,7 @@ Transform:
   m_GameObject: {fileID: 2137001675}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.071, y: 0.042, z: 0}
+  m_LocalPosition: {x: 0.016, y: 0.067, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

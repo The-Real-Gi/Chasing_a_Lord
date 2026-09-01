@@ -44,6 +44,9 @@ public class AnimationEventTrigger : MonoBehaviour
         else if (player.stateMachine.currentState == player.kick)
         {
             player.kickDamageDealt = true;
+        }else if (player.stateMachine.currentState == player.crouchAttack)
+        {
+            player.crouchMeleeDamageDealt=true;
         }
     }
 

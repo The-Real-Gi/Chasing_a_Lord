@@ -10,7 +10,7 @@ public class CrouchIdle : GroundedState
     {
         base.Enter();
         player.playerCollider.offset=player.crouchColliderOffset;
-            player.playerCollider.size=player.collidersizeCrouch;
+        player.playerCollider.size=player.collidersizeCrouch;
     
         player.rb.linearVelocity= new Vector2(0,player.rb.linearVelocityY);
     }
