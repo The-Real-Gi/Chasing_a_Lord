@@ -17,16 +17,14 @@ public class LedgeClimbState : PlayerState
         player.rb.gravityScale = 0f;
         player.rb.linearVelocity = Vector2.zero;
         currFacDir=player.facDir;
-         player.playerCollider.offset=player.crouchColliderOffset;
-        player.playerCollider.size=player.collidersizeCrouch;
+        player.ApplyCrouchCollider();
         
     }
 
     public override void Exit()
     {
         base.Exit();
-        player.playerCollider.offset=player.baseCollider;
-        player.playerCollider.size= player.sizeCollider;
+        player.ApplyBaseCollider();
         player.isClimbingLedge=false;
         player.canClimbLedge=false;
         player.finishedCLimb=false;

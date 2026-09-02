@@ -9,6 +9,8 @@ public class CrouchAttack : PlayerState
     public override void Enter()
     {
         base.Enter();
+        player.ApplyCrouchCollider();
+        player.isAttacking = true;
     }
 
     public override void Update()
@@ -28,6 +30,8 @@ public class CrouchAttack : PlayerState
     public override void Exit()
     {
         base.Exit();
+        player.ApplyBaseCollider();
+        player.isAttacking = false;
          player.crouchMeleeDamageDealt=false;
         player.finishAttack=false;
     }

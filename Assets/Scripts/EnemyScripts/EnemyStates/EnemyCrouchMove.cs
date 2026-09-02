@@ -22,6 +22,20 @@ public class EnemyCrouchMove : EnemyState
             return;
         }
 
+        if (enemy.IsPlayerInCrouchAttackRange())
+        {
+            if (enemy.CanAttackAgain())
+            {
+                enemy.FacePlayer();
+                stateMachine.ChangeState(enemy.enemyCrouchAttack);
+            }
+            else
+            {
+                stateMachine.ChangeState(enemy.enemyCrouchIdle);
+            }
+            return;
+        }
+
         if (enemy.CanSeePlayer())
         {
             enemy.timer = enemy.CrouchSearchDuration;
@@ -33,15 +47,17 @@ public class EnemyCrouchMove : EnemyState
         {
             stateMachine.ChangeState(enemy.enemyCrouchIdle);
         }
-        if(enemy.isForcedCrouch&&!enemy.isForcedCrouch2)
-        {
-            stateMachine.ChangeState(enemy.enemyMove);
-        }
     }
 
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+        if (enemy.IsPlayerInCrouchAttackRange())
+        {
+            enemy.rb.linearVelocityX = 0f;
+            return;
+        }
+
         enemy.rb.linearVelocityX = enemy.facDir * enemy.moveSpeed * Time.fixedDeltaTime * 0.5f;
     }
 

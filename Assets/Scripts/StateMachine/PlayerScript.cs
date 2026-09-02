@@ -194,6 +194,18 @@ public class PlayerScript : MonoBehaviour
         crouchBlock = new CrouchBlock(this,"CrouchBlock", stateMachine);
     }
 
+    public void ApplyCrouchCollider()
+    {
+        playerCollider.offset = crouchColliderOffset;
+        playerCollider.size = collidersizeCrouch;
+    }
+
+    public void ApplyBaseCollider()
+    {
+        playerCollider.offset = baseCollider;
+        playerCollider.size = sizeCollider;
+    }
+
     void OnEnable()
     {
         input.Movement.Enable();    
@@ -288,7 +300,9 @@ public class PlayerScript : MonoBehaviour
         // has slowed enough to become a crouch state.
         if (isForcedCrouch && stateMachine.currentState != crouchIdle
             && stateMachine.currentState != crouchMove
-            && stateMachine.currentState != slideState)
+            && stateMachine.currentState != slideState
+            && stateMachine.currentState != crouchAttack
+            && stateMachine.currentState != crouchBlock)
         {
             stateMachine.ChangeState(crouchIdle);
         }
@@ -544,6 +558,11 @@ public class PlayerScript : MonoBehaviour
 
     public void HitByEnemy(Transform attacker = null)
     {
+        if (isForcedCrouch)
+        {
+            return;
+        }
+
         if (attacker != null)
         {
             // Calculate direction to attacker
@@ -565,20 +584,22 @@ public class PlayerScript : MonoBehaviour
         {
             getHitKnockbackDirection = -facDir;
         }
-        if(stateMachine.currentState!=shieldBlock){
-        getHitTimer = getHitDuration;
-        rb.linearVelocity = Vector2.zero;
-        stateMachine.ChangeState(getHit);
-        }
-        else
+        if (stateMachine.currentState != shieldBlock && stateMachine.currentState != crouchBlock)
         {
-            return;
+            getHitTimer = getHitDuration;
+            rb.linearVelocity = Vector2.zero;
+            stateMachine.ChangeState(getHit);
         }
     }
 
     public void TakeDamage(int damage, Transform attacker = null)
     {
         health -= damage;
+        if (isForcedCrouch)
+        {
+            return;
+        }
+
         if (stateMachine.currentState != getHit)
         {
             HitByEnemy(attacker);
@@ -594,8 +615,27 @@ public class PlayerScript : MonoBehaviour
         }
 
         enemy.health -= damage;
+        if (stateMachine.currentState == crouchAttack)
+        {
+            return;
+        }
+
         enemy.HitByPlayer();
       
+    }
+
+    public bool IsCrouchAttacking()
+    {
+        return stateMachine.currentState == crouchAttack;
+    }
+
+    public bool IsCrouching()
+    {
+        return stateMachine.currentState == crouchIdle
+            || stateMachine.currentState == crouchMove
+            || stateMachine.currentState == crouchAttack
+            || stateMachine.currentState == crouchBlock
+            || stateMachine.currentState == slideState;
     }
 
    

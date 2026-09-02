@@ -11,6 +11,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] Transform wallCheck;
     [SerializeField] Transform playerCheck;
     [SerializeField] Transform playerCrouchCheck;
+    [SerializeField] Transform crouchAttackCheck;
     [SerializeField] Transform forcedCrouchCheck;
     [SerializeField] Transform forcedCrouchCheck2;
 
@@ -18,6 +19,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] float wallCheckDistance;
     [SerializeField] float playerCheckDistance;
     [SerializeField] float playerCrouchCheckDistance;
+    [SerializeField] float crouchAttackCheckRadius = 1.5f;
     [SerializeField] float forcedCrouchCheckDistance;
     [SerializeField] float forcedCrouchCheckDistance2;
     [SerializeField] private float wallDetectionGraceDuration = 0.1f;
@@ -43,6 +45,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private float attackHitRadius = 0.7f;
     [SerializeField] private int attack1Damage = 10;
     [SerializeField] private int attack2Damage = 15;
+    [SerializeField] private int attack3Damage= 5;
     [SerializeField] private float getHitDuration = 0.3f;
     [SerializeField] private float getHitTimer;
     [SerializeField] private float hitKnockbackForce = 4f;
@@ -62,6 +65,7 @@ public class EnemyScript : MonoBehaviour
     public bool isWallDetected;
     public bool isSeeingPlayer;
     public bool isSeeingPlayerCrouched;
+    public bool isCrouchAttackRangeDetected;
     public bool isForcedCrouch;
     public bool isForcedCrouch2;
     
@@ -77,10 +81,12 @@ public class EnemyScript : MonoBehaviour
     public EnemyGetHit getHit {get;private set;}
     public EnemyAttack1 enemyAttack1 {get;private set;}
     public EnemyAttack2 enemyAttack2 {get;private set;}
+    public EnemyCrouchAttack enemyCrouchAttack {get;private set;}
 
     public EnemyDeath death{get;private set;}
     public bool attackFinish=false;
     public bool attackFinish2;
+    public bool attackFinish3 = false;
     public bool dealingDamage=false;
     public bool getHitFinish=false;
 
@@ -104,9 +110,9 @@ public class EnemyScript : MonoBehaviour
         enemyRoll= new EnemyRoll(this,enemyStateMachine,"Roll"); 
         enemyAttack1 = new EnemyAttack1(this,enemyStateMachine,"Attack1");
         enemyAttack2 = new EnemyAttack2(this,enemyStateMachine,"Attack2");
+        enemyCrouchAttack = new EnemyCrouchAttack(this, enemyStateMachine, "CrouchAttack");
         getHit= new EnemyGetHit(this,enemyStateMachine,"GetHit");
         death = new EnemyDeath(this,enemyStateMachine,"Death");
-
         enemyStateMachine.Initialize(enemyIdle);
     
     }
@@ -120,13 +126,31 @@ public class EnemyScript : MonoBehaviour
     {
         Checks();
 
+        bool isInCrouchState = enemyStateMachine.currentState == enemyCrouchIdle
+            || enemyStateMachine.currentState == enemyCrouchMove
+            || enemyStateMachine.currentState == enemyCrouchAttack;
+        if (!isInCrouchState && MustCrouch())
+        {
+            bool isPatrolling = enemyStateMachine.currentState == enemyIdle
+                || enemyStateMachine.currentState == enemyMove;
+            if (isPatrolling)
+            {
+                enemyCrouchIdle.PrepareForPatrolEntry();
+            }
+
+            enemyStateMachine.ChangeState(enemyCrouchIdle);
+            return;
+        }
+
         if (enemyStateMachine.currentState == getHit&&health>0)
         {
             enemyStateMachine.currentState.Update();
             return;
         }
 
-        bool isAttacking = enemyStateMachine.currentState == enemyAttack1 || enemyStateMachine.currentState == enemyAttack2;
+        bool isAttacking = enemyStateMachine.currentState == enemyAttack1
+            || enemyStateMachine.currentState == enemyAttack2
+            || enemyStateMachine.currentState == enemyCrouchAttack;
 
         if (!isAttacking && enemyStateMachine.currentState != enemyRoll)
         {
@@ -154,6 +178,11 @@ public class EnemyScript : MonoBehaviour
         {
             enemyStateMachine.ChangeState(death);
         }
+    }
+
+    public void FacePlayer()
+    {
+        GeneralFlipCheck();
     }
 
     private void GeneralFlipCheck()
@@ -208,6 +237,19 @@ public class EnemyScript : MonoBehaviour
         isWallDetected = wallDetectedTimer > 0f;
         isSeeingPlayer= Physics2D.Raycast(wallCheck.position,Vector2.right*facDir,playerCheckDistance,whatIsPlayer);
         isSeeingPlayerCrouched = playerCrouchCheck != null && Physics2D.Raycast(playerCrouchCheck.position, Vector2.right * facDir, playerCrouchCheckDistance, whatIsPlayer);
+        isCrouchAttackRangeDetected = false;
+        if (crouchAttackCheck != null)
+        {
+            Collider2D[] crouchAttackHits = Physics2D.OverlapCircleAll(crouchAttackCheck.position, crouchAttackCheckRadius, whatIsPlayer);
+            foreach (Collider2D crouchAttackHit in crouchAttackHits)
+            {
+                if (crouchAttackHit.GetComponentInParent<PlayerScript>() != null)
+                {
+                    isCrouchAttackRangeDetected = true;
+                    break;
+                }
+            }
+        }
         isForcedCrouch = forcedCrouchCheck != null && Physics2D.Raycast(forcedCrouchCheck.position, Vector2.up, forcedCrouchCheckDistance, whatIsGround);
         isForcedCrouch2 = forcedCrouchCheck2 != null && Physics2D.Raycast(forcedCrouchCheck2.position, Vector2.up, forcedCrouchCheckDistance2, whatIsGround);
 
@@ -231,6 +273,11 @@ public class EnemyScript : MonoBehaviour
         if (playerCrouchCheck != null)
         {
             Gizmos.DrawLine(playerCrouchCheck.position, playerCrouchCheck.position + new Vector3(facDir * playerCrouchCheckDistance, 0, 0));
+        }
+        if (crouchAttackCheck != null)
+        {
+            Gizmos.color = isCrouchAttackRangeDetected ? Color.green : Color.yellow;
+            Gizmos.DrawWireSphere(crouchAttackCheck.position, crouchAttackCheckRadius);
         }
         if (forcedCrouchCheck != null)
         {
@@ -262,7 +309,9 @@ public class EnemyScript : MonoBehaviour
 
             if (playerScript != null)
             {
-                int damage = enemyAttack1 != null && enemyStateMachine.currentState == enemyAttack1 ? attack1Damage : attack2Damage;
+                int damage = enemyStateMachine.currentState == enemyAttack1 ? attack1Damage
+                    : enemyStateMachine.currentState == enemyAttack2 || enemyStateMachine.currentState == enemyCrouchAttack ? attack2Damage
+                    : attack3Damage;
                 playerScript.TakeDamage(damage, transform);
                 return;
             }
@@ -277,6 +326,28 @@ public class EnemyScript : MonoBehaviour
         }
 
         return Vector2.Distance(transform.position, player.position) <= attackRange;
+    }
+
+    public bool IsPlayerInCrouchAttackRange()
+    {
+        if (crouchAttackCheck == null)
+        {
+            return IsPlayerInAttackRange();
+        }
+
+        return isCrouchAttackRangeDetected;
+    }
+
+    public bool IsCrouchAttacking()
+    {
+        return enemyStateMachine.currentState == enemyCrouchAttack;
+    }
+
+    public bool IsCrouching()
+    {
+        return enemyStateMachine.currentState == enemyCrouchIdle
+            || enemyStateMachine.currentState == enemyCrouchMove
+            || enemyStateMachine.currentState == enemyCrouchAttack;
     }
 
     public void ApplyCrouchCollider()
@@ -333,6 +404,7 @@ public class EnemyScript : MonoBehaviour
         nextAttackTime = Time.time + attackCooldown;
         attackFinish = false;
         attackFinish2 = false;
+        attackFinish3 = false;
     }
 
     public void AttackFinish()
@@ -344,10 +416,24 @@ public class EnemyScript : MonoBehaviour
     {
         attackFinish2 = true;
     }
+    public void Attack3Finish()
+    {
+        attackFinish3 = true;
+    }
 
     public void HitByPlayer()
     {
         if (enemyStateMachine == null || getHit == null || player == null || enemyStateMachine.currentState == enemyRoll)
+        {
+            return;
+        }
+
+        if (IsCrouching())
+        {
+            return;
+        }
+
+        if (player.GetComponentInParent<PlayerScript>()?.IsCrouchAttacking() == true)
         {
             return;
         }

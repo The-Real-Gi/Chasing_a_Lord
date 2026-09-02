@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class EnemyCrouchIdle : EnemyState
 {
+    private bool flipOnEnter;
+
     public EnemyCrouchIdle(EnemyScript _enemy, EnemyStateMachine _enemyStateMachine, string _enemyAnim) : base(_enemy, _enemyStateMachine, _enemyAnim)
     {
     }
@@ -12,7 +14,16 @@ public class EnemyCrouchIdle : EnemyState
         enemy.ApplyCrouchCollider();
         enemy.rb.linearVelocityX = 0f;
         enemy.timer = enemy.CrouchIdleMoveDelay;
-        enemy.Flip();
+        if (flipOnEnter)
+        {
+            enemy.Flip();
+            flipOnEnter = false;
+        }
+    }
+
+    public void PrepareForPatrolEntry()
+    {
+        flipOnEnter = true;
     }
     public override void Update()
     {
@@ -24,7 +35,16 @@ public class EnemyCrouchIdle : EnemyState
             return;
         }
 
-        if (enemy.CanSeePlayer())
+        bool playerInRange = enemy.IsPlayerInAttackRange();
+
+        if (playerInRange && enemy.CanAttackAgain())
+        {
+            enemy.FacePlayer();
+            stateMachine.ChangeState(enemy.MustCrouch() ? enemy.enemyCrouchAttack : enemy.battleState);
+            return;
+        }
+
+        if (!playerInRange && enemy.CanSeePlayer())
         {
             stateMachine.ChangeState(enemy.enemyCrouchMove);
             return;

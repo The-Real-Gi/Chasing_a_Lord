@@ -15,6 +15,13 @@ public class EnemyIdle : EnemyState
     public override void Update()
     {
         base.Update();
+
+        if (enemy.MustCrouch())
+        {
+            stateMachine.ChangeState(enemy.enemyCrouchIdle);
+            return;
+        }
+
         enemy.timer-=Time.deltaTime;
         if(enemy.timer<=0)
         {
