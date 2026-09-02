@@ -9,6 +9,7 @@ public class EnemyCrouchAttack : EnemyState
     public override void Enter()
     {
         base.Enter();
+        enemy.ApplyCrouchCollider();
         enemy.BeginAttack();
         enemy.rb.linearVelocity = Vector2.zero;
     }
@@ -33,5 +34,6 @@ public class EnemyCrouchAttack : EnemyState
     public override void Exit()
     {
         base.Exit();
+        enemy.ResetColliderToBase();
     }
 }

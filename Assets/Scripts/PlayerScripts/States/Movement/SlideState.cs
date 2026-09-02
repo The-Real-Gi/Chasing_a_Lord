@@ -8,16 +8,14 @@ public class SlideState : PlayerState
     public override void Enter()
     {
         base.Enter();
-         player.playerCollider.offset=player.crouchColliderOffset;
-        player.playerCollider.size=player.collidersizeCrouch;
+        player.ApplyCrouchCollider();
         
     }
 
     public override void Exit()
     {
         base.Exit();
-        player.playerCollider.offset=player.baseCollider;
-        player.playerCollider.size= player.sizeCollider;
+        player.ApplyBaseCollider();
     }
     public override void FixedUpdate()
     {

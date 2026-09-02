@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CrouchBlock : PlayerState
 {
@@ -9,13 +10,14 @@ public class CrouchBlock : PlayerState
    public override void Enter()
     {
         base.Enter();
+        player.ApplyCrouchCollider();
+        player.input.Movement.CrouchBlock.canceled += OnCrouchBlockCanceled;
         player.rb.linearVelocity= new Vector2(0,player.rb.linearVelocityY);
     }
 
     public override void Update()
     {
         base.Update();
-        player.input.Movement.CrouchBlock.canceled+= ctx => stateMachine.ChangeState(player.crouchIdle);
     }
 
     public override void FixedUpdate()
@@ -26,6 +28,12 @@ public class CrouchBlock : PlayerState
     public override void Exit()
     {
         base.Exit();
-       
+        player.input.Movement.CrouchBlock.canceled -= OnCrouchBlockCanceled;
+        player.ApplyBaseCollider();
+    }
+
+    private void OnCrouchBlockCanceled(InputAction.CallbackContext context)
+    {
+        stateMachine.ChangeState(player.crouchIdle);
     }
 }

@@ -28,6 +28,7 @@ public class EnemyBattleState : EnemyState
 
         if (enemy.IsPlayerInAttackRange() && enemy.CanAttackAgain())
         {
+            enemy.FacePlayer();
             int randomNumber = Random.Range(1, 3);
             Debug.Log(randomNumber);
 
@@ -49,10 +50,18 @@ public class EnemyBattleState : EnemyState
 
         if (enemy.IsPlayerInAttackRange() && !enemy.CanAttackAgain())
         {
-            enemy.anim.SetBool("Move", false);
-            enemy.anim.SetBool("Idle", true);
-            enemy.anim.SetBool("Attack1", false);
+            enemy.FacePlayer();
             enemy.timer = loseSightTimer;
+            if (enemy.MustCrouch())
+            {
+                stateMachine.ChangeState(enemy.enemyCrouchIdle);
+            }
+            else
+            {
+                enemy.anim.SetBool("Move", false);
+                enemy.anim.SetBool("Idle", true);
+                enemy.anim.SetBool("Attack1", false);
+            }
             return;
         }
 
@@ -82,9 +91,6 @@ public class EnemyBattleState : EnemyState
         {
             enemy.rb.linearVelocityX = 0f;
             enemy.anim.speed = 1f;
-            enemy.anim.SetBool("Move", false);
-            enemy.anim.SetBool("Idle", true);
-            enemy.anim.SetBool("Attack1", false);
             return;
         }
 
