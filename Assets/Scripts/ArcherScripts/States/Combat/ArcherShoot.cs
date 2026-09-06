@@ -9,11 +9,33 @@ public class ArcherShoot : ArcherState
     public override void Enter()
     {
         base.Enter();
+        archer.FacePlayer();
     }
 
     public override void Update()
     {
         base.Update();
+
+        if (!archer.IsPlayerInRange())
+        {
+            archer.shooting = false;
+            stateMachine.ChangeState(archer.idle);
+            return;
+        }
+
+        if (!archer.IsPlayerInShootingRange())
+        {
+            stateMachine.ChangeState(archer.move);
+            return;
+        }
+
+        if (archer.shooting)
+        {
+            archer.ShootArrow();
+
+            bool canRetreat = archer.IsPlayerTooClose() && archer.isGrounded;
+            stateMachine.ChangeState(canRetreat ? archer.move : archer.battleState);
+        }
     }
 
     public override void FixedUpdate()
@@ -24,5 +46,6 @@ public class ArcherShoot : ArcherState
     public override void Exit()
     {
         base.Exit();
+        archer.shooting=false;
     }
 }

@@ -698,7 +698,7 @@ MonoBehaviour:
   meleeAtt2MoveSpeed: 0.1
   getHitDuration: 0.5
   getHitTimer: 0
-  getHitKnockbackForce: 2
+  getHitKnockbackForce: 0.5
   getHitKnockbackDirection: 1
   meleeAttackBlendSpeed: 8
   meleeSpinSlowdownRate: 1
@@ -724,6 +724,7 @@ MonoBehaviour:
   attack6Distance: 0.27
   whatIsEnemy:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 2304
   enemiesInAttackRange: []
+  archersInAttackRange: []
   isForcedCrouch: 0

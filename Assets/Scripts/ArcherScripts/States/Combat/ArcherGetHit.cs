@@ -14,6 +14,7 @@ public class ArcherGetHit : ArcherState
     public override void Update()
     {
         base.Update();
+        archer.UpdateGetHitState();
     }
 
     public override void FixedUpdate()
