@@ -9,7 +9,7 @@ public class ShieldBlock : PlayerState
     public override void Enter()
     {    
         base.Enter();
-        player.rb.linearVelocity= new Vector2(0,player.rb.linearVelocityY);
+       
     }
 
     public override void Update()
@@ -21,6 +21,7 @@ public class ShieldBlock : PlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+         player.rb.linearVelocity= new Vector2(0,player.rb.linearVelocityY);
     }
 
     public override void Exit()

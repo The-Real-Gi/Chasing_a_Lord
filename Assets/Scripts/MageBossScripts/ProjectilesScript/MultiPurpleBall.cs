@@ -1,18 +1,20 @@
 using UnityEngine;
 
-public class FireBall : MonoBehaviour
-{   
-
+public class MultiPurpleBall : MonoBehaviour
+{
     public Vector2 moveDirection;
-    public float moveSpeed = 8f;
-    public int damage = 20;
+    public float moveSpeed;
+    public int damage;
+
     Rigidbody2D rb;
     Animator anim;
+
     bool hasHitPlayer;
+
     void Awake()
     {
         rb= GetComponent<Rigidbody2D>();
-        anim=GetComponent<Animator>();
+        anim= GetComponent<Animator>();
         anim.SetBool("IsFlying",true);
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -29,9 +31,9 @@ public class FireBall : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = moveDirection * moveSpeed;
-
+        
     }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         PlayerScript player = collision.gameObject.GetComponentInParent<PlayerScript>();
@@ -54,9 +56,11 @@ public class FireBall : MonoBehaviour
         anim.SetBool("IsFlying", false);
         anim.SetBool("BlowUp", true);
     }
-    public void SetUp(Vector2 _moveDirection)
+
+     public void SetUp(Vector2 _moveDirection)
     {
         moveDirection = _moveDirection.normalized;
+        rb.AddForce(moveDirection * moveSpeed, ForceMode2D.Impulse);
     }
 
     private bool IsBlockedByPlayer(PlayerScript player)
@@ -75,7 +79,7 @@ public class FireBall : MonoBehaviour
         return projectileSide == player.facDir;
     }
 
-    public void DestroyObject()
+     public void DestroyObject()
     {
         Destroy(this.gameObject);
     }
