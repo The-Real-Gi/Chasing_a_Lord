@@ -11,6 +11,7 @@ public class MageIdle : MageState
      public override void Enter()
     {
         base.Enter();
+        mageScript.Flip();
         idleTimer = mageScript.IdleDuration;
     }
 
@@ -21,13 +22,14 @@ public class MageIdle : MageState
         idleTimer -= Time.deltaTime;
         if (idleTimer <= 0f)
         {
-            mageScript.Flip();
-            if (mageScript.rb != null)
+            if (mageScript.isWallDetected)
             {
-                mageScript.rb.linearVelocity = new Vector2(0f, mageScript.rb.linearVelocity.y);
+                idleTimer = mageScript.IdleDuration;
+                return;
             }
 
-            idleTimer = mageScript.IdleDuration;
+            stateMachine.ChangeState(mageScript.mageMove);
+            return;
         }
     }
 
