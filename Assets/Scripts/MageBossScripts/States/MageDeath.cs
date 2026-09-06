@@ -14,6 +14,7 @@ public class MageDeath : MageState
     public override void Update()
     {
         base.Update();
+        mageScript.rb.linearVelocity= Vector2.zero;
     }
 
     public override void FixedUpdate()
