@@ -606,6 +606,12 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    public bool IsBlocking()
+    {
+        return stateMachine.currentState == shieldBlock
+            || stateMachine.currentState == crouchBlock;
+    }
+
     public void TakeDamage(EnemyScript enemy,int damage)
     {
         if (enemy == null)

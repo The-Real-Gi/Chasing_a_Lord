@@ -15,7 +15,7 @@ TagManager:
   - Player
   - Enemy
   - Background
-  - 
+  - Arrow
   - 
   - 
   - 
@@ -55,6 +55,9 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 3934355805
+    locked: 0
+  - name: Arrow
+    uniqueID: 1023553849
     locked: 0
   m_RenderingLayers:
   - Default
