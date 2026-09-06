@@ -23,6 +23,12 @@ public class ArcherShoot : ArcherState
             return;
         }
 
+        if (!archer.IsPlayerInShootingRange())
+        {
+            stateMachine.ChangeState(archer.move);
+            return;
+        }
+
         if (archer.shooting)
         {
             archer.ShootArrow();

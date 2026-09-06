@@ -26,6 +26,10 @@ public class ArcherScript : MonoBehaviour
 
     public float moveSpeed = 3f;
 
+    [SerializeField] private float getHitDuration = 0.35f;
+    private float getHitTimer;
+    [SerializeField] private float hitKnockbackForce = 5f;
+
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform groundCheck2;
     [SerializeField] private float groundCheckDistance = 0.2f;
@@ -69,6 +73,30 @@ public class ArcherScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (health <= 0f)
+        {
+            if (stateMachine.currentState != death)
+            {
+                stateMachine.ChangeState(death);
+            }
+            return;
+        }
+
+        if (stateMachine.currentState == getHit)
+        {
+            stateMachine.currentState.Update();
+            return;
+        }
+
+        bool isCombatState = stateMachine.currentState == battleState
+            || stateMachine.currentState == move
+            || stateMachine.currentState == shoot;
+        if (isCombatState && !IsPlayerInRange())
+        {
+            stateMachine.ChangeState(idle);
+            return;
+        }
+
         stateMachine.currentState.Update();
         bool isPatrolling = stateMachine.currentState == idle;
         if (isPatrolling && IsPlayerInRange())
@@ -101,6 +129,44 @@ public class ArcherScript : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * facDir;
         transform.localScale = scale;
+    }
+
+    public void TakeDamage(int damage, Transform attacker = null)
+    {
+        health -= damage;
+        if (health > 0f && stateMachine.currentState != getHit)
+        {
+            HitByPlayer(attacker);
+        }
+    }
+
+    public void HitByPlayer(Transform attacker = null)
+    {
+        if (stateMachine.currentState == death)
+        {
+            return;
+        }
+
+        getHitTimer = getHitDuration;
+        Vector2 knockbackDirection = attacker == null
+            ? Vector2.left
+            : ((Vector2)transform.position - (Vector2)attacker.position).normalized;
+        if (knockbackDirection == Vector2.zero)
+        {
+            knockbackDirection = Vector2.left;
+        }
+
+        rb.linearVelocity = new Vector2(knockbackDirection.x * hitKnockbackForce, rb.linearVelocity.y);
+        stateMachine.ChangeState(getHit);
+    }
+
+    public void UpdateGetHitState()
+    {
+        getHitTimer -= Time.deltaTime;
+        if (getHitTimer <= 0f)
+        {
+            stateMachine.ChangeState(idle);
+        }
     }
 
     public bool IsPlayerInRange()

@@ -151,6 +151,7 @@ public class PlayerScript : MonoBehaviour
     public float attack6Distance;
     public LayerMask whatIsEnemy;
     public List<EnemyScript> enemiesInAttackRange = new List<EnemyScript>();
+    public List<ArcherScript> archersInAttackRange = new List<ArcherScript>();
     public bool isForcedCrouch;
 
     #endregion
@@ -445,6 +446,7 @@ public class PlayerScript : MonoBehaviour
     public void Attack1Checks()
     {
         enemiesInAttackRange.Clear();
+        archersInAttackRange.Clear();
 
         
 
@@ -506,17 +508,28 @@ public class PlayerScript : MonoBehaviour
         foreach (Collider2D hitCollider in hitColliders)
         {
             EnemyScript enemy = hitCollider.GetComponentInParent<EnemyScript>();
+            ArcherScript archer = hitCollider.GetComponentInParent<ArcherScript>();
 
             if (enemy != null && !enemiesInAttackRange.Contains(enemy))
             {
                 enemiesInAttackRange.Add(enemy);
             }
+
+            if (archer != null && !archersInAttackRange.Contains(archer))
+            {
+                archersInAttackRange.Add(archer);
+            }
         }
 
-        Debug.Log("I will hit " + enemiesInAttackRange.Count + " enemies with " + dealingDamage + " damage");
+        Debug.Log("I will hit " + (enemiesInAttackRange.Count + archersInAttackRange.Count) + " enemies with " + dealingDamage + " damage");
         foreach (var enemy in enemiesInAttackRange)
         {
             TakeDamage(enemy, dealingDamage);
+        }
+
+        foreach (var archer in archersInAttackRange)
+        {
+            TakeDamage(archer, dealingDamage);
         }
     }
     public void AnimationFinishCalled()
@@ -628,6 +641,16 @@ public class PlayerScript : MonoBehaviour
 
         enemy.HitByPlayer();
       
+    }
+
+    public void TakeDamage(ArcherScript archer, int damage)
+    {
+        if (archer == null)
+        {
+            return;
+        }
+
+        archer.TakeDamage(damage, transform);
     }
 
     public bool IsCrouchAttacking()
