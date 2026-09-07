@@ -444,8 +444,8 @@ MonoBehaviour:
   attackCooldown: 3
   attackHitPoint: {fileID: 7503173918696230744}
   attackHitRadius: 0.34
-  attack1Damage: 0
-  attack2Damage: 0
+  attack1Damage: 10
+  attack2Damage: 15
   attack3Damage: 5
   getHitDuration: 1
   getHitTimer: 0

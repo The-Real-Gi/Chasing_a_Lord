@@ -243,7 +243,7 @@ public class PlayerScript : MonoBehaviour
                 };
             input.Movement.Jump.performed+=ctx=>
             {
-             if(stateMachine.currentState == getHit) return;
+                 if(stateMachine.currentState == getHit || stateMachine.currentState == playerDeath || health <= 0f) return;
              Checks();
                
                 if(isGrounded)
@@ -295,6 +295,7 @@ public class PlayerScript : MonoBehaviour
        if(health<=0)
         {
             stateMachine.ChangeState(playerDeath);
+            return;
         }
 
         // Keep the slide active under a low ceiling; SlideState decides when it
@@ -344,7 +345,7 @@ public class PlayerScript : MonoBehaviour
     public void FlipController()
     {
         //could make animation for rotation by creating a new state with rotating and either time based or event based
-        if (isAttacking || stateMachine.currentState == slideState)
+        if (health <= 0f || stateMachine.currentState == playerDeath || isAttacking || stateMachine.currentState == slideState)
         {
             return;
         }
@@ -362,7 +363,7 @@ public class PlayerScript : MonoBehaviour
 
     public void Flip(float value)
     {   
-        if (isAttacking || stateMachine.currentState == slideState)
+        if (health <= 0f || stateMachine.currentState == playerDeath || isAttacking || stateMachine.currentState == slideState)
         {
             return;
         }
@@ -607,7 +608,19 @@ public class PlayerScript : MonoBehaviour
 
     public void TakeDamage(int damage, Transform attacker = null)
     {
+        if (health <= 0f || stateMachine.currentState == playerDeath)
+        {
+            return;
+        }
+
         health -= damage;
+        if (health <= 0f)
+        {
+            health = 0f;
+            stateMachine.ChangeState(playerDeath);
+            return;
+        }
+
         if (isForcedCrouch)
         {
             return;

@@ -38,6 +38,12 @@ public class BossMageScript : MonoBehaviour
 
     public bool spawnObj = false;
 
+<<<<<<< Updated upstream
+=======
+    public GameObject dropBombSpawnPos;
+    public Transform meleeEnemySpawnPoint;
+
+>>>>>>> Stashed changes
     public GameObject fireball;
     public GameObject multiPurpleBall;
     public Transform multiPurpleBallSpawnPoint;
@@ -71,6 +77,12 @@ public class BossMageScript : MonoBehaviour
         if (isPlayerSeen)
         {
             FacePlayer();
+        }
+
+        if (!isPlayerSeen && (stateMachine.currentState == mageAttack1 || stateMachine.currentState == mageAttack2))
+        {
+            stateMachine.ChangeState(mageIdle);
+            return;
         }
 
         if (isPlayerSeen && stateMachine.currentState != mageBattleState && stateMachine.currentState != mageAttack1 && stateMachine.currentState != mageAttack2)
@@ -117,10 +129,10 @@ public class BossMageScript : MonoBehaviour
         foreach (Collider2D overlap in overlaps)
         {
             PlayerScript player = overlap != null ? overlap.GetComponentInParent<PlayerScript>() : null;
-            if (player != null || (overlap != null && overlap.CompareTag("Player")))
+            if (player != null && player.health > 0f)
             {
                 isPlayerSeen = true;
-                playerTarget = player != null ? player.transform : overlap.transform;
+                playerTarget = player.transform;
                 break;
             }
         }

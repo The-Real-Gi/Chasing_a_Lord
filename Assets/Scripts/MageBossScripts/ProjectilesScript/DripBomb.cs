@@ -13,4 +13,9 @@ public class DripBomb : MonoBehaviour
     {
         
     }
+
+    public void DestroyObject9()
+    {
+        Destroy(this.gameObject);
+    }
 }

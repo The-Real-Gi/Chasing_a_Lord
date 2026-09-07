@@ -641,8 +641,8 @@ MonoBehaviour:
   facDir: 1
   health: 100
   moveSpeed: 0
-  jumpStrength: 7
-  wallJumpStrength: 5
+  jumpStrength: 5
+  wallJumpStrength: 3
   groundCheck: {fileID: 1345353158247238774}
   groundCheckDistance: 0.12
   whatIsGround:
@@ -677,8 +677,8 @@ MonoBehaviour:
   isClimbingLedge: 0
   timer: 0
   dashCooldown: 1
-  dashingTime: 1
-  dashSpeed: 200
+  dashingTime: 0.3
+  dashSpeed: 500
   cooldownTimer: 0
   flipCooldown: 1
   flipCooldownTimer: 0

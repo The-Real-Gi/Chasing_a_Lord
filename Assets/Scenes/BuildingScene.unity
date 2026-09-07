@@ -156,6 +156,11 @@ Transform:
   - {fileID: 1787921499}
   - {fileID: 1044407697}
   - {fileID: 1540311077}
+<<<<<<< Updated upstream
+=======
+  - {fileID: 328357594}
+  - {fileID: 1751451800}
+>>>>>>> Stashed changes
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &28236168
@@ -253,6 +258,11 @@ MonoBehaviour:
   isFacingRight: 1
   attackEnded: 0
   spawnObj: 0
+<<<<<<< Updated upstream
+=======
+  dropBombSpawnPos: {fileID: 328357593}
+  meleeEnemySpawnPoint: {fileID: 1751451800}
+>>>>>>> Stashed changes
   fireball: {fileID: 3608041409575189111, guid: 1b7944deed8644c0d81b7af5f4a79714, type: 3}
   multiPurpleBall: {fileID: 4397022815301782202, guid: e606f767d844844558c1c07e0c1b08e7, type: 3}
   multiPurpleBallSpawnPoint: {fileID: 1044407697}
@@ -1865,7 +1875,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 28236167}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< Updated upstream
 --- !u!1 &1777505168
+=======
+--- !u!1 &1751451799
+>>>>>>> Stashed changes
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1873,6 +1887,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< Updated upstream
   - component: {fileID: 1777505174}
   - component: {fileID: 1777505173}
   - component: {fileID: 1777505172}
@@ -1881,11 +1896,17 @@ GameObject:
   - component: {fileID: 1777505169}
   m_Layer: 10
   m_Name: Spawning Melee Enemy
+=======
+  - component: {fileID: 1751451800}
+  m_Layer: 8
+  m_Name: Crould pos
+>>>>>>> Stashed changes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< Updated upstream
 --- !u!114 &1777505169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2043,11 +2064,15 @@ Animator:
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1777505174
+=======
+--- !u!4 &1751451800
+>>>>>>> Stashed changes
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
   m_GameObject: {fileID: 1777505168}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -2056,6 +2081,16 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+=======
+  m_GameObject: {fileID: 1751451799}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.234, y: -0.19, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 28236167}
+>>>>>>> Stashed changes
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1787921498
 GameObject:
@@ -2325,6 +2360,9 @@ SceneRoots:
   - {fileID: 1490055894}
   - {fileID: 28236167}
   - {fileID: 899037849}
+<<<<<<< Updated upstream
   - {fileID: 1204858897}
   - {fileID: 405324048}
   - {fileID: 1777505174}
+=======
+>>>>>>> Stashed changes
