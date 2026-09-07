@@ -21,7 +21,7 @@ public class MageBattleState : MageState
             return;
         }
 
-        int randomAttack = Random.Range(0, 2);
+        int randomAttack = 2;//Random.Range(0, 2);
         if (randomAttack == 0)
         {
             stateMachine.ChangeState(mageScript.mageAttack1);

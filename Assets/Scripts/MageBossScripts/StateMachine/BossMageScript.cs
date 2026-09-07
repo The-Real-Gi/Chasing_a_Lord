@@ -38,8 +38,13 @@ public class BossMageScript : MonoBehaviour
 
     public bool spawnObj = false;
 
+    public GameObject dropBombSpawnPos;
+
     public GameObject fireball;
     public GameObject multiPurpleBall;
+    public GameObject droppingBomb;
+    public GameObject explosion;
+    public GameObject SpawningMeleeEnemy;
     public Transform multiPurpleBallSpawnPoint;
 
     void Awake()
