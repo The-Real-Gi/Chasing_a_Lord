@@ -4,9 +4,12 @@ using UnityEngine;
 public class MageAttack2 : MageState
 {
     private const int BombCount = 4;
+    private const int ExplosionCount = 3;
     private const float SpawnDelay = 0.1f;
+    private const float ExplosionSpawnDelay = 0.2f;
     private const float BombSpacing = 1f;
     private Coroutine bombSpawnRoutine;
+    private Coroutine explosionSpawnRoutine;
 
     public MageAttack2(BossMageScript _bossMageScript, MageStateMachine _stateMachine, string _animBoolName) : base(_bossMageScript, _stateMachine, _animBoolName)
     {
@@ -34,15 +37,18 @@ public class MageAttack2 : MageState
             }
             else if (attnum == 2)
             {
-                Debug.Log("NothingSpawning");
+                explosionSpawnRoutine = mageScript.StartCoroutine(SpawnExplosions());
             }
             else if (attnum == 3)
             {
-                 Debug.Log("NothingSpawning");
+                if (mageScript.SpawningMeleeEnemy != null && mageScript.meleeEnemySpawnPoint != null)
+                {
+                    Object.Instantiate(mageScript.SpawningMeleeEnemy, mageScript.meleeEnemySpawnPoint.position, Quaternion.identity);
+                }
             }
         }
 
-        if(mageScript.attackEnded)
+        if (mageScript.attackEnded && bombSpawnRoutine == null && explosionSpawnRoutine == null)
         {
             stateMachine.ChangeState(mageScript.mageBattleState);
         }
@@ -56,8 +62,21 @@ public class MageAttack2 : MageState
     public override void Exit()
     {
         base.Exit();
+        mageScript.StartAttackCooldown();
         mageScript.attackEnded=false;
         mageScript.spawnObj = false;
+
+        if (bombSpawnRoutine != null)
+        {
+            mageScript.StopCoroutine(bombSpawnRoutine);
+            bombSpawnRoutine = null;
+        }
+
+        if (explosionSpawnRoutine != null)
+        {
+            mageScript.StopCoroutine(explosionSpawnRoutine);
+            explosionSpawnRoutine = null;
+        }
     }
 
     private IEnumerator SpawnBombs()
@@ -82,5 +101,32 @@ public class MageAttack2 : MageState
         }
 
         bombSpawnRoutine = null;
+    }
+
+    private IEnumerator SpawnExplosions()
+    {
+        if (mageScript.explosion == null)
+        {
+            explosionSpawnRoutine = null;
+            yield break;
+        }
+
+        for (int explosionIndex = 0; explosionIndex < ExplosionCount; explosionIndex++)
+        {
+            Transform player = GameObject.FindGameObjectWithTag("Player")?.transform;
+            if (player == null)
+            {
+                break;
+            }
+
+            Object.Instantiate(mageScript.explosion, player.position, Quaternion.identity);
+
+            if (explosionIndex < ExplosionCount - 1)
+            {
+                yield return new WaitForSeconds(ExplosionSpawnDelay);
+            }
+        }
+
+        explosionSpawnRoutine = null;
     }
 }

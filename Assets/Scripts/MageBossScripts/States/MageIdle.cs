@@ -11,7 +11,7 @@ public class MageIdle : MageState
      public override void Enter()
     {
         base.Enter();
-        mageScript.Flip();
+        mageScript.FacePlayer();
         idleTimer = mageScript.IdleDuration;
     }
 

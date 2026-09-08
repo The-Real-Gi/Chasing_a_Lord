@@ -47,4 +47,9 @@ public class DripBomb : MonoBehaviour
         anim.SetBool("IsFlying", false);
         anim.SetBool("Explosion", true);
     }
+
+    public void DestroyObj()
+    {
+        Destroy(this.gameObject);
+    }
 }

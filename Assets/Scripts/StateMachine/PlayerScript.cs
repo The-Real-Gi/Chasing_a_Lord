@@ -41,6 +41,8 @@ public class PlayerScript : MonoBehaviour
 
     public bool isAttacking=false;
 
+    private bool IsDead => health <= 0f || stateMachine.currentState == playerDeath;
+
 
     #endregion
 
@@ -152,6 +154,7 @@ public class PlayerScript : MonoBehaviour
     public LayerMask whatIsEnemy;
     public List<EnemyScript> enemiesInAttackRange = new List<EnemyScript>();
     public List<ArcherScript> archersInAttackRange = new List<ArcherScript>();
+    public List<BossMageScript> mageBossesInAttackRange = new List<BossMageScript>();
     public bool isForcedCrouch;
 
     #endregion
@@ -214,14 +217,14 @@ public class PlayerScript : MonoBehaviour
         input.Movement.VerticalMove.performed += ctx => inputVector = ctx.ReadValue<Vector2>();
         input.Movement.VerticalMove.canceled += ctx => inputVector = Vector2.zero;
         
-         input.Movement.Attack1.performed +=ctx => {if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt1);};
-         input.Movement.Attack2.performed +=ctx => {if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt2);};
-         input.Movement.MeleeRun.performed+= ctx =>{if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeRun);};
-         input.Movement.MeleeSpin.performed+= ctx =>{if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeSpin);};
-         input.Movement.Kick.performed+= ctx =>{if(stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(kick);};
+         input.Movement.Attack1.performed +=ctx => {if(IsDead || stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt1);};
+         input.Movement.Attack2.performed +=ctx => {if(IsDead || stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeAtt2);};
+         input.Movement.MeleeRun.performed+= ctx =>{if(IsDead || stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeRun);};
+         input.Movement.MeleeSpin.performed+= ctx =>{if(IsDead || stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(meleeSpin);};
+         input.Movement.Kick.performed+= ctx =>{if(IsDead || stateMachine.currentState == getHit) return; if(isGrounded&&!isAttacking)stateMachine.ChangeState(kick);};
         
         input.Movement.Dash.performed+= ctx => 
-        {if(stateMachine.currentState == getHit) return; 
+        {if(IsDead || stateMachine.currentState == getHit) return; 
             if(cooldownTimer<=0)
             {
             stateMachine.ChangeState(dashState);
@@ -229,6 +232,7 @@ public class PlayerScript : MonoBehaviour
         };
         
             input.Movement.CrouchAtt.performed+=ctx=>{
+                if (IsDead) return;
                 if(inputVector.y<0)
                 {
                     stateMachine.ChangeState(crouchAttack);
@@ -236,14 +240,15 @@ public class PlayerScript : MonoBehaviour
                 }
                 
                 };    
-            input.Movement.CrouchBlock.performed+= ctx=>stateMachine.ChangeState(crouchBlock);
+            input.Movement.CrouchBlock.performed+= ctx=>{if (!IsDead) stateMachine.ChangeState(crouchBlock);};
             input.Movement.Block.performed+=ctx=>{
+                if (IsDead) return;
                 if(inputVector.y>=0)
                 {stateMachine.ChangeState(shieldBlock);}
                 };
             input.Movement.Jump.performed+=ctx=>
             {
-             if(stateMachine.currentState == getHit) return;
+             if(IsDead || stateMachine.currentState == getHit) return;
              Checks();
                
                 if(isGrounded)
@@ -286,15 +291,21 @@ public class PlayerScript : MonoBehaviour
         inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
         Checks();
 
+        if (IsDead)
+        {
+            if (stateMachine.currentState != playerDeath)
+            {
+                stateMachine.ChangeState(playerDeath);
+            }
+
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         if (stateMachine.currentState == getHit)
         {
             getHit.Update();
             return;
-        }
-
-       if(health<=0)
-        {
-            stateMachine.ChangeState(playerDeath);
         }
 
         // Keep the slide active under a low ceiling; SlideState decides when it
@@ -344,7 +355,7 @@ public class PlayerScript : MonoBehaviour
     public void FlipController()
     {
         //could make animation for rotation by creating a new state with rotating and either time based or event based
-        if (isAttacking || stateMachine.currentState == slideState)
+        if (IsDead || isAttacking || stateMachine.currentState == slideState)
         {
             return;
         }
@@ -362,7 +373,7 @@ public class PlayerScript : MonoBehaviour
 
     public void Flip(float value)
     {   
-        if (isAttacking || stateMachine.currentState == slideState)
+        if (IsDead || isAttacking || stateMachine.currentState == slideState)
         {
             return;
         }
@@ -447,6 +458,7 @@ public class PlayerScript : MonoBehaviour
     {
         enemiesInAttackRange.Clear();
         archersInAttackRange.Clear();
+        mageBossesInAttackRange.Clear();
 
         
 
@@ -509,6 +521,7 @@ public class PlayerScript : MonoBehaviour
         {
             EnemyScript enemy = hitCollider.GetComponentInParent<EnemyScript>();
             ArcherScript archer = hitCollider.GetComponentInParent<ArcherScript>();
+            BossMageScript mageBoss = hitCollider.GetComponentInParent<BossMageScript>();
 
             if (enemy != null && !enemiesInAttackRange.Contains(enemy))
             {
@@ -519,9 +532,14 @@ public class PlayerScript : MonoBehaviour
             {
                 archersInAttackRange.Add(archer);
             }
+
+            if (mageBoss != null && !mageBossesInAttackRange.Contains(mageBoss))
+            {
+                mageBossesInAttackRange.Add(mageBoss);
+            }
         }
 
-        Debug.Log("I will hit " + (enemiesInAttackRange.Count + archersInAttackRange.Count) + " enemies with " + dealingDamage + " damage");
+        Debug.Log("I will hit " + (enemiesInAttackRange.Count + archersInAttackRange.Count + mageBossesInAttackRange.Count) + " enemies with " + dealingDamage + " damage");
         foreach (var enemy in enemiesInAttackRange)
         {
             TakeDamage(enemy, dealingDamage);
@@ -530,6 +548,11 @@ public class PlayerScript : MonoBehaviour
         foreach (var archer in archersInAttackRange)
         {
             TakeDamage(archer, dealingDamage);
+        }
+
+        foreach (var mageBoss in mageBossesInAttackRange)
+        {
+            TakeDamage(mageBoss, dealingDamage);
         }
     }
     public void AnimationFinishCalled()
@@ -607,7 +630,20 @@ public class PlayerScript : MonoBehaviour
 
     public void TakeDamage(int damage, Transform attacker = null)
     {
+        if (IsDead)
+        {
+            return;
+        }
+
         health -= damage;
+        if (health <= 0f)
+        {
+            health = 0f;
+            stateMachine.ChangeState(playerDeath);
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
         if (isForcedCrouch)
         {
             return;
@@ -627,7 +663,7 @@ public class PlayerScript : MonoBehaviour
 
     public void TakeDamage(EnemyScript enemy,int damage)
     {
-        if (enemy == null)
+        if (enemy == null || enemy.IsRolling)
         {
             return;
            
@@ -651,6 +687,16 @@ public class PlayerScript : MonoBehaviour
         }
 
         archer.TakeDamage(damage, transform);
+    }
+
+    public void TakeDamage(BossMageScript mageBoss, int damage)
+    {
+        if (mageBoss == null)
+        {
+            return;
+        }
+
+        mageBoss.TakeDamage(damage, transform);
     }
 
     public bool IsCrouchAttacking()

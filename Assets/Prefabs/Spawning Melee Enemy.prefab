@@ -192,3 +192,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cf83c648b3d0423d923daefeb426b41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawningMeleeEnemy
+  meleeEnemy: {fileID: 8395266798037131481, guid: 62764a552935f4b36af6af4438f8edb1, type: 3}

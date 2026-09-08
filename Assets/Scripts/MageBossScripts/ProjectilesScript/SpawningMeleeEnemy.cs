@@ -2,15 +2,27 @@ using UnityEngine;
 
 public class SpawningMeleeEnemy : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private Animator anim;
+    public GameObject meleeEnemy;
+    void Awake()
     {
-        
+        anim=GetComponent<Animator>();
+        anim.SetBool("SmokeFinish",true);
+    }
+    public void SpawnEnemy()
+    {
+        if (meleeEnemy == null)
+        {
+            return;
+        }
+
+        Instantiate(meleeEnemy, transform.position, Quaternion.identity);
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DestroyCloud()
     {
-        
+        Destroy(gameObject);
     }
 }

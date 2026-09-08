@@ -90,6 +90,14 @@ public class EnemyScript : MonoBehaviour
     public bool dealingDamage=false;
     public bool getHitFinish=false;
 
+    public bool IsRolling => enemyStateMachine != null && enemyStateMachine.currentState == enemyRoll;
+
+    private bool IsPlayerAlive()
+    {
+        PlayerScript playerScript = player != null ? player.GetComponentInParent<PlayerScript>() : null;
+        return playerScript != null && playerScript.health > 0f;
+    }
+
 
     void Awake()
     {   anim= GetComponentInChildren<Animator>();
@@ -125,6 +133,20 @@ public class EnemyScript : MonoBehaviour
     void Update()
     {
         Checks();
+
+        if (!IsPlayerAlive())
+        {
+            isSeeingPlayer = false;
+            isSeeingPlayerCrouched = false;
+            isCrouchAttackRangeDetected = false;
+
+            if (enemyStateMachine.currentState != enemyIdle && enemyStateMachine.currentState != death)
+            {
+                enemyStateMachine.ChangeState(enemyIdle);
+            }
+
+            return;
+        }
 
         bool isInCrouchState = enemyStateMachine.currentState == enemyCrouchIdle
             || enemyStateMachine.currentState == enemyCrouchMove
@@ -296,7 +318,7 @@ public class EnemyScript : MonoBehaviour
 
     public void TryDealDamage()
     {
-        if (attackHitPoint == null || player == null)
+        if (attackHitPoint == null || !IsPlayerAlive())
         {
             return;
         }
@@ -307,7 +329,7 @@ public class EnemyScript : MonoBehaviour
         {
             PlayerScript playerScript = hitCollider.GetComponentInParent<PlayerScript>();
 
-            if (playerScript != null)
+            if (playerScript != null && playerScript.health > 0f)
             {
                 int damage = enemyStateMachine.currentState == enemyAttack1 ? attack1Damage
                     : enemyStateMachine.currentState == enemyAttack2 || enemyStateMachine.currentState == enemyCrouchAttack ? attack2Damage
@@ -320,7 +342,7 @@ public class EnemyScript : MonoBehaviour
 
     public bool IsPlayerInAttackRange()
     {
-        if (player == null)
+        if (!IsPlayerAlive())
         {
             return false;
         }

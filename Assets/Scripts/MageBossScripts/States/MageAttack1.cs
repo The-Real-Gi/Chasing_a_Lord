@@ -54,6 +54,7 @@ public class MageAttack1 : MageState
     public override void Exit()
     {
         base.Exit();
+        mageScript.StartAttackCooldown();
 
         mageScript.attackEnded=false;
         mageScript.spawnObj = false;

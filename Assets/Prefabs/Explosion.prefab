@@ -170,7 +170,7 @@ SpriteRenderer:
   m_SortingLayer: 6
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 6602883449044678407, guid: 93b16152174d34e5ea43f078e21b035e, type: 3}
+  m_Sprite: {fileID: -5981531399740838611, guid: 280469c6c57e3464d96a447d542a0889, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -192,3 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd9f9813909e0405395cad7ecdfc0ef2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChargingExplosion
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
+  damage: 10
