@@ -379,7 +379,9 @@ public class PlayerScript : MonoBehaviour
         }
 
         int direction = value >= 0 ? 1 : -1;
-        transform.localScale = new Vector3(direction, 1, 1);
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * direction;
+        transform.localScale = scale;
         isFacingRight = direction == 1;
         facDir = direction;
     }

@@ -118,7 +118,7 @@ Transform:
   m_GameObject: {fileID: 1156499945238797836}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.178, z: 0}
+  m_LocalPosition: {x: 0.054, y: 0.191, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -467,7 +467,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.08, y: 0.03, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4330999012008951272}
@@ -644,16 +644,16 @@ MonoBehaviour:
   jumpStrength: 7
   wallJumpStrength: 5
   groundCheck: {fileID: 1345353158247238774}
-  groundCheckDistance: 0.12
+  groundCheckDistance: 0.22
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
   wallCheck: {fileID: 6614795546242165747}
-  wallCheckDistance: 0.21
+  wallCheckDistance: 0.42
   hangCheck: {fileID: 8236194707312401036}
-  hangCheckDistance: 0.18
+  hangCheckDistance: 0.51
   forcedCrouchCheck: {fileID: 1914016252291913010}
-  forcedCrouchCheckDistance: 0.15
+  forcedCrouchCheckDistance: 0.42
   isGrounded: 0
   isWallDetected: 0
   isWallJumping: 0
@@ -672,18 +672,18 @@ MonoBehaviour:
   finishedCLimb: 0
   moveUp: 0
   moveForward: 0
-  climbingUpSpeed: 30
-  movingForwardSpeed: 35
+  climbingUpSpeed: 100
+  movingForwardSpeed: 65
   isClimbingLedge: 0
   timer: 0
   dashCooldown: 1
-  dashingTime: 1
-  dashSpeed: 200
+  dashingTime: 0.5
+  dashSpeed: 500
   cooldownTimer: 0
   flipCooldown: 1
   flipCooldownTimer: 0
-  maxRunSpeed: 200
-  baseRunSpeed: 100
+  maxRunSpeed: 400
+  baseRunSpeed: 200
   jumpCount: 0
   maxJumps: 2
   crouchColliderOffset: {x: 0, y: -0.23}
@@ -727,4 +727,5 @@ MonoBehaviour:
     m_Bits: 2304
   enemiesInAttackRange: []
   archersInAttackRange: []
+  mageBossesInAttackRange: []
   isForcedCrouch: 0
