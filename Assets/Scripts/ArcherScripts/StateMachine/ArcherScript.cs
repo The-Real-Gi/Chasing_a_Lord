@@ -302,6 +302,7 @@ public class ArcherScript : MonoBehaviour
         ArrowController arrowController = spawnedArrow.GetComponent<ArrowController>();
         if (arrowController != null)
         {
+            arrowController.IgnoreCollisionWith(gameObject);
             arrowController.SetDirection(directionSign, angle, arrowSpeed);
         }
     }

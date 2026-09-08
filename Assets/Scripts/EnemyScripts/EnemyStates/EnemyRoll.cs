@@ -11,6 +11,7 @@ public class EnemyRoll : EnemyState
     public override void Enter()
     {
         base.Enter();
+        enemy.ApplyCrouchCollider();
         rollTimer = enemy.rollDuration;
         enemy.rb.linearVelocity = new Vector2(enemy.facDir * enemy.rollSpeed, enemy.rb.linearVelocity.y);
         Debug.Log("Entered roll state");
@@ -40,6 +41,7 @@ public class EnemyRoll : EnemyState
     public override void Exit()
     {
         base.Exit();
+        enemy.ResetColliderToBase();
         enemy.rb.linearVelocity = new Vector2(0f, enemy.rb.linearVelocity.y);
         enemy.Flip();
     }

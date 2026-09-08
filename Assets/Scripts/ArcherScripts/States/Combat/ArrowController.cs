@@ -89,6 +89,22 @@ public class ArrowController : MonoBehaviour
         MoveInSetDirection();
     }
 
+    public void IgnoreCollisionWith(GameObject other)
+    {
+        if (other == null)
+        {
+            return;
+        }
+
+        foreach (Collider2D arrowCollider in GetComponentsInChildren<Collider2D>())
+        {
+            foreach (Collider2D otherCollider in other.GetComponentsInChildren<Collider2D>())
+            {
+                Physics2D.IgnoreCollision(arrowCollider, otherCollider);
+            }
+        }
+    }
+
     private void MoveInSetDirection()
     {
         float angleInRadians = moveDir * Mathf.Deg2Rad;

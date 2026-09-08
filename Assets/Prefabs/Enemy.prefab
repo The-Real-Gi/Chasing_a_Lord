@@ -450,9 +450,9 @@ MonoBehaviour:
   getHitDuration: 1
   getHitTimer: 0
   hitKnockbackForce: 2
-  hitsBeforeRoll: 1
-  rollSpeed: 6
-  rollDuration: 0.7
+  hitsBeforeRoll: 3
+  rollSpeed: 3
+  rollDuration: 0.4
   player: {fileID: 0}
   facDir: 1
   isFacingRight: 1

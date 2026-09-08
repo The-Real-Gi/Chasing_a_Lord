@@ -92,6 +92,12 @@ public class EnemyScript : MonoBehaviour
 
     public bool IsRolling => enemyStateMachine != null && enemyStateMachine.currentState == enemyRoll;
 
+    public void SetFacingDirection(int direction)
+    {
+        facDir = direction >= 0 ? 1 : -1;
+        UpdateFacingFromDirection(facDir);
+    }
+
     private bool IsPlayerAlive()
     {
         PlayerScript playerScript = player != null ? player.GetComponentInParent<PlayerScript>() : null;
@@ -451,11 +457,6 @@ public class EnemyScript : MonoBehaviour
         }
 
         if (IsCrouching())
-        {
-            return;
-        }
-
-        if (player.GetComponentInParent<PlayerScript>()?.IsCrouchAttacking() == true)
         {
             return;
         }

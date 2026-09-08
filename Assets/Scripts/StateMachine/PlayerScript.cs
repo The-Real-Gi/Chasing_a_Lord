@@ -670,11 +670,6 @@ public class PlayerScript : MonoBehaviour
         }
 
         enemy.health -= damage;
-        if (stateMachine.currentState == crouchAttack)
-        {
-            return;
-        }
-
         enemy.HitByPlayer();
       
     }

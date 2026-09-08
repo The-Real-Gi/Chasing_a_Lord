@@ -9,7 +9,7 @@ public class MultiPurpleBall : MonoBehaviour
     Rigidbody2D rb;
     Animator anim;
 
-    bool hasHitPlayer;
+    bool hasImpacted;
 
     void Awake()
     {
@@ -36,16 +36,16 @@ public class MultiPurpleBall : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        PlayerScript player = collision.gameObject.GetComponentInParent<PlayerScript>();
-        if (hasHitPlayer)
+        if (hasImpacted)
         {
             return;
         }
 
+        hasImpacted = true;
+        PlayerScript player = collision.gameObject.GetComponentInParent<PlayerScript>();
+
         if (player != null)
         {
-            hasHitPlayer = true;
-
             if (!IsBlockedByPlayer(player))
             {
                 player.TakeDamage(damage, transform);
@@ -55,6 +55,7 @@ public class MultiPurpleBall : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         anim.SetBool("IsFlying", false);
         anim.SetBool("BlowUp", true);
+        Destroy(gameObject, 0.65f);
     }
 
      public void SetUp(Vector2 _moveDirection)

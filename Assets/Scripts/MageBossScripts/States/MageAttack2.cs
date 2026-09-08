@@ -43,7 +43,15 @@ public class MageAttack2 : MageState
             {
                 if (mageScript.SpawningMeleeEnemy != null && mageScript.meleeEnemySpawnPoint != null)
                 {
-                    Object.Instantiate(mageScript.SpawningMeleeEnemy, mageScript.meleeEnemySpawnPoint.position, Quaternion.identity);
+                    GameObject spawnObject = Object.Instantiate(
+                        mageScript.SpawningMeleeEnemy,
+                        mageScript.meleeEnemySpawnPoint.position,
+                        Quaternion.identity);
+                    SpawningMeleeEnemy spawningMeleeEnemy = spawnObject.GetComponent<SpawningMeleeEnemy>();
+                    if (spawningMeleeEnemy != null)
+                    {
+                        spawningMeleeEnemy.SetFacingDirection(mageScript.facDir);
+                    }
                 }
             }
         }
