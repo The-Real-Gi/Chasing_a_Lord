@@ -672,7 +672,7 @@ MonoBehaviour:
   finishedCLimb: 0
   moveUp: 0
   moveForward: 0
-  climbingUpSpeed: 100
+  climbingUpSpeed: 70
   movingForwardSpeed: 65
   isClimbingLedge: 0
   timer: 0
