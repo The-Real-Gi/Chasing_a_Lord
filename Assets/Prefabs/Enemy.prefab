@@ -56,7 +56,38 @@ Transform:
   m_GameObject: {fileID: 602814047505506367}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.127, z: 0}
+  m_LocalPosition: {x: 0.056, y: -0.127, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1233937444906167442}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1369524353199393918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3601418676618334817}
+  m_Layer: 8
+  m_Name: HazardCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3601418676618334817
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369524353199393918}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.16, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14865,6 +14896,7 @@ Transform:
   - {fileID: 4313643970639933673}
   - {fileID: 3902121792179265100}
   - {fileID: 6202927484389114289}
+  - {fileID: 3601418676618334817}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &9007395454577324448
@@ -14925,13 +14957,15 @@ MonoBehaviour:
   crouchAttackCheck: {fileID: 6419556920884259572}
   forcedCrouchCheck: {fileID: 4454896537354578071}
   forcedCrouchCheck2: {fileID: 2336355174364648877}
-  groundCheckDistance: 0.28
+  hazardCheck: {fileID: 3601418676618334817}
+  groundCheckDistance: 0.52
   wallCheckDistance: 0.31
   playerCheckDistance: 2
   playerCrouchCheckDistance: 2.15
   crouchAttackCheckRadius: 0.29
   forcedCrouchCheckDistance: 0.39
   forcedCrouchCheckDistance2: 0.38
+  hazardCheckDistance: 1.8
   wallDetectionGraceDuration: 0.3
   crouchObstacleGraceDuration: 0.2
   whatIsGround:
@@ -14940,6 +14974,9 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 128
+  whatIsHazard:
+    serializedVersion: 2
+    m_Bits: 4096
   anim: {fileID: 0}
   rb: {fileID: 0}
   enemyCollider: {fileID: 0}
@@ -14974,6 +15011,7 @@ MonoBehaviour:
   isCrouchAttackRangeDetected: 0
   isForcedCrouch: 0
   isForcedCrouch2: 0
+  isHazardDetected: 0
   attackFinish: 0
   attackFinish2: 0
   attackFinish3: 0

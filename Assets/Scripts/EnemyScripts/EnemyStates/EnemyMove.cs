@@ -21,7 +21,7 @@ public class EnemyMove : EnemyState
             return;
         }
 
-        if(enemy.isWallDetected)
+        if(enemy.isWallDetected || !enemy.isGrounded || enemy.isHazardDetected)
         {
             enemy.Flip();
             stateMachine.ChangeState(enemy.enemyIdle);

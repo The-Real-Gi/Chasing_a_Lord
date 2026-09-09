@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3096186808181934835}
   - component: {fileID: 6746393474980238604}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7951706209058882941}
   - component: {fileID: 7409386701646386735}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Square (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8602666631799574615}
   - component: {fileID: 4228344103382528935}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4164510984997191197}
   - component: {fileID: 8328510719388950709}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +374,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2691672268672305275}
   - component: {fileID: 7592666820073616914}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -466,7 +466,7 @@ GameObject:
   - component: {fileID: 3168434546578470444}
   - component: {fileID: 627427930535247938}
   - component: {fileID: 5657171137062139638}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: Saw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,14 +506,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Saw
   rotationSpeed: {x: 0, y: 0, z: 900}
-  moveVertically: 0
-  moveHorizontally: 1
+  moveVertically: 1
+  moveHorizontally: 0
   moveInCircle: 0
   movementDistance: 2
   movementDuration: 2
   circleRadius: 2
   damage: 10
-  knockbackForce: 5
+  knockbackForce: 2
 --- !u!58 &5657171137062139638
 CircleCollider2D:
   m_ObjectHideFlags: 0

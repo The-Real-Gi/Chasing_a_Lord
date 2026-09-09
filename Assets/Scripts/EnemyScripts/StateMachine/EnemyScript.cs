@@ -14,6 +14,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] Transform crouchAttackCheck;
     [SerializeField] Transform forcedCrouchCheck;
     [SerializeField] Transform forcedCrouchCheck2;
+    [SerializeField] Transform hazardCheck;
 
     [SerializeField]float groundCheckDistance;
     [SerializeField] float wallCheckDistance;
@@ -22,10 +23,12 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] float crouchAttackCheckRadius = 1.5f;
     [SerializeField] float forcedCrouchCheckDistance;
     [SerializeField] float forcedCrouchCheckDistance2;
+    [SerializeField] float hazardCheckDistance = 0.75f;
     [SerializeField] private float wallDetectionGraceDuration = 0.1f;
     [SerializeField] private float crouchObstacleGraceDuration = 0.2f;
     [SerializeField] LayerMask whatIsGround;
     [SerializeField] LayerMask whatIsPlayer;
+    [SerializeField] LayerMask whatIsHazard;
 
     public Animator anim;
     public Rigidbody2D rb;
@@ -68,6 +71,7 @@ public class EnemyScript : MonoBehaviour
     public bool isCrouchAttackRangeDetected;
     public bool isForcedCrouch;
     public bool isForcedCrouch2;
+    public bool isHazardDetected;
     
     
     EnemyStateMachine enemyStateMachine;
@@ -280,6 +284,10 @@ public class EnemyScript : MonoBehaviour
     {
         isGrounded= Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckDistance,whatIsGround);
         bool wallDetectedThisFrame = Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance * facDir, whatIsGround);
+        Vector2 hazardOrigin = hazardCheck != null ? hazardCheck.position : transform.position;
+        bool hazardDetectedLeft = Physics2D.Raycast(hazardOrigin, Vector2.left, hazardCheckDistance, whatIsHazard);
+        bool hazardDetectedRight = Physics2D.Raycast(hazardOrigin, Vector2.right, hazardCheckDistance, whatIsHazard);
+        isHazardDetected = facDir < 0 ? hazardDetectedLeft : hazardDetectedRight;
         if (wallDetectedThisFrame)
         {
             wallDetectedTimer = wallDetectionGraceDuration;
@@ -342,6 +350,10 @@ public class EnemyScript : MonoBehaviour
         {
             Gizmos.DrawLine(forcedCrouchCheck2.position, forcedCrouchCheck2.position + new Vector3(0, forcedCrouchCheckDistance2, 0));
         }
+        Vector3 hazardOrigin = hazardCheck != null ? hazardCheck.position : transform.position;
+        Gizmos.color = isHazardDetected ? Color.red : Color.yellow;
+        Gizmos.DrawLine(hazardOrigin, hazardOrigin + Vector3.left * hazardCheckDistance);
+        Gizmos.DrawLine(hazardOrigin, hazardOrigin + Vector3.right * hazardCheckDistance);
         if (attackHitPoint != null)
         {
             Gizmos.color = Color.magenta;
