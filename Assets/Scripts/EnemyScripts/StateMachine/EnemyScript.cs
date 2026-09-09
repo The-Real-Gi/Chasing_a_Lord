@@ -449,9 +449,9 @@ public class EnemyScript : MonoBehaviour
         attackFinish3 = true;
     }
 
-    public void HitByPlayer()
+    public void HitByPlayer(Transform attacker = null)
     {
-        if (enemyStateMachine == null || getHit == null || player == null || enemyStateMachine.currentState == enemyRoll)
+        if (enemyStateMachine == null || getHit == null || enemyStateMachine.currentState == enemyRoll)
         {
             return;
         }
@@ -478,7 +478,13 @@ public class EnemyScript : MonoBehaviour
         getHitTimer = getHitDuration; //get hit timer starts and get hit finish is false
         getHitFinish = false;
 
-        Vector2 knockbackDirection = (transform.position - player.position).normalized; // knockbackDirection is objects position minus player position normalised
+        Transform hitSource = attacker != null ? attacker : player;
+        if (hitSource == null)
+        {
+            return;
+        }
+
+        Vector2 knockbackDirection = (transform.position - hitSource.position).normalized; // knockbackDirection is objects position minus player position normalised
         if (knockbackDirection == Vector2.zero) // if the result is 0 then its left
         {
             knockbackDirection = Vector2.left;
@@ -486,7 +492,7 @@ public class EnemyScript : MonoBehaviour
 
         rb.linearVelocity = new Vector2(knockbackDirection.x * hitKnockbackForce, rb.linearVelocity.y);
 
-        facDir = player.position.x >= transform.position.x ? 1 : -1;
+        facDir = hitSource.position.x >= transform.position.x ? 1 : -1;
         UpdateFacingFromDirection(facDir);
 
         enemyStateMachine.ChangeState(getHit);

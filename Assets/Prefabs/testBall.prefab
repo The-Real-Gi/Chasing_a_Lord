@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7815074652817401494}
   - component: {fileID: 6743807592121570771}
   - component: {fileID: 1191199085160503889}
+  - component: {fileID: 3784914178378662298}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -137,7 +138,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: -0.00000049427507, y: -0.5000002}
+  m_ConnectedAnchor: {x: 0.0000014672105, y: -0.4999998}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -147,6 +148,42 @@ HingeJoint2D:
   m_AngleLimits:
     m_LowerAngle: 0
     m_UpperAngle: 359
+--- !u!58 &3784914178378662298
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5227439604667546279}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.00000011920929, y: 0}
+  m_Radius: 0.5000001
 --- !u!1 &6599830392123801697
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,7 +321,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0.5}
-  m_ConnectedAnchor: {x: -7.07, y: 3.67}
+  m_ConnectedAnchor: {x: 17.4856, y: 3.5655997}
   m_UseConnectedAnchor: 1
   m_UseMotor: 1
   m_Motor:
@@ -309,6 +346,10 @@ MonoBehaviour:
   minimumSpeed: 10
   maximumSpeed: 180
   maximumMotorTorque: 1000
+  ball: {fileID: 5227439604667546279}
+  damage: 10
+  knockbackForce: 8
+  verticalKnockback: 1
 --- !u!1 &6680229191563490502
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,7 +360,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4797637453972912713}
   - component: {fileID: 1616100002495560812}
-  - component: {fileID: 3295683426915975441}
   - component: {fileID: 7727261957150940376}
   m_Layer: 0
   m_Name: Spikes
@@ -402,52 +442,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &3295683426915975441
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6680229191563490502}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!114 &7727261957150940376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,8 +481,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -5.95, y: 3.79, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.87, y: 1.87, z: 1.87}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7203078389337283180}
   - {fileID: 5742518871180412951}

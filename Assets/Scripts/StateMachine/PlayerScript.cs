@@ -157,6 +157,11 @@ public class PlayerScript : MonoBehaviour
     public List<BossMageScript> mageBossesInAttackRange = new List<BossMageScript>();
     public bool isForcedCrouch;
 
+    public GameObject walkingPatricleEffect;
+    public GameObject bleedingParticleEffect;
+    public GameObject deathBleedingParticleEffect;
+    
+
     #endregion
 
 
@@ -299,12 +304,18 @@ public class PlayerScript : MonoBehaviour
             }
 
             rb.linearVelocity = Vector2.zero;
+            UpdateWalkingParticleEffect();
+            UpdateBleedingParticleEffect();
+            UpdateDeathBleedingParticleEffect();
             return;
         }
 
         if (stateMachine.currentState == getHit)
         {
             getHit.Update();
+            UpdateWalkingParticleEffect();
+            UpdateBleedingParticleEffect();
+            UpdateDeathBleedingParticleEffect();
             return;
         }
 
@@ -339,6 +350,56 @@ public class PlayerScript : MonoBehaviour
             stateMachine.ChangeState(wallHangState);
         }
 
+        UpdateWalkingParticleEffect();
+        UpdateBleedingParticleEffect();
+        UpdateDeathBleedingParticleEffect();
+
+    }
+
+    private void UpdateWalkingParticleEffect()
+    {
+        if (walkingPatricleEffect == null)
+        {
+            return;
+        }
+
+        bool shouldPlay = stateMachine.currentState == move
+            || stateMachine.currentState == slideState;
+
+        if (walkingPatricleEffect.activeSelf != shouldPlay)
+        {
+            walkingPatricleEffect.SetActive(shouldPlay);
+        }
+    }
+
+    private void UpdateBleedingParticleEffect()
+    {
+        if (bleedingParticleEffect == null)
+        {
+            return;
+        }
+
+        bool shouldPlay = stateMachine.currentState == getHit;
+
+        if (bleedingParticleEffect.activeSelf != shouldPlay)
+        {
+            bleedingParticleEffect.SetActive(shouldPlay);
+        }
+    }
+
+    private void UpdateDeathBleedingParticleEffect()
+    {
+        if (deathBleedingParticleEffect == null)
+        {
+            return;
+        }
+
+        bool shouldPlay = stateMachine.currentState == playerDeath;
+
+        if (deathBleedingParticleEffect.activeSelf != shouldPlay)
+        {
+            deathBleedingParticleEffect.SetActive(shouldPlay);
+        }
     }
 
     void FixedUpdate()
@@ -382,6 +443,14 @@ public class PlayerScript : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * direction;
         transform.localScale = scale;
+
+        if (walkingPatricleEffect != null)
+        {
+            Vector3 effectScale = walkingPatricleEffect.transform.localScale;
+            effectScale.x = Mathf.Abs(effectScale.x) * direction;
+            walkingPatricleEffect.transform.localScale = effectScale;
+        }
+
         isFacingRight = direction == 1;
         facDir = direction;
     }

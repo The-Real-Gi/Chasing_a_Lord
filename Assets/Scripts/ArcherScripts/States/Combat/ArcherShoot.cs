@@ -32,9 +32,8 @@ public class ArcherShoot : ArcherState
         if (archer.shooting)
         {
             archer.ShootArrow();
-
-            bool canRetreat = archer.IsPlayerTooClose() && archer.isGrounded;
-            stateMachine.ChangeState(canRetreat ? archer.move : archer.battleState);
+            archer.ResetTooCloseShootTimer();
+            stateMachine.ChangeState(archer.battleState);
         }
     }
 

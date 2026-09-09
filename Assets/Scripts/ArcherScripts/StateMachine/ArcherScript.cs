@@ -36,15 +36,21 @@ public class ArcherScript : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
     public bool isGrounded;
 
-    [SerializeField] private float playerDetectionRadius = 5f;
-    [SerializeField] private float tooCloseRange = 2f;
-    [SerializeField] private float shootingRange = 8f;
+    [SerializeField] private float playerDetectionRadius ;
+    [SerializeField] private float tooCloseRange ;
+    [SerializeField] private float shootingRange ;
+    [SerializeField] private float shootingCooldown = 1f;
+    private float shootingCooldownTimer;
     [SerializeField] private Transform arrowSpawnPoint;
     [SerializeField] private float arrowSpeed = 10f;
     [SerializeField] private LayerMask whatIsPlayer;
     public bool shooting;
 
     public GameObject arrow;
+
+    public GameObject walkingParticles;
+    public GameObject getHitParticles;
+    public GameObject DeathParticles;
 
     void Awake()
     {
@@ -73,18 +79,22 @@ public class ArcherScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        shootingCooldownTimer = Mathf.Max(0f, shootingCooldownTimer - Time.deltaTime);
+
         if (health <= 0f)
         {
             if (stateMachine.currentState != death)
             {
                 stateMachine.ChangeState(death);
             }
+            UpdateParticleEffects();
             return;
         }
 
         if (stateMachine.currentState == getHit)
         {
             stateMachine.currentState.Update();
+            UpdateParticleEffects();
             return;
         }
 
@@ -94,6 +104,7 @@ public class ArcherScript : MonoBehaviour
         if (isCombatState && !IsPlayerInRange())
         {
             stateMachine.ChangeState(idle);
+            UpdateParticleEffects();
             return;
         }
 
@@ -103,7 +114,26 @@ public class ArcherScript : MonoBehaviour
         {
             stateMachine.ChangeState(battleState);
         }
+        UpdateParticleEffects();
         Debug.Log(stateMachine.currentState);
+    }
+
+    private void UpdateParticleEffects()
+    {
+        bool isWalking = stateMachine.currentState == move
+            || stateMachine.currentState == battleState;
+
+        SetParticleState(walkingParticles, isWalking);
+        SetParticleState(getHitParticles, stateMachine.currentState == getHit);
+        SetParticleState(DeathParticles, stateMachine.currentState == death);
+    }
+
+    private void SetParticleState(GameObject particleEffect, bool shouldPlay)
+    {
+        if (particleEffect != null && particleEffect.activeSelf != shouldPlay)
+        {
+            particleEffect.SetActive(shouldPlay);
+        }
     }
 
     void FixedUpdate()
@@ -129,6 +159,13 @@ public class ArcherScript : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * facDir;
         transform.localScale = scale;
+
+        if (walkingParticles != null)
+        {
+            Vector3 particleScale = walkingParticles.transform.localScale;
+            particleScale.x = Mathf.Abs(particleScale.x) * facDir;
+            walkingParticles.transform.localScale = particleScale;
+        }
     }
 
     public void TakeDamage(int damage, Transform attacker = null)
@@ -177,6 +214,17 @@ public class ArcherScript : MonoBehaviour
     public bool IsPlayerInShootingRange()
     {
         return FindPlayerInRange(shootingRange) != null;
+    }
+
+    public bool IsAtShootingRangeLimit()
+    {
+        Transform player = FindPlayerInRange(playerDetectionRadius);
+        if (player == null)
+        {
+            return false;
+        }
+
+        return Vector2.Distance(transform.position, player.position) >= shootingRange * 0.9f;
     }
 
     public bool IsPlayerTooClose()
@@ -259,10 +307,17 @@ public class ArcherScript : MonoBehaviour
 
     public void ShootSingal()
     {
-        if (IsPlayerInShootingRange())
+        if (CanShoot && IsPlayerInShootingRange())
         {
             shooting = true;
         }
+    }
+
+    public bool CanShoot => shootingCooldownTimer <= 0f;
+
+    public void ResetTooCloseShootTimer()
+    {
+        battleState.ResetTooCloseShootTimer();
     }
 
     public void ShootArrow()
@@ -305,5 +360,7 @@ public class ArcherScript : MonoBehaviour
             arrowController.IgnoreCollisionWith(gameObject);
             arrowController.SetDirection(directionSign, angle, arrowSpeed);
         }
+
+        shootingCooldownTimer = shootingCooldown;
     }
 }
