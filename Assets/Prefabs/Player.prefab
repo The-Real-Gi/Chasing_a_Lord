@@ -15155,7 +15155,7 @@ MonoBehaviour:
   jumpStrength: 7
   wallJumpStrength: 5
   groundCheck: {fileID: 1345353158247238774}
-  groundCheckDistance: 0.22
+  groundCheckDistance: 0.5
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64

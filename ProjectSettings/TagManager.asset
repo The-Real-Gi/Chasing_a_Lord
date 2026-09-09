@@ -45,6 +45,9 @@ TagManager:
   - name: Background
     uniqueID: 169653223
     locked: 0
+  - name: Hazard
+    uniqueID: 606459393
+    locked: 0
   - name: Ground
     uniqueID: 3088059555
     locked: 0
@@ -59,9 +62,6 @@ TagManager:
     locked: 0
   - name: Arrow
     uniqueID: 1023553849
-    locked: 0
-  - name: Hazard
-    uniqueID: 606459393
     locked: 0
   m_RenderingLayers:
   - Default
