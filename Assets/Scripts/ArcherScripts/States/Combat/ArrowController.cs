@@ -10,15 +10,18 @@ public class ArrowController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float arrowLifetime = 5f;
     [SerializeField] private float fadeDuration = 1f;
+    [SerializeField] private float flyingVelocityThreshold = 0.01f;
     private SpriteRenderer[] spriteRenderers;
     private float[] originalAlphas;
     private float lifetimeTimer;
     private bool isFrozen;
     private bool isStuckToPlayer;
     private PlayerScript stuckPlayer;
+    public GameObject flyingParticle;
     void Awake()
     {
         rb =GetComponent<Rigidbody2D>();
+        SetFlyingParticleState(false);
         spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         originalAlphas = new float[spriteRenderers.Length];
         for (int index = 0; index < spriteRenderers.Length; index++)
@@ -35,6 +38,7 @@ public class ArrowController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        SetFlyingParticleState(!isFrozen && Mathf.Abs(rb.linearVelocity.x) > flyingVelocityThreshold);
         lifetimeTimer += Time.deltaTime;
         float fadeStartTime = Mathf.Max(0f, arrowLifetime - fadeDuration);
         if (lifetimeTimer >= fadeStartTime)
@@ -64,6 +68,15 @@ public class ArrowController : MonoBehaviour
             spriteRenderers[index].color = color;
         }
     }
+
+    private void SetFlyingParticleState(bool shouldPlay)
+    {
+        if (flyingParticle != null && flyingParticle.activeSelf != shouldPlay)
+        {
+            flyingParticle.SetActive(shouldPlay);
+        }
+    }
+
     void FixedUpdate()
     {
         if (!isFrozen)
@@ -75,6 +88,19 @@ public class ArrowController : MonoBehaviour
     public void SetFacDir(int dir)
     {
         facDir = dir >= 0 ? 1 : -1;
+        UpdateFlyingParticleScale();
+    }
+
+    private void UpdateFlyingParticleScale()
+    {
+        if (flyingParticle == null)
+        {
+            return;
+        }
+
+        Vector3 particleScale = flyingParticle.transform.localScale;
+        particleScale.x = -Mathf.Abs(particleScale.x) * facDir;
+        flyingParticle.transform.localScale = particleScale;
     }
 
     public void SetDirection(int dir, float angle, float speed)

@@ -89,6 +89,9 @@ public class EnemyScript : MonoBehaviour
     public bool attackFinish3 = false;
     public bool dealingDamage=false;
     public bool getHitFinish=false;
+    [SerializeField]GameObject walkingParticle;
+    [SerializeField] GameObject getHitParticle;
+    [SerializeField] GameObject deathParticle;
 
     public bool IsRolling => enemyStateMachine != null && enemyStateMachine.currentState == enemyRoll;
 
@@ -151,6 +154,7 @@ public class EnemyScript : MonoBehaviour
                 enemyStateMachine.ChangeState(enemyIdle);
             }
 
+            UpdateParticleEffects();
             return;
         }
 
@@ -167,12 +171,14 @@ public class EnemyScript : MonoBehaviour
             }
 
             enemyStateMachine.ChangeState(enemyCrouchIdle);
+            UpdateParticleEffects();
             return;
         }
 
         if (enemyStateMachine.currentState == getHit&&health>0)
         {
             enemyStateMachine.currentState.Update();
+            UpdateParticleEffects();
             return;
         }
 
@@ -205,6 +211,27 @@ public class EnemyScript : MonoBehaviour
         if (health <= 0)
         {
             enemyStateMachine.ChangeState(death);
+        }
+
+        UpdateParticleEffects();
+    }
+
+    private void UpdateParticleEffects()
+    {
+        bool isWalking = enemyStateMachine.currentState == enemyMove
+            || enemyStateMachine.currentState == battleState
+            || enemyStateMachine.currentState == enemyCrouchMove;
+
+        SetParticleState(walkingParticle, isWalking);
+        SetParticleState(getHitParticle, enemyStateMachine.currentState == getHit);
+        SetParticleState(deathParticle, enemyStateMachine.currentState == death);
+    }
+
+    private void SetParticleState(GameObject particleEffect, bool shouldPlay)
+    {
+        if (particleEffect != null && particleEffect.activeSelf != shouldPlay)
+        {
+            particleEffect.SetActive(shouldPlay);
         }
     }
 
@@ -420,6 +447,13 @@ public class EnemyScript : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * direction;
         transform.localScale = scale;
+
+        if (walkingParticle != null)
+        {
+            Vector3 particleScale = walkingParticle.transform.localScale;
+            particleScale.x = Mathf.Abs(particleScale.x) * direction;
+            walkingParticle.transform.localScale = particleScale;
+        }
     }
 
     public bool CanAttackAgain()
