@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6743807592121570771}
   - component: {fileID: 1191199085160503889}
   - component: {fileID: 3784914178378662298}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,8 +81,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 606459393
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
@@ -138,7 +138,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_ConnectedAnchor: {x: 0.0000014672105, y: -0.4999998}
+  m_ConnectedAnchor: {x: 0.0000014672102, y: -0.50000006}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -164,7 +164,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 5103307671948184390}
   - component: {fileID: 2551216427797073220}
   - component: {fileID: 2974343565642835619}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Chain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,8 +264,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 606459393
+  m_SortingLayer: 1
   m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
@@ -321,7 +321,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0.5}
-  m_ConnectedAnchor: {x: 17.4856, y: 3.5655997}
+  m_ConnectedAnchor: {x: 1.2536261, y: 5.4256}
   m_UseConnectedAnchor: 1
   m_UseMotor: 1
   m_Motor:
@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 4797637453972912713}
   - component: {fileID: 1616100002495560812}
   - component: {fileID: 7727261957150940376}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Spikes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,8 +428,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 606459393
+  m_SortingLayer: 1
   m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
@@ -464,7 +464,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6007946526835733001}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: testBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
