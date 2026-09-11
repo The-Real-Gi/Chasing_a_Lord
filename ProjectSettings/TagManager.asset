@@ -42,11 +42,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Hazard
-    uniqueID: 606459393
-    locked: 0
   - name: Background
     uniqueID: 169653223
+    locked: 0
+  - name: Hazard
+    uniqueID: 606459393
     locked: 0
   - name: Ground
     uniqueID: 3088059555
