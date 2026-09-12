@@ -190,6 +190,15 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""351e7d8f-d260-47b6-8a51-765f22b639ac"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -357,6 +366,17 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""action"": ""Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c9b80f46-660f-4e0b-b612-c3246de6489a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -393,6 +413,7 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         m_Movement_CrouchAtt = m_Movement.FindAction("CrouchAtt", throwIfNotFound: true);
         m_Movement_CrouchBlock = m_Movement.FindAction("CrouchBlock", throwIfNotFound: true);
         m_Movement_Block = m_Movement.FindAction("Block", throwIfNotFound: true);
+        m_Movement_PauseGame = m_Movement.FindAction("PauseGame", throwIfNotFound: true);
     }
 
     ~@PlayersInputSet()
@@ -484,6 +505,7 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_CrouchAtt;
     private readonly InputAction m_Movement_CrouchBlock;
     private readonly InputAction m_Movement_Block;
+    private readonly InputAction m_Movement_PauseGame;
     /// <summary>
     /// Provides access to input actions defined in input action map "Movement".
     /// </summary>
@@ -539,6 +561,10 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Movement/Block".
         /// </summary>
         public InputAction @Block => m_Wrapper.m_Movement_Block;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/PauseGame".
+        /// </summary>
+        public InputAction @PauseGame => m_Wrapper.m_Movement_PauseGame;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -598,6 +624,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @Block.started += instance.OnBlock;
             @Block.performed += instance.OnBlock;
             @Block.canceled += instance.OnBlock;
+            @PauseGame.started += instance.OnPauseGame;
+            @PauseGame.performed += instance.OnPauseGame;
+            @PauseGame.canceled += instance.OnPauseGame;
         }
 
         /// <summary>
@@ -642,6 +671,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @Block.started -= instance.OnBlock;
             @Block.performed -= instance.OnBlock;
             @Block.canceled -= instance.OnBlock;
+            @PauseGame.started -= instance.OnPauseGame;
+            @PauseGame.performed -= instance.OnPauseGame;
+            @PauseGame.canceled -= instance.OnPauseGame;
         }
 
         /// <summary>
@@ -772,5 +804,12 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBlock(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PauseGame" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPauseGame(InputAction.CallbackContext context);
     }
 }

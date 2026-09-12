@@ -160,6 +160,7 @@ public class PlayerScript : MonoBehaviour
     public GameObject walkingPatricleEffect;
     public GameObject bleedingParticleEffect;
     public GameObject deathBleedingParticleEffect;
+    public float energyValue;
     
 
     #endregion
