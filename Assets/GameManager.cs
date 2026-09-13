@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -38,8 +39,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        
+        if (SceneManager.GetSceneByName("Menu").isLoaded && Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+        {
+            StartGame();
+        }
     }
 
     void OnEnable()
@@ -48,7 +51,6 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
         inputActions.Movement.Enable();
         inputActions.Movement.PauseGame.performed += ctx => PauseGame();
     }
