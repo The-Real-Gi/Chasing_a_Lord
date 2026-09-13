@@ -199,6 +199,33 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""To Main Menu"",
+                    ""type"": ""Button"",
+                    ""id"": ""d92b8766-4f66-4e2e-9911-9745fa6de465"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Next Level"",
+                    ""type"": ""Button"",
+                    ""id"": ""956e5ae5-6e0f-40bb-980c-c46b4448e6bd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RetryLevel"",
+                    ""type"": ""Button"",
+                    ""id"": ""da3af3e6-a1d4-435a-a88b-cb91b065078a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -377,6 +404,39 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
                     ""action"": ""PauseGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1488c13a-33f5-4663-90ea-e39467f6178c"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""To Main Menu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32d99d72-5157-4668-9f70-76cd2e3612d9"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""Next Level"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a04286f-4ad4-45c2-9bcb-2fac10f8d17b"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Player"",
+                    ""action"": ""RetryLevel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -414,6 +474,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         m_Movement_CrouchBlock = m_Movement.FindAction("CrouchBlock", throwIfNotFound: true);
         m_Movement_Block = m_Movement.FindAction("Block", throwIfNotFound: true);
         m_Movement_PauseGame = m_Movement.FindAction("PauseGame", throwIfNotFound: true);
+        m_Movement_ToMainMenu = m_Movement.FindAction("To Main Menu", throwIfNotFound: true);
+        m_Movement_NextLevel = m_Movement.FindAction("Next Level", throwIfNotFound: true);
+        m_Movement_RetryLevel = m_Movement.FindAction("RetryLevel", throwIfNotFound: true);
     }
 
     ~@PlayersInputSet()
@@ -506,6 +569,9 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_CrouchBlock;
     private readonly InputAction m_Movement_Block;
     private readonly InputAction m_Movement_PauseGame;
+    private readonly InputAction m_Movement_ToMainMenu;
+    private readonly InputAction m_Movement_NextLevel;
+    private readonly InputAction m_Movement_RetryLevel;
     /// <summary>
     /// Provides access to input actions defined in input action map "Movement".
     /// </summary>
@@ -565,6 +631,18 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Movement/PauseGame".
         /// </summary>
         public InputAction @PauseGame => m_Wrapper.m_Movement_PauseGame;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/ToMainMenu".
+        /// </summary>
+        public InputAction @ToMainMenu => m_Wrapper.m_Movement_ToMainMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/NextLevel".
+        /// </summary>
+        public InputAction @NextLevel => m_Wrapper.m_Movement_NextLevel;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/RetryLevel".
+        /// </summary>
+        public InputAction @RetryLevel => m_Wrapper.m_Movement_RetryLevel;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -627,6 +705,15 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @PauseGame.started += instance.OnPauseGame;
             @PauseGame.performed += instance.OnPauseGame;
             @PauseGame.canceled += instance.OnPauseGame;
+            @ToMainMenu.started += instance.OnToMainMenu;
+            @ToMainMenu.performed += instance.OnToMainMenu;
+            @ToMainMenu.canceled += instance.OnToMainMenu;
+            @NextLevel.started += instance.OnNextLevel;
+            @NextLevel.performed += instance.OnNextLevel;
+            @NextLevel.canceled += instance.OnNextLevel;
+            @RetryLevel.started += instance.OnRetryLevel;
+            @RetryLevel.performed += instance.OnRetryLevel;
+            @RetryLevel.canceled += instance.OnRetryLevel;
         }
 
         /// <summary>
@@ -674,6 +761,15 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
             @PauseGame.started -= instance.OnPauseGame;
             @PauseGame.performed -= instance.OnPauseGame;
             @PauseGame.canceled -= instance.OnPauseGame;
+            @ToMainMenu.started -= instance.OnToMainMenu;
+            @ToMainMenu.performed -= instance.OnToMainMenu;
+            @ToMainMenu.canceled -= instance.OnToMainMenu;
+            @NextLevel.started -= instance.OnNextLevel;
+            @NextLevel.performed -= instance.OnNextLevel;
+            @NextLevel.canceled -= instance.OnNextLevel;
+            @RetryLevel.started -= instance.OnRetryLevel;
+            @RetryLevel.performed -= instance.OnRetryLevel;
+            @RetryLevel.canceled -= instance.OnRetryLevel;
         }
 
         /// <summary>
@@ -811,5 +907,26 @@ public partial class @PlayersInputSet: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPauseGame(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "To Main Menu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToMainMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Next Level" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNextLevel(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RetryLevel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRetryLevel(InputAction.CallbackContext context);
     }
 }

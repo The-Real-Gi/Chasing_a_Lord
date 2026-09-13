@@ -22,6 +22,7 @@ public class DoubleJump : AirState
     public override void Exit()
     {
         base.Exit();
+        player.jumpEnded=false;
     }
     public override void FixedUpdate()
     {
@@ -30,7 +31,7 @@ public class DoubleJump : AirState
     public override void Update()
     {
         base.Update();
-        if(player.rb.linearVelocityY<0)
+        if(player.rb.linearVelocityY<0|| player.jumpEnded)
         {
             stateMachine.ChangeState(player.airState);
         }

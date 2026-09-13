@@ -19,6 +19,9 @@ public class WallHangState : PlayerState
         player.rb.linearVelocity = Vector2.zero;
         currFacDir=player.facDir;
         player.canClimbLedge=true;
+        // Save the wall contact point before calculating the climb targets.
+        // Without this, ledgePos1/2 are derived from the default (0, 0).
+        player.ledgePosBot = player.wallCheck.position;
         
     }
 
@@ -34,6 +37,8 @@ public class WallHangState : PlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+        // A hang is stationary; clear any horizontal momentum inherited from
+        // the airborne state.
         player.rb.linearVelocity = Vector2.zero;
     }
     public override void Update()
@@ -43,11 +48,13 @@ public class WallHangState : PlayerState
           if(player.inputVector.y>0)
         {   
             stateMachine.ChangeState(player.ledgeClimbState);
+            return;
         }
         if(!player.isWallDetected || player.inputVector.y < 0f)
         {
             player.ledgeDetected=false;
             stateMachine.ChangeState(player.airState);
+            return;
         }
             if(player.isFacingRight)
             {

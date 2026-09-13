@@ -1,5 +1,7 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyScript : MonoBehaviour
 {   
@@ -96,6 +98,9 @@ public class EnemyScript : MonoBehaviour
     [SerializeField]GameObject walkingParticle;
     [SerializeField] GameObject getHitParticle;
     [SerializeField] GameObject deathParticle;
+    [SerializeField] Slider slider;
+    [SerializeField] Canvas sliderCanvas;
+    [SerializeField] TextMeshProUGUI hpText;
 
     public bool IsRolling => enemyStateMachine != null && enemyStateMachine.currentState == enemyRoll;
 
@@ -146,6 +151,10 @@ public class EnemyScript : MonoBehaviour
     void Update()
     {
         Checks();
+
+        slider.value=health;
+        sliderCanvas.transform.position=gameObject.transform.position;
+        hpText.text= health.ToString()+" / 100";
 
         if (!IsPlayerAlive())
         {
@@ -459,6 +468,13 @@ public class EnemyScript : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * direction;
         transform.localScale = scale;
+
+        if (sliderCanvas != null && sliderCanvas.transform.IsChildOf(transform))
+        {
+            Vector3 canvasScale = sliderCanvas.transform.localScale;
+            canvasScale.x = Mathf.Abs(canvasScale.x) * direction;
+            sliderCanvas.transform.localScale = canvasScale;
+        }
 
         if (walkingParticle != null)
         {

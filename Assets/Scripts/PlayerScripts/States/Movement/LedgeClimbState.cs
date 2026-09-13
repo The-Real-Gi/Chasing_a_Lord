@@ -38,12 +38,18 @@ public class LedgeClimbState : PlayerState
         base.FixedUpdate();
         if(player.moveUp)
         {
-            player.rb.linearVelocity= new Vector2(0,player.climbingUpSpeed*Time.deltaTime);
+            player.rb.linearVelocity = new Vector2(0f, player.climbingUpSpeed * Time.deltaTime);
         }
 
         if(player.moveForward)
         {
              player.rb.linearVelocity= new Vector2(player.movingForwardSpeed*player.facDir*Time.deltaTime,0);
+        }
+        else if (!player.moveUp)
+        {
+            // Do not retain horizontal momentum between climb animation
+            // phases. Forward motion is only applied explicitly above.
+            player.rb.linearVelocityX = 0f;
         }
         
     }

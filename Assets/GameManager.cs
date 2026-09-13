@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject deathPanel;
     public GameObject winPanel;
     void Awake()
-    {
+    {   Time.timeScale=1f;
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -24,10 +24,13 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         inputActions = new PlayersInputSet();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        FindPanels();
     }
 
     void OnDestroy()
     {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
         inputActions?.Dispose();
 
         if (Instance == this)
@@ -36,10 +39,37 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindPanels();
+    }
+
+    void FindPanels()
+    {
+        pausePanel = FindPanel("PausePanel");
+        deathPanel = FindPanel("DeathPanel");
+        winPanel = FindPanel("WinPanel");
+    }
+
+    GameObject FindPanel(string panelName)
+    {
+        Transform[] transforms = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        foreach (Transform panelTransform in transforms)
+        {
+            if (panelTransform.name == panelName && panelTransform.gameObject.scene.IsValid())
+            {
+                return panelTransform.gameObject;
+            }
+        }
+
+        return null;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (SceneManager.GetSceneByName("Menu").isLoaded && Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+        if (SceneManager.GetSceneByName("Menu").isLoaded && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             StartGame();
         }
@@ -53,6 +83,44 @@ public class GameManager : MonoBehaviour
         }
         inputActions.Movement.Enable();
         inputActions.Movement.PauseGame.performed += ctx => PauseGame();
+        inputActions.Movement.ToMainMenu.performed += ctx =>
+        {    
+        if (deathPanel == null || pausePanel == null || winPanel == null)
+        {
+            return;
+        }
+
+        if(deathPanel.activeInHierarchy||pausePanel.activeInHierarchy||winPanel.activeInHierarchy)
+        {
+            SceneManager.LoadScene("Menu");
+        }else{return;}
+        };
+
+        inputActions.Movement.NextLevel.performed+=ctx=>{    
+        if (winPanel == null)
+        {
+            return;
+        }
+
+        if(winPanel.activeInHierarchy)
+        {
+            LoadNextLevel();
+        }else{return;}
+        };
+
+        inputActions.Movement.RetryLevel.performed += ctx =>
+        {
+        if (deathPanel == null)
+        {
+            return;
+        }
+
+        if(deathPanel.activeInHierarchy)
+        {
+            SceneManager.LoadScene(level);
+        }   else{return;}
+        };
+
     }
 
     void OnDisable()
@@ -74,6 +142,11 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
+        if (pausePanel == null)
+        {
+            return;
+        }
+
         if(Time.timeScale==0f)
         {
             Time.timeScale=1f;
@@ -91,12 +164,22 @@ public class GameManager : MonoBehaviour
     }
     public void OpenWinPanel()
     {
+        if (winPanel == null)
+        {
+            return;
+        }
+
         Time.timeScale=0f;
         winPanel.SetActive(true);
     }
 
     public void DeathPanel()
     {
+        if (deathPanel == null)
+        {
+            return;
+        }
+
         Time.timeScale=0f;
         deathPanel.SetActive(true);
     }

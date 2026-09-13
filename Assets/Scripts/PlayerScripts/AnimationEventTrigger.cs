@@ -50,6 +50,11 @@ public class AnimationEventTrigger : MonoBehaviour
         }
     }
 
+    public void DoubleJumpAnimEnded()
+    {
+        player.DoubleJumpEnded();
+    }
+
     // do func for all types of attack
     
 }

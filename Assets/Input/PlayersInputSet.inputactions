@@ -113,6 +113,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "To Main Menu",
+                    "type": "Button",
+                    "id": "d92b8766-4f66-4e2e-9911-9745fa6de465",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Next Level",
+                    "type": "Button",
+                    "id": "956e5ae5-6e0f-40bb-980c-c46b4448e6bd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RetryLevel",
+                    "type": "Button",
+                    "id": "da3af3e6-a1d4-435a-a88b-cb91b065078a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -289,6 +316,39 @@
                     "processors": "",
                     "groups": ";Player",
                     "action": "PauseGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1488c13a-33f5-4663-90ea-e39467f6178c",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Player",
+                    "action": "To Main Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "32d99d72-5157-4668-9f70-76cd2e3612d9",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Player",
+                    "action": "Next Level",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a04286f-4ad4-45c2-9bcb-2fac10f8d17b",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Player",
+                    "action": "RetryLevel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

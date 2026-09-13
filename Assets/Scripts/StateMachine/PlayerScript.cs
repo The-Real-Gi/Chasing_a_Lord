@@ -161,10 +161,12 @@ public class PlayerScript : MonoBehaviour
     public GameObject bleedingParticleEffect;
     public GameObject deathBleedingParticleEffect;
     public float energyValue;
+    public bool jumpEnded=false;
     
-
     #endregion
-
+    [SerializeField] List<GameObject> backgrounds = new();
+    [SerializeField] private float backgroundParallaxSpeed = 0.5f;
+    private Vector3 previousBackgroundPosition;
 
     
 
@@ -173,6 +175,7 @@ public class PlayerScript : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         stateMachine = new StateMachine();
         rb = GetComponent<Rigidbody2D>();
+        previousBackgroundPosition = transform.position;
         playerCollider= GetComponent<CapsuleCollider2D>();
         playerCollider.offset=baseCollider;
         sizeCollider=playerCollider.size;
@@ -294,6 +297,7 @@ public class PlayerScript : MonoBehaviour
     
     void Update()
     {   
+        MoveBackgrounds();
         inputVector = input.Movement.VerticalMove.ReadValue<Vector2>();
         Checks();
 
@@ -346,7 +350,10 @@ public class PlayerScript : MonoBehaviour
             stateMachine.ChangeState(idle);
         }
 
-        if (!isClimbingLedge && !isForcedCrouch && stateMachine.currentState!=wallSlide && isWallDetected&&!isTouchingLedge&&inputVector.y>=0)
+        if (!isClimbingLedge && !isForcedCrouch
+            && stateMachine.currentState == airState
+            && !isGrounded
+            && isWallDetected && !isTouchingLedge && inputVector.y >= 0)
         {
             stateMachine.ChangeState(wallHangState);
         }
@@ -355,6 +362,25 @@ public class PlayerScript : MonoBehaviour
         UpdateBleedingParticleEffect();
         UpdateDeathBleedingParticleEffect();
 
+    }
+
+    private void MoveBackgrounds()
+    {
+        Vector3 movement = transform.position - previousBackgroundPosition;
+        previousBackgroundPosition = transform.position;
+
+        if (movement == Vector3.zero || backgrounds == null)
+        {
+            return;
+        }
+
+        foreach (GameObject background in backgrounds)
+        {
+            if (background != null)
+            {
+                background.transform.position += movement * backgroundParallaxSpeed;
+            }
+        }
     }
 
     private void UpdateWalkingParticleEffect()
@@ -417,7 +443,7 @@ public class PlayerScript : MonoBehaviour
     public void FlipController()
     {
         //could make animation for rotation by creating a new state with rotating and either time based or event based
-        if (IsDead || isAttacking || stateMachine.currentState == slideState)
+        if (IsDead || isAttacking || isClimbingLedge || stateMachine.currentState == slideState)
         {
             return;
         }
@@ -435,7 +461,7 @@ public class PlayerScript : MonoBehaviour
 
     public void Flip(float value)
     {   
-        if (IsDead || isAttacking || stateMachine.currentState == slideState)
+        if (IsDead || isAttacking || isClimbingLedge || stateMachine.currentState == slideState)
         {
             return;
         }
@@ -511,8 +537,18 @@ public class PlayerScript : MonoBehaviour
     void Checks()
     {
         isGrounded= Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckDistance,whatIsGround);
-        isWallDetected= Physics2D.Raycast(wallCheck.position,Vector2.right,wallCheckDistance*facDir,whatIsGround);
-        isTouchingLedge= Physics2D.Raycast(hangCheck.position,Vector2.right,hangCheckDistance*facDir,whatIsGround);
+        // Keep the ray direction signed by facing, but pass a positive length.
+        // A negative Raycast distance does not detect the wall on the left side.
+        isWallDetected = Physics2D.Raycast(
+            wallCheck.position,
+            Vector2.right * facDir,
+            wallCheckDistance,
+            whatIsGround);
+        isTouchingLedge = Physics2D.Raycast(
+            hangCheck.position,
+            Vector2.right * facDir,
+            hangCheckDistance,
+            whatIsGround);
 
         if (forcedCrouchCheck != null)
         {
@@ -780,5 +816,8 @@ public class PlayerScript : MonoBehaviour
             || stateMachine.currentState == slideState;
     }
 
-   
+   public void DoubleJumpEnded()
+    {
+       jumpEnded=true; 
+    }
 }

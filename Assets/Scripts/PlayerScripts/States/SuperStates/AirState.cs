@@ -32,6 +32,15 @@ public class AirState : PlayerState
     public override void Update()
     {
         base.Update();
+        // A clear upper wall check means this is a ledge, so enter the hang
+        // state before the wall-slide check even when horizontal input is held.
+        if(player.isWallDetected && !player.isTouchingLedge
+            && player.inputVector.y >= 0f)
+        {
+            stateMachine.ChangeState(player.wallHangState);
+            return;
+        }
+
         if(player.isWallDetected && player.inputVector.x * player.facDir > 0.1f)
         {
             stateMachine.ChangeState(player.wallSlide);

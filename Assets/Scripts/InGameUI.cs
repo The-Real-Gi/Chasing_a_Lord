@@ -9,12 +9,25 @@ public class InGameUI : MonoBehaviour
     [SerializeField] Slider energySlider;
     [SerializeField] TextMeshProUGUI healthText;
     [SerializeField] TextMeshProUGUI energyText;
+    [SerializeField] Slider mageBossSlider;
+    [SerializeField] BossMageScript mageBoss;
+    private bool mageBossBattleStarted;
 
     void Awake()
     {
         if (player == null)
         {
             player = FindFirstObjectByType<PlayerScript>();
+        }
+
+        if (mageBoss == null)
+        {
+            mageBoss = FindFirstObjectByType<BossMageScript>();
+        }
+
+        if (mageBossSlider != null)
+        {
+            mageBossSlider.gameObject.SetActive(false);
         }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,6 +39,19 @@ public class InGameUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!mageBossBattleStarted && mageBoss != null && mageBossSlider != null
+            && mageBoss.stateMachine.currentState == mageBoss.mageBattleState)
+        {
+            mageBossSlider.value = mageBoss.health;
+            mageBossSlider.gameObject.SetActive(true);
+            mageBossBattleStarted = true;
+        }
+
+        if (mageBossBattleStarted && mageBoss != null && mageBossSlider != null)
+        {
+            mageBossSlider.value = mageBoss.health;
+        }
+
         if (player == null)
         {
             return;
