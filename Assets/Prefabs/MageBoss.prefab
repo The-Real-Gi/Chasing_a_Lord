@@ -311,8 +311,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.73, y: 0.89, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 5, y: 5, z: 1.6666666}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6420688841561876946}
   - {fileID: 604599524306062852}
@@ -401,11 +401,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossMageScript
   anim: {fileID: 0}
   rb: {fileID: 0}
-  health: 100
+  health: 300
   wallCheck: {fileID: 604599524306062852}
   wallCheckDistance: 1.01
   playerCheck: {fileID: 1182530078845619952}
-  playerDetectionRadius: 5.37
+  playerDetectionRadius: 12.47
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64

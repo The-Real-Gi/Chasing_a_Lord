@@ -9,6 +9,7 @@ public class FireBall : MonoBehaviour
     Rigidbody2D rb;
     Animator anim;
     bool hasHitPlayer;
+
     void Awake()
     {
         rb= GetComponent<Rigidbody2D>();
@@ -57,6 +58,19 @@ public class FireBall : MonoBehaviour
     public void SetUp(Vector2 _moveDirection)
     {
         moveDirection = _moveDirection.normalized;
+        SetRotationFromMoveDirection();
+    }
+
+    private void SetRotationFromMoveDirection()
+    {
+        if (moveDirection.sqrMagnitude == 0f)
+        {
+            return;
+        }
+
+        float zRotation = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+
+        transform.rotation = Quaternion.Euler(0f, 0f, zRotation);
     }
 
     private bool IsBlockedByPlayer(PlayerScript player)

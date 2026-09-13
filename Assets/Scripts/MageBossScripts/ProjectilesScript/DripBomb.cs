@@ -13,6 +13,7 @@ public class DripBomb : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        transform.rotation = Quaternion.Euler(0f, 0f, -75f);
         anim.SetBool("IsFlying",true);
     }
 

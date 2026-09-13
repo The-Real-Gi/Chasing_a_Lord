@@ -10,11 +10,22 @@ public class MultiPurpleBall : MonoBehaviour
     Animator anim;
 
     bool hasImpacted;
+    bool isFalling;
+    float previousVelocityY;
+    float currentZRotation;
+    float fallingTargetZRotation;
+
+    const float InitialZRotation = -105f;
+    const float LeftwardFallingZRotation = 84f;
+    const float RightwardFallingZRotation = -283f;
+    const float FallingRotationSpeed = 180f;
 
     void Awake()
     {
         rb= GetComponent<Rigidbody2D>();
         anim= GetComponent<Animator>();
+        currentZRotation = InitialZRotation;
+        transform.rotation = Quaternion.Euler(0f, 0f, currentZRotation);
         anim.SetBool("IsFlying",true);
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -31,7 +42,26 @@ public class MultiPurpleBall : MonoBehaviour
 
     void FixedUpdate()
     {
-        
+        float currentVelocityY = rb.linearVelocity.y;
+
+        if (!isFalling && previousVelocityY > 0f && currentVelocityY <= 0f)
+        {
+            isFalling = true;
+            fallingTargetZRotation = rb.linearVelocity.x < 0f
+                ? LeftwardFallingZRotation
+                : RightwardFallingZRotation;
+        }
+
+        if (isFalling)
+        {
+            currentZRotation = Mathf.MoveTowards(
+                currentZRotation,
+                fallingTargetZRotation,
+                FallingRotationSpeed * Time.fixedDeltaTime);
+            transform.rotation = Quaternion.Euler(0f, 0f, currentZRotation);
+        }
+
+        previousVelocityY = currentVelocityY;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -58,9 +88,11 @@ public class MultiPurpleBall : MonoBehaviour
         Destroy(gameObject, 0.65f);
     }
 
-     public void SetUp(Vector2 _moveDirection)
+    public void SetUp(Vector2 _moveDirection)
     {
         moveDirection = _moveDirection.normalized;
+        currentZRotation = InitialZRotation;
+        transform.rotation = Quaternion.Euler(0f, 0f, currentZRotation);
         rb.AddForce(moveDirection * moveSpeed, ForceMode2D.Impulse);
     }
 
