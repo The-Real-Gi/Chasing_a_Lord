@@ -449,6 +449,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
+--- !u!1 &930488602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 930488604}
+  - component: {fileID: 930488603}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &930488603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930488602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d402631ebb35441b0a257faf2dc450a9, type: 3}
+  m_Name: ''
+  m_EditorClassIdentifier: '::'
+  menuClip: {fileID: 8300000, guid: 7b137c7676cf94b9ab0672eb3e6c41e8, type: 3}
+  level1Clip: {fileID: 8300000, guid: a2a67546c5c0c4a3b8724050a73e306a, type: 3}
+  level2Clip: {fileID: 8300000, guid: eddaa06b9ba4744cfa3bad01c6fecabb, type: 3}
+  level3Clip: {fileID: 8300000, guid: 1812d9381c9e4479c817da8c8cf970b4, type: 3}
+  level4Clip: {fileID: 8300000, guid: a4db9de53f1334a23a53a83a82755958, type: 3}
+  BossFightClip: {fileID: 0}
+--- !u!4 &930488604
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930488602}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.6064, y: 27.08187, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1008221998
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,3 +1025,4 @@ SceneRoots:
   - {fileID: 1114694562}
   - {fileID: 234629481}
   - {fileID: 246241715}
+  - {fileID: 930488604}

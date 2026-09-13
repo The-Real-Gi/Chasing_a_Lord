@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
     public void LoadNextLevel()
     {
         level++;
-        SceneManager.LoadScene("Level"+level.ToString());
+        SceneManager.LoadScene("Level "+level.ToString());
     }
 
     public void PauseGame()

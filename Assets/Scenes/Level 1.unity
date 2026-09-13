@@ -801,11 +801,11 @@ PrefabInstance:
       objectReference: {fileID: 1162520197}
     - target: {fileID: 4868790092918548192, guid: 753c14fea3c5f49f58c187e99d44631a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.3
+      value: -16.9
       objectReference: {fileID: 0}
     - target: {fileID: 4868790092918548192, guid: 753c14fea3c5f49f58c187e99d44631a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.1
+      value: -1.7
       objectReference: {fileID: 0}
     - target: {fileID: 4868790092918548192, guid: 753c14fea3c5f49f58c187e99d44631a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -947,6 +947,7 @@ GameObject:
   m_Component:
   - component: {fileID: 158305164}
   - component: {fileID: 158305165}
+  - component: {fileID: 158305166}
   m_Layer: 0
   m_Name: DeathGameObject (2)
   m_TagString: Untagged
@@ -1015,6 +1016,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 18.004337, y: 1.9846612}
   m_EdgeRadius: 0
+--- !u!114 &158305166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158305163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4af5044109b43009175b28693b0eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathPit
 --- !u!1 &175338278
 GameObject:
   m_ObjectHideFlags: 0
@@ -1208,7 +1221,7 @@ Transform:
   m_GameObject: {fileID: 222189698}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.3, y: 0.6999999, z: -10}
+  m_LocalPosition: {x: -16.9, y: 0.099999905, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2909,6 +2922,7 @@ GameObject:
   m_Component:
   - component: {fileID: 711466890}
   - component: {fileID: 711466891}
+  - component: {fileID: 711466892}
   m_Layer: 0
   m_Name: DeathGameObject (1)
   m_TagString: Untagged
@@ -2977,6 +2991,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 18.004337, y: 1.9846612}
   m_EdgeRadius: 0
+--- !u!114 &711466892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711466889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4af5044109b43009175b28693b0eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathPit
 --- !u!1 &771548846
 GameObject:
   m_ObjectHideFlags: 0
@@ -3308,6 +3334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 831152209}
   - component: {fileID: 831152210}
+  - component: {fileID: 831152211}
   m_Layer: 0
   m_Name: DeathGameObject
   m_TagString: Untagged
@@ -3376,6 +3403,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 18.004337, y: 1.9846612}
   m_EdgeRadius: 0
+--- !u!114 &831152211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831152208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4af5044109b43009175b28693b0eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!4 &907025903 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4868790092918548192, guid: 753c14fea3c5f49f58c187e99d44631a, type: 3}
@@ -3459,6 +3498,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 938337081}
   m_CullTransparentMesh: 1
+--- !u!1 &938854938
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 938854940}
+  - component: {fileID: 938854939}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &938854939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938854938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d402631ebb35441b0a257faf2dc450a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MusicManager
+  menuClip: {fileID: 8300000, guid: 7b137c7676cf94b9ab0672eb3e6c41e8, type: 3}
+  level1Clip: {fileID: 8300000, guid: a2a67546c5c0c4a3b8724050a73e306a, type: 3}
+  level2Clip: {fileID: 8300000, guid: eddaa06b9ba4744cfa3bad01c6fecabb, type: 3}
+  level3Clip: {fileID: 8300000, guid: 1812d9381c9e4479c817da8c8cf970b4, type: 3}
+  level4Clip: {fileID: 8300000, guid: a4db9de53f1334a23a53a83a82755958, type: 3}
+  BossFightClip: {fileID: 0}
+--- !u!4 &938854940
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938854938}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.6064, y: 27.08187, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &952188552
 GameObject:
   m_ObjectHideFlags: 0
@@ -4174,7 +4263,7 @@ Transform:
   m_GameObject: {fileID: 1102252852}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.3, y: 0.6999999, z: -10}
+  m_LocalPosition: {x: -16.9, y: 0.099999905, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37729,6 +37818,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2113671951}
   - component: {fileID: 2113671950}
+  - component: {fileID: 2113671952}
   m_Layer: 0
   m_Name: NextLevelGameObject
   m_TagString: Untagged
@@ -37766,11 +37856,11 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 1.4062157, y: 9.388945}
+  m_Offset: {x: 24.834599, y: -9.87174}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -37780,7 +37870,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.8124313, y: 46.40888}
+  m_Size: {x: 50.669197, y: 7.8875084}
   m_EdgeRadius: 0
 --- !u!4 &2113671951
 Transform:
@@ -37797,6 +37887,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2113671952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113671949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbd75c498ce1440159c76acc27a04c49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  player:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &2134060794
 GameObject:
   m_ObjectHideFlags: 0
@@ -38244,3 +38349,4 @@ SceneRoots:
   - {fileID: 484121444}
   - {fileID: 1914916933}
   - {fileID: 19582371}
+  - {fileID: 938854940}

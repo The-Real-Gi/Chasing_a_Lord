@@ -9,6 +9,7 @@ public class MageDeath : MageState
      public override void Enter()
     {
         base.Enter();
+        GameManager.Instance.OpenWinPanel();
     }
 
     public override void Update()
