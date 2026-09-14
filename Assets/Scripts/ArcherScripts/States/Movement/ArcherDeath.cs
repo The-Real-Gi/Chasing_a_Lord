@@ -9,6 +9,7 @@ public class ArcherDeath : ArcherState
     public override void Enter()
     {
         base.Enter();
+  
     }
 
     public override void Update()

@@ -10088,8 +10088,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1058485475
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -10318,7 +10318,7 @@ Transform:
   m_GameObject: {fileID: 8063075726218586961}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.143, z: 0}
+  m_LocalPosition: {x: -0.056, y: -0.193, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15092,8 +15092,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1058485475
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -15235,9 +15235,9 @@ MonoBehaviour:
   forcedCrouchCheck2: {fileID: 2336355174364648877}
   hazardCheck: {fileID: 3601418676618334817}
   groundCheckDistance: 0.52
-  wallCheckDistance: 0.31
-  playerCheckDistance: 2
-  playerCrouchCheckDistance: 2.15
+  wallCheckDistance: 0.52
+  playerCheckDistance: 4.52
+  playerCrouchCheckDistance: 4.62
   crouchAttackCheckRadius: 0.29
   forcedCrouchCheckDistance: 0.39
   forcedCrouchCheckDistance2: 0.38

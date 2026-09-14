@@ -1,5 +1,7 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ArcherScript : MonoBehaviour
 {
@@ -51,6 +53,8 @@ public class ArcherScript : MonoBehaviour
     public GameObject walkingParticles;
     public GameObject getHitParticles;
     public GameObject DeathParticles;
+    [SerializeField] Slider hpSlider;
+    [SerializeField] TextMeshProUGUI hpText;
 
     void Awake()
     {
@@ -78,11 +82,14 @@ public class ArcherScript : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {       hpSlider.value=health;
+    hpText.text= health.ToString()+" / 100";
+
         shootingCooldownTimer = Mathf.Max(0f, shootingCooldownTimer - Time.deltaTime);
 
         if (health <= 0f)
-        {
+        {   
+            hpSlider.gameObject.SetActive(false);
             if (stateMachine.currentState != death)
             {
                 stateMachine.ChangeState(death);
@@ -159,6 +166,13 @@ public class ArcherScript : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * facDir;
         transform.localScale = scale;
+
+        if (hpSlider != null && hpSlider.transform.IsChildOf(transform))
+        {
+            Vector3 sliderScale = hpSlider.transform.localScale;
+            sliderScale.x = Mathf.Abs(sliderScale.x) * facDir;
+            hpSlider.transform.localScale = sliderScale;
+        }
 
         if (walkingParticles != null)
         {

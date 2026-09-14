@@ -103,6 +103,7 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI hpText;
 
     public bool IsRolling => enemyStateMachine != null && enemyStateMachine.currentState == enemyRoll;
+    public bool IsDead => health <= 0 || enemyStateMachine != null && enemyStateMachine.currentState == death;
 
     public void SetFacingDirection(int direction)
     {
@@ -152,9 +153,19 @@ public class EnemyScript : MonoBehaviour
     {
         Checks();
 
-        slider.value=health;
-        sliderCanvas.transform.position=gameObject.transform.position;
-        hpText.text= health.ToString()+" / 100";
+        UpdateHealthUI();
+
+        if (IsDead)
+        {
+            if (enemyStateMachine.currentState != death)
+            {
+                Die();
+            }
+
+            enemyStateMachine.currentState.Update();
+            UpdateParticleEffects();
+            return;
+        }
 
         if (!IsPlayerAlive())
         {
@@ -221,12 +232,60 @@ public class EnemyScript : MonoBehaviour
         }
 
         enemyStateMachine.currentState.Update();
-        if (health <= 0)
+        if (health <= 0 && enemyStateMachine.currentState != death)
         {
-            enemyStateMachine.ChangeState(death);
+            Die();
         }
 
         UpdateParticleEffects();
+    }
+
+    private void UpdateHealthUI()
+    {
+        if (IsDead)
+        {
+            HideHealthSlider();
+            return;
+        }
+
+        if (slider != null)
+        {
+            slider.value = health;
+        }
+
+        if (sliderCanvas != null)
+        {
+            sliderCanvas.transform.position = gameObject.transform.position;
+        }
+
+        if (hpText != null)
+        {
+            hpText.text = health.ToString() + " / 100";
+        }
+    }
+
+    private void HideHealthSlider()
+    {
+        if (slider != null && slider.gameObject.activeSelf)
+        {
+            slider.gameObject.SetActive(false);
+        }
+
+        if (sliderCanvas != null && sliderCanvas.gameObject.activeSelf)
+        {
+            sliderCanvas.gameObject.SetActive(false);
+        }
+    }
+
+    private void Die()
+    {
+        health = 0;
+        HideHealthSlider();
+
+        if (enemyStateMachine.currentState != death)
+        {
+            enemyStateMachine.ChangeState(death);
+        }
     }
 
     private void UpdateParticleEffects()
@@ -513,7 +572,7 @@ public class EnemyScript : MonoBehaviour
 
     public void HitByPlayer(Transform attacker = null)
     {
-        if (enemyStateMachine == null || getHit == null || enemyStateMachine.currentState == enemyRoll)
+        if (enemyStateMachine == null || getHit == null || IsRolling || IsDead)
         {
             return;
         }
@@ -523,20 +582,68 @@ public class EnemyScript : MonoBehaviour
             return;
         }
 
-        playerHitCounter++;
-
-        // With hitsBeforeRoll set to 2, the second player hit starts the roll.
-        if (playerHitCounter >= Mathf.Max(1, hitsBeforeRoll))
+        if (TryStartRollFromHit(attacker))
         {
-            playerHitCounter = 0;
-
-            facDir = player.position.x >= transform.position.x ? 1 : -1;
-            UpdateFacingFromDirection(facDir);
-
-            enemyStateMachine.ChangeState(enemyRoll);
             return;
         }
 
+        StartGetHitReaction(attacker);
+    }
+
+    public bool TakeDamage(int damage, Transform attacker = null)
+    {
+        if (damage <= 0 || IsRolling || IsDead)
+        {
+            return false;
+        }
+
+        if (!IsCrouching() && TryStartRollFromHit(attacker))
+        {
+            return false;
+        }
+
+        health = Mathf.Max(0, health - damage);
+        UpdateHealthUI();
+
+        if (health <= 0)
+        {
+            Die();
+            return true;
+        }
+
+        if (!IsCrouching())
+        {
+            StartGetHitReaction(attacker);
+        }
+
+        return true;
+    }
+
+    private bool TryStartRollFromHit(Transform attacker = null)
+    {
+        playerHitCounter++;
+
+        // With hitsBeforeRoll set to 2, the second player hit starts the roll.
+        if (playerHitCounter < Mathf.Max(1, hitsBeforeRoll))
+        {
+            return false;
+        }
+
+        playerHitCounter = 0;
+
+        Transform hitSource = attacker != null ? attacker : player;
+        if (hitSource != null)
+        {
+            facDir = hitSource.position.x >= transform.position.x ? 1 : -1;
+            UpdateFacingFromDirection(facDir);
+        }
+
+        enemyStateMachine.ChangeState(enemyRoll);
+        return true;
+    }
+
+    private void StartGetHitReaction(Transform attacker = null)
+    {
         getHitTimer = getHitDuration; //get hit timer starts and get hit finish is false
         getHitFinish = false;
 

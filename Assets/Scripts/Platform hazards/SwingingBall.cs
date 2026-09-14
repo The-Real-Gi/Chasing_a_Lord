@@ -91,9 +91,10 @@ public class SwingingBall : MonoBehaviour
         }
         else if (enemyTarget != null)
         {
-            enemyTarget.health -= damage;
-            enemyTarget.HitByPlayer(ball.transform);
-            ApplyKnockback(enemyTarget.rb, enemyTarget.transform);
+            if (enemyTarget.TakeDamage(damage, ball.transform))
+            {
+                ApplyKnockback(enemyTarget.rb, enemyTarget.transform);
+            }
         }
         else if (archerTarget != null)
         {

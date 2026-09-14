@@ -82,9 +82,10 @@ public class Saw : MonoBehaviour
         }
         else if (enemy != null)
         {
-            enemy.health -= damage;
-            enemy.HitByPlayer();
-            ApplyKnockback(enemy.rb, target.transform);
+            if (enemy.TakeDamage(damage, transform))
+            {
+                ApplyKnockback(enemy.rb, target.transform);
+            }
         }
         else
         {

@@ -4801,8 +4801,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1824918565
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -9885,8 +9885,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1824918565
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -14752,8 +14752,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1824918565
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
@@ -15243,7 +15243,16 @@ MonoBehaviour:
   walkingPatricleEffect: {fileID: 6769103430249990814}
   bleedingParticleEffect: {fileID: 44738064622758194}
   deathBleedingParticleEffect: {fileID: 7345839316505833420}
+  maxEnergy: 100
   energyValue: 100
+  energyRegenPerSecond: 10
+  crouchIdleRegenMultiplier: 3
+  attack1EnergyCost: 10
+  attack2EnergyCost: 15
+  meleeRunEnergyCost: 20
+  meleeSpinEnergyCost: 25
+  kickEnergyCost: 10
+  crouchAttackEnergyCost: 15
   jumpEnded: 0
   backgrounds:
   - {fileID: 0}

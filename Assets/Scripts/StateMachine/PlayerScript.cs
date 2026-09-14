@@ -810,15 +810,12 @@ public class PlayerScript : MonoBehaviour
 
     public void TakeDamage(EnemyScript enemy,int damage)
     {
-        if (enemy == null || enemy.IsRolling)
+        if (enemy == null)
         {
             return;
-           
         }
 
-        enemy.health -= damage;
-        enemy.HitByPlayer();
-      
+        enemy.TakeDamage(damage, transform);
     }
 
     public void TakeDamage(ArcherScript archer, int damage)
