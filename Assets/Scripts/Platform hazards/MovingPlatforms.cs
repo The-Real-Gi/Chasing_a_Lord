@@ -10,6 +10,8 @@ public class MovingPlatforms : MonoBehaviour
     float moveTimer;
     float moveDirection = 1f;
     readonly HashSet<PlayerScript> playersTouching = new();
+    public bool movingHorizontaly;
+    public bool movingVertically;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,6 +26,7 @@ public class MovingPlatforms : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if(movingHorizontaly){
         moveTimer += Time.fixedDeltaTime;
 
         if (moveTimer >= moveDuration)
@@ -37,6 +40,24 @@ public class MovingPlatforms : MonoBehaviour
         foreach (PlayerScript player in playersTouching)
         {
             player.rb.position += Vector2.right * rb.linearVelocity.x * Time.fixedDeltaTime;
+        }}
+        if(movingVertically)
+        {
+        moveTimer += Time.fixedDeltaTime;
+
+        if (moveTimer >= moveDuration)
+        {
+            moveTimer = 0f;
+            moveDirection *= -1f;
+        }
+
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, moveDirection * moveSpeed);
+
+        foreach (PlayerScript player in playersTouching)
+        {
+            player.rb.position += Vector2.right * rb.linearVelocity.x * Time.fixedDeltaTime;
+        }
+            
         }
     }
 
