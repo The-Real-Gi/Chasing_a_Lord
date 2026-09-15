@@ -13,7 +13,7 @@ public class MusicManager : MonoBehaviour
     [SerializeField] AudioClip level4Clip;
     [SerializeField] AudioClip BossFightClip;
 
-    [SerializeField] private float targetVolume = 0.5f;
+    [SerializeField] private float targetVolume = 0.3f;
     [SerializeField] private float fadeDuration = 1f;
 
     AudioSource audioSource;
