@@ -9,6 +9,7 @@ public class PlayerDeath : PlayerState
     public override void Enter()
     {
         base.Enter();
+        GameManager.Instance.DeathPanel();
         player.rb.linearVelocity= new Vector2(0,player.rb.linearVelocityY);
         player.playerCollider.offset= new Vector2(0.02f,-0.05f);
     }

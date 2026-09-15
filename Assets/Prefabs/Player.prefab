@@ -15127,6 +15127,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 629ff47b-3919-4a05-924c-60d1ec164796
     m_ActionName: 'Movement/Block[/Keyboard/b]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 351e7d8f-d260-47b6-8a51-765f22b639ac
+    m_ActionName: 'Movement/PauseGame[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d92b8766-4f66-4e2e-9911-9745fa6de465
+    m_ActionName: 'Movement/To Main Menu[/Keyboard/m]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 956e5ae5-6e0f-40bb-980c-c46b4448e6bd
+    m_ActionName: 'Movement/Next Level[/Keyboard/c]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: da3af3e6-a1d4-435a-a88b-cb91b065078a
+    m_ActionName: 'Movement/RetryLevel[/Keyboard/r]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Player
   m_DefaultActionMap: Movement
@@ -15196,7 +15212,7 @@ MonoBehaviour:
   maxRunSpeed: 400
   baseRunSpeed: 200
   jumpCount: 0
-  maxJumps: 2
+  maxJumps: 1
   crouchColliderOffset: {x: -0.2, y: -0.23}
   baseCollider: {x: 0, y: -0.12}
   sizeCollider: {x: 0.2, y: 0.6}
@@ -15247,12 +15263,12 @@ MonoBehaviour:
   energyValue: 100
   energyRegenPerSecond: 10
   crouchIdleRegenMultiplier: 3
-  attack1EnergyCost: 10
-  attack2EnergyCost: 15
-  meleeRunEnergyCost: 20
-  meleeSpinEnergyCost: 25
-  kickEnergyCost: 10
-  crouchAttackEnergyCost: 15
+  attack1EnergyCost: 5
+  attack2EnergyCost: 10
+  meleeRunEnergyCost: 15
+  meleeSpinEnergyCost: 20
+  kickEnergyCost: 5
+  crouchAttackEnergyCost: 10
   jumpEnded: 0
   backgrounds:
   - {fileID: 0}

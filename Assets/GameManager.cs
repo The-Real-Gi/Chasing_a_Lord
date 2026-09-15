@@ -34,6 +34,7 @@ void Awake()
 void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 {
     FindPanels();
+    Time.timeScale = 1f;
     if (fadeRoutine != null) StopCoroutine(fadeRoutine);
     fadeRoutine = StartCoroutine(FadeInScene());
 }
@@ -189,6 +190,7 @@ GameObject FindPanel(string panelName)
 
     public void TryAgain()
     {
+        Time.timeScale=1f;
         SceneManager.LoadScene(level);
     }
    

@@ -781,8 +781,10 @@ public class PlayerScript : MonoBehaviour
         {
             return;
         }
-
-        health -= damage;
+        if(!IsBlocking())
+        {
+        health -= damage;    
+        }
         if (health <= 0f)
         {
             health = 0f;
