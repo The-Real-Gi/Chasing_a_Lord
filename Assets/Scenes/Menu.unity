@@ -476,7 +476,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d402631ebb35441b0a257faf2dc450a9, type: 3}
-  m_Name: ''
+  m_Name: 
   m_EditorClassIdentifier: '::'
   menuClip: {fileID: 8300000, guid: 7b137c7676cf94b9ab0672eb3e6c41e8, type: 3}
   level1Clip: {fileID: 8300000, guid: a2a67546c5c0c4a3b8724050a73e306a, type: 3}
@@ -484,6 +484,8 @@ MonoBehaviour:
   level3Clip: {fileID: 8300000, guid: 1812d9381c9e4479c817da8c8cf970b4, type: 3}
   level4Clip: {fileID: 8300000, guid: a4db9de53f1334a23a53a83a82755958, type: 3}
   BossFightClip: {fileID: 0}
+  targetVolume: 0.5
+  fadeDuration: 0.3
 --- !u!4 &930488604
 Transform:
   m_ObjectHideFlags: 0
@@ -858,10 +860,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70998046402a64b7aa651aa3542e70bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  level: 1
+  level: 0
   pausePanel: {fileID: 0}
   deathPanel: {fileID: 0}
   winPanel: {fileID: 0}
+  fadeInDuration: 1
+  fadeDuration: 1
 --- !u!4 &1545938901
 Transform:
   m_ObjectHideFlags: 0
@@ -934,7 +938,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press any key to continue
+  m_text: Press Space to continue
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}

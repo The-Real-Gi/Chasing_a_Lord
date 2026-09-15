@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance { get; private set; }
@@ -11,7 +13,11 @@ public class MusicManager : MonoBehaviour
     [SerializeField] AudioClip level4Clip;
     [SerializeField] AudioClip BossFightClip;
 
+    [SerializeField] private float targetVolume = 0.5f;
+    [SerializeField] private float fadeDuration = 1f;
+
     AudioSource audioSource;
+    Coroutine fadeRoutine;
 
     void Awake()
     {
@@ -33,13 +39,13 @@ public class MusicManager : MonoBehaviour
         audioSource.playOnAwake = false;
         audioSource.loop = true;
         audioSource.spatialBlend = 0f;
+        audioSource.volume = 0f; // fade handles raising it, including on the very first track
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-
         if (Instance == this)
         {
             Instance = null;
@@ -78,9 +84,39 @@ public class MusicManager : MonoBehaviour
             return;
         }
 
+        if (fadeRoutine != null) StopCoroutine(fadeRoutine);
+        fadeRoutine = StartCoroutine(SwapClipWithFade(clip));
+    }
+
+    IEnumerator SwapClipWithFade(AudioClip newClip)
+    {
+        if (audioSource.isPlaying)
+        {
+            yield return FadeVolume(audioSource.volume, 0f, fadeDuration);
+        }
+
         audioSource.Stop();
-        audioSource.clip = clip;
+        audioSource.clip = newClip;
         audioSource.loop = true;
         audioSource.Play();
+
+        yield return FadeVolume(0f, targetVolume, fadeDuration);
+    }
+
+    IEnumerator FadeVolume(float from, float to, float duration)
+    {
+        if (audioSource == null) yield break;
+        const float maxStep = 0.05f; // caps a scene-load stall frame, same fix as ScreenFader
+
+        audioSource.volume = from;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            if (audioSource == null) yield break;
+            elapsed += Mathf.Min(Time.unscaledDeltaTime, maxStep);
+            audioSource.volume = Mathf.Lerp(from, to, elapsed / duration);
+            yield return null;
+        }
+        if (audioSource != null) audioSource.volume = to;
     }
 }

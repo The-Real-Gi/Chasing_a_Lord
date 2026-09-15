@@ -13,47 +13,48 @@ public class GameManager : MonoBehaviour
     public GameObject pausePanel;
     public GameObject deathPanel;
     public GameObject winPanel;
-    void Awake()
-    {   Time.timeScale=1f;
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+    [SerializeField] private float fadeInDuration = 1f;
+    [SerializeField] private float fadeDuration = 1f;
+    private Coroutine fadeRoutine;
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-        inputActions = new PlayersInputSet();
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        FindPanels();
-    }
+void Awake()
+{
+    Time.timeScale = 1f;
+    if (Instance != null && Instance != this) { Destroy(gameObject);return; }
+    
+    Instance = this;
+    Debug.Log("GameManager Awake, Instance is " + (Instance == null ? "null" : "set"));
+    DontDestroyOnLoad(gameObject);
+    inputActions = new PlayersInputSet();
+    SceneManager.sceneLoaded += OnSceneLoaded;
+    FindPanels();
+    //StartCoroutine(FadeInScene()); // covers the very first scene, before sceneLoaded ever fires
+}
 
-    void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-        inputActions?.Dispose();
+void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+{
+    FindPanels();
+    if (fadeRoutine != null) StopCoroutine(fadeRoutine);
+    fadeRoutine = StartCoroutine(FadeInScene());
+}
 
-        if (Instance == this)
-        {
-            Instance = null;
-        }
-    }
+System.Collections.IEnumerator FadeInScene()
+{
+    CanvasGroup fadeCanvasGroup = ScreenFader.CreateOverlay(1f);
+    Debug.Log("[Fade] overlay created, alpha=" + fadeCanvasGroup.alpha); 
+    yield return ScreenFader.Fade(fadeCanvasGroup, 1f, 0f, fadeInDuration);
+    Destroy(fadeCanvasGroup.gameObject);
+}
+void FindPanels()
+{
+    pausePanel = FindPanel("PausePanel");
+    deathPanel = FindPanel("DeathPanel");
+    winPanel = FindPanel("WinPanel");
+}
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        FindPanels();
-    }
-
-    void FindPanels()
-    {
-        pausePanel = FindPanel("PausePanel");
-        deathPanel = FindPanel("DeathPanel");
-        winPanel = FindPanel("WinPanel");
-    }
-
-    GameObject FindPanel(string panelName)
-    {
-        Transform[] transforms = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+GameObject FindPanel(string panelName)
+{
+    Transform[] transforms = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         foreach (Transform panelTransform in transforms)
         {
@@ -71,7 +72,7 @@ public class GameManager : MonoBehaviour
     {
         if (SceneManager.GetSceneByName("Menu").isLoaded && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            StartGame();
+            StartCoroutine(FadeAndLoadNextLevel());
         }
     }
 
@@ -130,9 +131,11 @@ public class GameManager : MonoBehaviour
             inputActions.Movement.Disable();
         }
     }
-    public void StartGame()
-    {
-        SceneManager.LoadScene("Level 1");
+     System.Collections.IEnumerator FadeAndLoadNextLevel()
+{
+    CanvasGroup fadeCanvasGroup = ScreenFader.CreateOverlay(0f);
+    yield return ScreenFader.Fade(fadeCanvasGroup, 0f, 1f, fadeDuration);
+    GameManager.Instance.LoadNextLevel();
     }
     public void LoadNextLevel()
     {
