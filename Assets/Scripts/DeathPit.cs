@@ -16,8 +16,8 @@ public class DeathPit : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag=="Player")
-        {
-            collision.gameObject.GetComponent<PlayerScript>().health=-10;
+        {   Debug.Log("Trying to kill player");
+            collision.gameObject.GetComponent<PlayerScript>().health=-100;
             GameManager.Instance.DeathPanel();
         }
     }
