@@ -5,3 +5,4 @@ movement mechanics:
 combat mechanics:
 3 combat attacks with little movement & 1 synced with speed player was in before going to attack
   enemies: knight, archer, mage boss
+From weekend platformer it ended up 2 moths project but got bigger than I expected
